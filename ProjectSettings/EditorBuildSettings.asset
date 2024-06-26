@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/ETukTukSamples/Scenes/LandingPage.unity
+    guid: 234ebb6523995084098ab93bbaaa2022
+  - enabled: 1
+    path: Assets/ETukTukSamples/Scenes/LoginScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/ETukTukSamples/Scenes/SignIn.unity
+    guid: 11032effc1f3ca44cbffa24295becc27
+  - enabled: 1
+    path: Assets/ETukTukSamples/Scenes/HomePage.unity
+    guid: 89569b5900c5be1409483162a87c5e91
   m_configObjects: {}

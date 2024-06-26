@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace TA.Authentication{
-[CreateAssetMenu(menuName="Web3AuthConfig", fileName="Web3AuthConfig")]
+[CreateAssetMenu(menuName="TA/Web3AuthConfig", fileName="Web3AuthConfig")]
 public class Web3AuthConfig : ScriptableObject{
     public string clientID;
     public string redirecUrl;

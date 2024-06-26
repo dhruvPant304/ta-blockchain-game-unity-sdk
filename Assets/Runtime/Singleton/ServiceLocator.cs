@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TA{
+namespace TA.Services{
 public class ServiceLocator : Singleton<ServiceLocator>{
 	Dictionary<Type,MonoBehaviour> _services = new();
 
@@ -10,13 +10,13 @@ public class ServiceLocator : Singleton<ServiceLocator>{
 		Debug.Log("Service locator intialised");
 	}
 
-	public void RegisterService<T>(Service<T> service, bool asSingle = false) where T: Service<T>{
+	public void RegisterService<T>(Service<T> service, bool persistant = false) where T: Service<T>{
 		if(_services.ContainsKey(service.serviceType)){
+			if(_services[service.serviceType] != null)
 			throw new Exception($"Service type '{service.serviceType.ToString()}' is already registerd");
 		}
-
 		_services[service.serviceType] = service;
-		if(asSingle) DontDestroyOnLoad(service.gameObject);
+		if(persistant) MakeGameObjectPersistant(service.gameObject);	
 		Debug.Log($"Service:{service.serviceType} registered");
 	}
 
@@ -27,6 +27,10 @@ public class ServiceLocator : Singleton<ServiceLocator>{
 		return _services[typeof(T)].GetComponent<T>();
 	}
 
+	private void MakeGameObjectPersistant(GameObject gameObject){
+		gameObject.transform.SetParent(null);
+		DontDestroyOnLoad(gameObject);
+	}
 }
 }
 
