@@ -1,23 +1,26 @@
 using TA.Authentication;
 using TA.Services;
+using TA.UserProfile;
 using UnityEngine;
 
 namespace TA.Components{
 public class LoginPanel : MonoBehaviour{
     [SerializeField] GameObject loginPanelBackGround;
     Web3AuthService _webAuthService;
+    UserProfileService _userProfileService;
     CanvasGroupFader _canvasGroupFader;
 
     void Start(){
         _webAuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _canvasGroupFader = ServiceLocator.Instance.GetService<CanvasGroupFader>();
+        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        _userProfileService.OnAuthComplete += Hide;
 
         if(_webAuthService.LoggedIn){
             Hide();
         }
         else {
             _webAuthService.OnWaitingLogin += Hide;
-            _webAuthService.OnLogin += OnLoginHide;
             _webAuthService.OnLogout += Show;
             _webAuthService.OnLoginCancelled += Show;
             Show();
@@ -26,7 +29,7 @@ public class LoginPanel : MonoBehaviour{
 
     void OnDestroy(){
         _webAuthService.OnWaitingLogin -= Hide;
-        _webAuthService.OnLogin -= OnLoginHide;
+        _userProfileService.OnAuthComplete -= Hide;
         _webAuthService.OnLogout -= Show;
         _webAuthService.OnLoginCancelled -= Show;
     }

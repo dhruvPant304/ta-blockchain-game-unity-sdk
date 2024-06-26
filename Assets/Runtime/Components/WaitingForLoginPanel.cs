@@ -1,5 +1,6 @@
 using TA.Authentication;
 using TA.Services;
+using TA.UserProfile;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,15 +9,17 @@ public class WaitingForLoginPanel : MonoBehaviour {
     [SerializeField] Button cancelButton;
     
     Web3AuthService _web3AuthService;
+    UserProfileService _userProfile;
     CanvasGroupFader _canvasGroupFader;
 
     void Start(){
-        _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>(); 
+        _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
+        _userProfile = ServiceLocator.Instance.GetService<UserProfileService>();
         _canvasGroupFader = ServiceLocator.Instance.GetService<CanvasGroupFader>();
 
         _web3AuthService.OnWaitingLogin += Show;
         _web3AuthService.OnLoginCancelled += Hide;
-        _web3AuthService.OnLogin += OnLoginHide; 
+        _userProfile.OnAuthComplete += Hide;
 
         cancelButton.onClick.AddListener(CancelLogin);
         Hide();
