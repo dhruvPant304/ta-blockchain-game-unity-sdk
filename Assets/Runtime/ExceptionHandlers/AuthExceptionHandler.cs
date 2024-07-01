@@ -5,6 +5,7 @@ using TA.Components;
 using TA.Services;
 using TA.UserProfile;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TA.ExceptionHandling{
 public class AuthExceptionHandler : MonoBehaviour{
@@ -19,6 +20,8 @@ public class AuthExceptionHandler : MonoBehaviour{
 
         _profileService.OnAuthFailed += OnAuthFailed;
         _profileService.OnAuthSuccess += OnAuthSuccess;
+
+        Debug.Log("Auth exception handler ready");
     }
 
     void OnAuthFailed(FailedResponse failedResponse){
@@ -41,7 +44,11 @@ public class AuthExceptionHandler : MonoBehaviour{
     }
 
     void OnAuthSuccess(LoginUserData userData){
-        if(!userData.isFirstTimeUser) return;
+        if(!userData.isFirstTimeUser) {
+            Debug.Log("not a first time user");
+            SceneManager.LoadScene("HomePage");
+            return;
+        }
         var popup = new MessagePopup(){
             header = "Login Successful!",
             message = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you",
@@ -51,7 +58,7 @@ public class AuthExceptionHandler : MonoBehaviour{
                     name = "Okay",
                     exitStyle = MessagePopupExit.ExitStyle.Confirmation,
                     exitAction = () => {
-                        //Does nothing
+                        SceneManager.LoadScene("HomePage"); 
                     }
                 }
             }

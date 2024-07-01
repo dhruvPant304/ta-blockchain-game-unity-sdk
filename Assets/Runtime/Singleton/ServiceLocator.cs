@@ -31,6 +31,15 @@ public class ServiceLocator : Singleton<ServiceLocator>{
 		gameObject.transform.SetParent(null);
 		DontDestroyOnLoad(gameObject);
 	}
+
+	public void CloseServices(){
+		foreach(var service in _services){
+			Destroy(service.Value.gameObject);
+		}
+
+		_services = new();
+		Destroy(gameObject);
+	}
 }
 }
 

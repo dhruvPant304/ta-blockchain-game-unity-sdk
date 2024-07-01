@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: PurchasePackageData
   m_EditorClassIdentifier: 
   packages:
+  - creditAmount: 500
+    price: 50
+  - creditAmount: 500
+    price: 50
+  - creditAmount: 1000
+    price: 100
   - creditAmount: 100
     price: 10
   - creditAmount: 500
     price: 50
   - creditAmount: 1000
     price: 100
-  - creditAmount: 5000
-    price: 500
-  - creditAmount: 10000
-    price: 1000
-  - creditAmount: 50000
-    price: 5000

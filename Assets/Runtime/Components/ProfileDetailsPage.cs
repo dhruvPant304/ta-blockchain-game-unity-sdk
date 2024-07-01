@@ -17,8 +17,6 @@ public class ProfileDetailsPage : MonoBehaviour{
     LoginUserData _userData;
 
     void Start(){
-        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-        _userProfileService.OnAuthSuccess += SaveUserData;
         Hide();
     }
 
@@ -28,6 +26,7 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     public void Show(){
         gameObject.SetActive(true);
+        _userData = ServiceLocator.Instance.GetService<UserProfileService>().UserData;
         userName.text = _userData.username;
         walletAddress.text = GetTruncatedString(6,_userData.walletAddress);
         email.text = _userData.email;

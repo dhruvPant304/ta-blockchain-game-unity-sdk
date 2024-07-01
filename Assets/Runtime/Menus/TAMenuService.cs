@@ -14,6 +14,7 @@ public class TAMenuService : Service<TAMenuService>{
     }
 
     public void OpenBuyCreditsMenu(){
+        CloseAll();
         _buyCreditsMenu.Open();
         OnBuyCreditsMenuOpen?.Invoke();
     }
@@ -24,6 +25,7 @@ public class TAMenuService : Service<TAMenuService>{
     }
 
     public void OpenProfilePage(){
+        CloseAll();
         _profilePage.Show();
     }
 

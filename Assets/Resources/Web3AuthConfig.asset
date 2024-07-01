@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695529c80735b7742a7ea3ea8c72a551, type: 3}
   m_Name: Web3AuthConfig
   m_EditorClassIdentifier: 
-  clientID: BAAIovyeslEQ7chZCQzyBm5e5DVnRJg4nH0Ph_xdUynyvhfd3ucBMSx_xR8TCpMxJVj_8fGtLG42WHjAY4Lp-Z4
+  clientID: BJUf-EAb5Xvt2XMNtYCuDNg6yZZQN7QQzIbZEP-AeOciK2J3KUfq1gHFA_mbiWcwMqrYbX5nKD06kZrNrI2tLds
   redirecUrl: intent://com.fightout.fighting/auth
-  network: 1
+  network: 4
   env: 2
