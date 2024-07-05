@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using TA.APIClient;
 using TA.APIClient.ResponseData;
 using TA.Authentication;
@@ -20,9 +21,12 @@ public class UserProfileService : Service<UserProfileService>{
     LoginUserData _userData;
     public LoginUserData UserData => _userData;
 
+    //Events
     public Action<LoginUserData> OnAuthSuccess;
     public Action<FailedResponse>  OnAuthFailed;
     public Action OnAuthComplete;
+    public Action<UserBalanceData> OnBalanceUpdate;
+    public Action OnBalanceUpdateFailed;
 
     private bool _loggedIn;
     public bool LoggedIn => _loggedIn;
@@ -70,11 +74,21 @@ public class UserProfileService : Service<UserProfileService>{
         _userData = loginData;
 
         OnAuthSuccess?.Invoke(_userData);
+        UpdateUserBalance().Forget();
     }
 
     void HandleAuthFailiure(FailedResponse failedResponse){
         Debug.LogError($"Failed to authentiacate user: {failedResponse.message}");
         OnAuthFailed?.Invoke(failedResponse);
+    }
+
+    public async UniTask UpdateUserBalance(){
+        var response = await _apiService.SendFetchUserBalanceRequest(UserData.token);
+        if(response.IsSuccess){
+            OnBalanceUpdate?.Invoke(response.Response.data);
+        } else{
+            OnBalanceUpdateFailed?.Invoke();
+        }
     }
 }
 }

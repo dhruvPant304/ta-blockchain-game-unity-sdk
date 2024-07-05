@@ -34,6 +34,20 @@ namespace TA.APIClient{
         }
 
         //=====================
+        // USER 
+        //=====================
+
+        public async UniTask<StaticRequestResponse<UserBalanceResponse>> SendFetchUserBalanceRequest(string authToken){
+            return await SendWebRequest<UserBalanceResponse>(
+                        "/api/v1/user/balance",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
+
+        //=====================
         // END
         //=====================
 

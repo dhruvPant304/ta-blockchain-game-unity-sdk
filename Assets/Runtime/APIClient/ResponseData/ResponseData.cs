@@ -18,6 +18,9 @@ namespace TA.APIClient.ResponseData{
     public class LoginResponse : APIResponse<LoginUserData>{}
 
     [Serializable]
+    public class UserBalanceResponse : APIResponse<UserBalanceData>{}
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -39,5 +42,16 @@ namespace TA.APIClient.ResponseData{
     public class LoginUserData : UserData{
         public string token;
         public bool isFirstTimeUser;
+    }
+
+    [Serializable]
+    public class UserBalanceData {
+        public int credits;
+        public int gameCoin;
+        public int freeCredits;
+        public int boughtCredits;
+        public int tokens;
+        public int xpBalance;
+        public int native;
     }
 }
