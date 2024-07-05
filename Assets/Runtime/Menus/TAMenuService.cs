@@ -6,6 +6,7 @@ namespace TA.Menus{
 public class TAMenuService : Service<TAMenuService>{
     [SerializeField] BuyCreditsMenu _buyCreditsMenu;
     [SerializeField] ProfileDetailsPage _profilePage;
+    [SerializeField] SettingsPage _settingsPage;
 
     public event Action OnBuyCreditsMenuOpen;
     public event Action OnBuyCreditsMenuClosed;
@@ -33,8 +34,18 @@ public class TAMenuService : Service<TAMenuService>{
         _profilePage.Hide();
     }
 
+    public void OpenSettingsPage(){
+        CloseAll();
+        _settingsPage.Show();
+    }
+
+    public void CloseSettingsPage(){
+        _settingsPage.Hide();
+    }
+
     public void CloseAll(){
         CloseBuyCreditMenu();
         CloseProfilePage();
+        CloseSettingsPage();
     }
 }}

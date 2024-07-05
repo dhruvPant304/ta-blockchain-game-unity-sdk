@@ -36,6 +36,7 @@ namespace TA.APIClient.ResponseData{
         public string walletAddress;
         public string createdAt;
         public string email;
+        public AppSettings[] appSettings;
     }
 
     [Serializable]
@@ -53,5 +54,12 @@ namespace TA.APIClient.ResponseData{
         public int tokens;
         public int xpBalance;
         public int native;
+    }
+
+    [Serializable]
+    public class AppSettings{
+        public bool isMusic;
+        public bool isSound;
+        public bool isVibrate;
     }
 }

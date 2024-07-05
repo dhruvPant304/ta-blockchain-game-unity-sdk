@@ -174,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1864992456943617915
 RectTransform:
   m_ObjectHideFlags: 0
@@ -955,6 +955,10 @@ PrefabInstance:
     - target: {fileID: 9193871215725242162, guid: cafd74b209de9a445b8d14ea6bed694b, type: 3}
       propertyPath: m_Name
       value: LogOut
+      objectReference: {fileID: 0}
+    - target: {fileID: 9193871215725242162, guid: cafd74b209de9a445b8d14ea6bed694b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9193871215725242163, guid: cafd74b209de9a445b8d14ea6bed694b, type: 3}
       propertyPath: m_Pivot.x

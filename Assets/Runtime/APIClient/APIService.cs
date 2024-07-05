@@ -90,6 +90,7 @@ namespace TA.APIClient{
         ///SendWebRequest<TSuccess,TFailure> which returns a VariableRequestResponse
         ///</summary>
         ///<param name="relativePath"> relativeAPIPath is the API path after the server relativeAPIPath</paramm>
+    
         private async UniTask<StaticRequestResponse<TResponse>> SendWebRequest<TResponse>(string relativePath, string method, object param = null, string authToken = ""){
             var variableResponse = await SendWebRequest<TResponse,TResponse>(relativePath, method, param, authToken);
             return new StaticRequestResponse<TResponse>(variableResponse);
