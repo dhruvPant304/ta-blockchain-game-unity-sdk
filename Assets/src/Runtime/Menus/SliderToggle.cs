@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
+using System.Collections;
 
 public class SliderToggle : MonoBehaviour{
     [Header("Image Components")]
@@ -54,19 +54,19 @@ public class SliderToggle : MonoBehaviour{
     }
 
     void Enable(){
-        sliderBase.DOColor(baseEnabledColor, 0.1f);
-        slider.DOColor(sliderEnabledColor, 0.1f);
-        sliderText.DOColor(sliderTextEnabledColor, 0.1f);
-        slider.rectTransform.DOLocalMoveX(enabledX, 0.1f);
+        StartCoroutine(TransformColor(sliderBase,baseEnabledColor, 0.1f));
+        StartCoroutine(TransformColor(slider, sliderEnabledColor, 0.1f));
+        StartCoroutine(TransformColor(sliderText, sliderTextEnabledColor, 0.1f));
+        StartCoroutine(DoLocalMoveX(slider.rectTransform, enabledX, 0.1f));
 
         sliderText.text = "ON";
     }
 
     void Disable(){
-        sliderBase.DOColor(baseDisabledColor, 0.1f);
-        slider.DOColor(sliderDisableColor, 0.1f);
-        sliderText.DOColor(sliderTextDisableColor, 0.1f);
-        slider.rectTransform.DOLocalMoveX(disabledX, 0.1f);
+        StartCoroutine(TransformColor(sliderBase,baseDisabledColor, 0.1f));
+        StartCoroutine(TransformColor(slider, sliderDisableColor, 0.1f));
+        StartCoroutine(TransformColor(sliderText, sliderTextDisableColor, 0.1f));
+        StartCoroutine(DoLocalMoveX(slider.rectTransform, disabledX, 0.1f));
 
         sliderText.text = "OFF";
     }
@@ -77,5 +77,28 @@ public class SliderToggle : MonoBehaviour{
 
     void Toggle(){
         Value = !Value;
+    }
+
+    IEnumerator TransformColor(Graphic graphic, Color endColor, float duration){
+        var startTime = Time.time;
+        var startColor = graphic.color;
+        while(Time.time - startTime < duration){
+            var t = (Time.time - startTime) / duration;
+            graphic.color = Color.Lerp(startColor, endColor, t);
+            yield return null;
+        }
+        graphic.color = endColor;
+    } 
+
+    IEnumerator DoLocalMoveX(Transform transform, float endValue, float duration){
+        var startPos = transform.localPosition;
+        var endPos = new Vector3(endValue, startPos.y ,startPos.z);
+        var startTime = Time.time;
+        while(Time.time - startTime < duration){
+            var t = (Time.time - startTime) / duration;
+            transform.localPosition = Vector3.Lerp(startPos, endPos, t);
+            yield return null;
+        }
+        transform.localPosition = endPos;
     }
 }
