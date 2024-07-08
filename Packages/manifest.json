@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.nethereum.unity": "4.19.2",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.feature.development": "1.0.1",
