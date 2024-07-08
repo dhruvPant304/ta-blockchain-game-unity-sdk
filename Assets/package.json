@@ -1,0 +1,24 @@
+{
+	"name": "com.techalchemy.tablockchaingame",
+	"version": "0.0.1",
+	"displayName": "TA Block Chain Game",
+	"description": "Integrate your unity games with Tech Alchemy's Blockchain ecosystem",
+	"unity": "2021.3",
+	"unityRelease": "35f1",
+	"keywords": [
+    		"Block Chain",
+    		"Tech Alchemy",
+  	],
+	"author": {
+		"name": "Dhruv Pant",
+		"email": "dhruv@techalchemy.com",
+		"url": "https://www.unity3d.com"
+	},
+	"samples" : [
+		{			
+			"displayName": "ETUK-TUK Samples",
+			"description": "Menu prefabs and assets for etuk tuk game",
+			"path": "Samples~/ETukTukSamples"
+		}
+	]
+}
