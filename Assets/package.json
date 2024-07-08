@@ -4,7 +4,6 @@
 	"displayName": "TA Block Chain Game",
 	"description": "Integrate your unity games with Tech Alchemy's Blockchain ecosystem",
 	"unity": "2021.3",
-	"unityRelease": "35f1",
 	"keywords": [
     		"Block Chain",
     		"Tech Alchemy",
