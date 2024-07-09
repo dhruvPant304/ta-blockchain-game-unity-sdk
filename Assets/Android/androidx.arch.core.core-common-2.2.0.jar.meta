@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e3a8a70f6834e44ab811a595edf18f9a
+guid: 96887d25b87004f819cf0accaee5ec29
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -17,12 +17,13 @@ PluginImporter:
       enabled: 0
       settings:
         Exclude Android: 1
-        Exclude Editor: 1
+        Exclude Editor: 0
         Exclude Linux64: 1
         Exclude OSXUniversal: 1
+        Exclude WebGL: 1
         Exclude Win: 1
         Exclude Win64: 1
-        Exclude iOS: 0
+        Exclude iOS: 1
   - first:
       Android: Android
     second:
@@ -37,7 +38,7 @@ PluginImporter:
   - first:
       Editor: Editor
     second:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
@@ -53,33 +54,28 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: None
+        CPU: AnyCPU
   - first:
       Standalone: Win
     second:
       enabled: 0
       settings:
-        CPU: x86
+        CPU: AnyCPU
   - first:
       Standalone: Win64
     second:
       enabled: 0
       settings:
-        CPU: x86_64
+        CPU: AnyCPU
   - first:
       iPhone: iOS
     second:
-      enabled: 1
+      enabled: 0
       settings:
         AddToEmbeddedBinaries: false
         CPU: AnyCPU
         CompileFlags: 
-        FrameworkDependencies: AuthenticationServices;SafariServices;
-  - first:
-      tvOS: tvOS
-    second:
-      enabled: 1
-      settings: {}
+        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
