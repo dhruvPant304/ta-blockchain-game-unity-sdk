@@ -46,7 +46,7 @@ public class AuthExceptionHandler : MonoBehaviour{
     void OnAuthSuccess(LoginUserData userData){
         if(!userData.isFirstTimeUser) {
             Debug.Log("not a first time user");
-            SceneManager.LoadScene("HomePage");
+            SceneManager.LoadScene(4);
             return;
         }
         var popup = new MessagePopup(){
@@ -58,7 +58,7 @@ public class AuthExceptionHandler : MonoBehaviour{
                     name = "Okay",
                     exitStyle = MessagePopupExit.ExitStyle.Confirmation,
                     exitAction = () => {
-                        SceneManager.LoadScene("HomePage"); 
+                        SceneManager.LoadScene(4);
                     }
                 }
             }
