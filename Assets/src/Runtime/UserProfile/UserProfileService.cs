@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using TA.APIClient;
 using TA.APIClient.ResponseData;
 using TA.Authentication;
-using TA.Crypto;
+using TA.Helpers.Crypto;
 using TA.Services;
 using UnityEngine;
 
@@ -20,6 +20,9 @@ public class UserProfileService : Service<UserProfileService>{
 
     LoginUserData _userData;
     public LoginUserData UserData => _userData;
+
+    UserBalanceData _userBalanceData;
+    public UserBalanceData UserBalanceData => _userBalanceData;
 
     //Events
     public Action<LoginUserData> OnAuthSuccess;
@@ -82,13 +85,15 @@ public class UserProfileService : Service<UserProfileService>{
         OnAuthFailed?.Invoke(failedResponse);
     }
 
-    public async UniTask UpdateUserBalance(){
+    public async UniTask<StaticRequestResponse<UserBalanceResponse>> UpdateUserBalance(){
         var response = await _apiService.SendFetchUserBalanceRequest(UserData.token);
         if(response.IsSuccess){
             OnBalanceUpdate?.Invoke(response.Response.data);
+            _userBalanceData = response.Response.data;
         } else{
             OnBalanceUpdateFailed?.Invoke();
         }
+        return response;
     }
 }
 }

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace TA.ExceptionHandling{
 public class AuthExceptionHandler : MonoBehaviour{
+
     UserProfileService _profileService;
     Web3AuthService _web3AuthService;
     BlockchainGameCanvas _blockChainGameCanvas;
@@ -29,6 +30,7 @@ public class AuthExceptionHandler : MonoBehaviour{
             header = "Something went wrong!!",
             message = "Failed to authenticate user" + failedResponse.message,
             banner = BannerType.Danger,
+            hasBackground = true,
             exits = new List<MessagePopupExit>(){
                 new MessagePopupExit(){
                     name = "Try Again",
@@ -53,6 +55,7 @@ public class AuthExceptionHandler : MonoBehaviour{
             header = "Login Successful!",
             message = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you",
             banner = BannerType.Reward,
+            hasBackground = true,
             exits = new List<MessagePopupExit>(){
                 new MessagePopupExit{
                     name = "Okay",

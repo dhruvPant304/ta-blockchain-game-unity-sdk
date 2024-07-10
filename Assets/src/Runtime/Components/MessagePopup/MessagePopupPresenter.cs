@@ -2,20 +2,26 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TA.Components{
 public class MessagePopupPresenter : MonoBehaviour{
     [SerializeField] TextMeshProUGUI header;
     [SerializeField] TextMeshProUGUI message;
+    [SerializeField] Image popupBG;
     [SerializeField] Transform exitButtonContent;
 
     [SerializeField] GameObject dangerBanner;
     [SerializeField] GameObject rewardBanner;
+    [SerializeField] GameObject bG;
 
     [Header("Button Prefabs")]
     [SerializeField] DynamicButton confirmationPrefab;
     [SerializeField] DynamicButton regularPrefab;
     [SerializeField] DynamicButton dangerPrefab;
+
+    [Header("PopUp Styles")]
+    [SerializeField] List<PopUpStyle> style;
 
     List<DynamicButton> _activeExitButtons = new();
 
@@ -23,7 +29,8 @@ public class MessagePopupPresenter : MonoBehaviour{
         Hide();
     }
 
-    public void ShowMessagePopup(MessagePopup popup){
+    public void ShowMessagePopup(MessagePopup popup, int styleIndex = 0){
+        ApplyStyle(style[0]);
         Show();
 
         header.text = popup.header;
@@ -31,6 +38,7 @@ public class MessagePopupPresenter : MonoBehaviour{
 
         dangerBanner.SetActive(false);
         rewardBanner.SetActive(false);
+        bG.SetActive(popup.hasBackground);
 
         switch(popup.banner){
             case BannerType.Danger:
@@ -42,6 +50,12 @@ public class MessagePopupPresenter : MonoBehaviour{
         }
 
         CreateExits(popup.exits.ToArray());
+    }
+
+    void ApplyStyle(PopUpStyle style){
+        popupBG.sprite = style.BgImage;
+        header.font = style.headerFont;
+        message.font = style.messageFont;
     }
 
     public void HidePopup(){
@@ -96,9 +110,17 @@ public class MessagePopupPresenter : MonoBehaviour{
     }
 }
 
+[Serializable]
+public class PopUpStyle{
+    public Sprite BgImage;
+    public TMP_FontAsset headerFont;
+    public TMP_FontAsset messageFont;
+}
+
 public class MessagePopup{
     public string message = "";
     public string header = "";
+    public bool hasBackground = false;
     public BannerType banner;
     public List<MessagePopupExit> exits;
 }
@@ -112,10 +134,11 @@ public class MessagePopupExit{
         Confirmation,
         Danger
     }
-    public ExitStyle exitStyle;
+    public ExitStyle exitStyle = ExitStyle.Regular;
 }
 
 public enum BannerType{
+    None,
     Danger,
     Good,
     Warning,

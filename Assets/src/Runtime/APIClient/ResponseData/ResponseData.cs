@@ -2,14 +2,17 @@ using System;
 
 namespace TA.APIClient.ResponseData{
     [Serializable]
-    public class APIResponse<T>{
+    public class BaseAPIResponse{
         public string status;
         public string message;
-        public T data;
-
         public bool IsSuccess => status == "success";
     }
-    
+
+    [Serializable]
+    public class APIResponse<T> : BaseAPIResponse {
+        public T data;
+    }
+
     //=====================
     // RESPONSE CLASSES
     //=====================
@@ -19,6 +22,9 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class UserBalanceResponse : APIResponse<UserBalanceData>{}
+
+    [Serializable]
+    public class GameSessionResponse : APIResponse<GameSessionData>{}
 
     [Serializable]
     public class FailedResponse{
@@ -37,6 +43,11 @@ namespace TA.APIClient.ResponseData{
         public string createdAt;
         public string email;
         public AppSettings[] appSettings;
+    }
+
+    [Serializable]
+    public class GameSessionData {
+        public string token;
     }
 
     [Serializable]

@@ -5,6 +5,7 @@ namespace TA.APIClient{
 public class APIConfig : ScriptableObject {
     public string serverUrl;
     public string encryptionPublicKey;
+    public string gameId;
 
     [Header("DebugSettings")]
     public bool logResponses;

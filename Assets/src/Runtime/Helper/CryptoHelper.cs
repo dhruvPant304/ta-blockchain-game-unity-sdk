@@ -1,7 +1,7 @@
 using Nethereum.Web3.Accounts;
 using Nethereum.Signer;
 
-namespace TA.Crypto{
+namespace TA.Helpers.Crypto{
 public static class CryptoHelper {
 
     public static string GetWalletAddress(string privateKey){
