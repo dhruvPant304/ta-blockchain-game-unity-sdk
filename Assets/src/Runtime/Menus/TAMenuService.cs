@@ -8,6 +8,7 @@ public class TAMenuService : Service<TAMenuService>{
     [SerializeField] BuyCreditsMenu inGameBuyCreditMenu;
     [SerializeField] ProfileDetailsPage _profilePage;
     [SerializeField] SettingsPage _settingsPage;
+    [SerializeField] GameOverMenu _gameOverMenu;
 
     public event Action OnBuyCreditsMenuOpen;
     public event Action OnBuyCreditsMenuClosed;
@@ -27,6 +28,10 @@ public class TAMenuService : Service<TAMenuService>{
     public void CloseBuyCreditMenu(){
         _buyCreditsMenu.Close();
         OnBuyCreditsMenuClosed?.Invoke();
+    }
+
+    public void OpenGameOverMenu(){
+        _gameOverMenu.ShowEndGameMenu();
     }
 
     public void OpenInGameCreditShop(){

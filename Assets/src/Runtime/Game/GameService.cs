@@ -32,6 +32,8 @@ public class GameService : Service<GameService> {
 
     int _retries;
 
+    public int SavedTotalScore => _totalScore;
+
     public Action OnStartSessionSuccess;
     public Action OnStartSessionFailed;
 
@@ -43,6 +45,8 @@ public class GameService : Service<GameService> {
 
     public Action OnEndSessionSuccess;
     public Action OnEndSessionFailed;
+
+    public Action OnExitGameRequest;
 
     string AuthToken { 
         get{
@@ -87,6 +91,8 @@ public class GameService : Service<GameService> {
     void ShowErrorMessage(string message, Action action){
         _blockChainGameCanvas.ShowMessagePopup(ShowAPIFailureMessagePopUp(message, action));
     }
+
+    public int NextContinueCost => GetContinueCost(_retries);
 
     public static int GetContinueCost(int retries) {
         if (retries < 0) {
@@ -245,5 +251,9 @@ public class GameService : Service<GameService> {
         }else{
             ShowErrorMessage(response.FailureResponse.message, OnEndSessionFailed);
         }
+    }
+
+    public void MakeExitGameRequest(){
+        OnExitGameRequest?.Invoke();
     }
 }}
