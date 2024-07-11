@@ -12,7 +12,7 @@ public class StartGame : MonoBehaviour {
         GetComponent<Button>().onClick.AddListener(gameService.StartGameSession);
     }
 
-    void OnDisable(){
+    void OnDestroy(){
         GetComponent<Button>().onClick.RemoveListener(gameService.StartGameSession);
     }
 }

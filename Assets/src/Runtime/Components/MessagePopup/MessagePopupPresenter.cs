@@ -30,7 +30,7 @@ public class MessagePopupPresenter : MonoBehaviour{
     }
 
     public void ShowMessagePopup(MessagePopup popup, int styleIndex = 0){
-        ApplyStyle(style[0]);
+        ApplyStyle(style[styleIndex]);
         Show();
 
         header.text = popup.header;

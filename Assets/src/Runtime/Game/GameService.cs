@@ -23,6 +23,7 @@ public class GameService : Service<GameService> {
 
     string _gameId;
     string _gameToken = null;
+    public bool InSession => _gameToken != null;
 
     int _totalScore;
     float _duration;
@@ -80,7 +81,7 @@ public class GameService : Service<GameService> {
     } 
 
     void OpenBuyCredit(){
-        _taMenuService.OpenBuyCreditsMenu();
+        _taMenuService.OpenInGameCreditShop();
     }
 
     void ShowErrorMessage(string message, Action action){
@@ -112,14 +113,15 @@ public class GameService : Service<GameService> {
         return new MessagePopup{
             message = "You don't have enough credits to continue playing. Buy more credits to continue",
             header = "Not Enought Credits!",
-            banner = BannerType.Danger,
+            banner = BannerType.None,
             hasBackground = false,
             exits = new List<MessagePopupExit>(){
                 new MessagePopupExit{
                     name = "Okay"
                 },
                 new MessagePopupExit{
-                    name = "Exit",
+                    name = "Buy Credits",
+                    exitStyle = ExitStyle.Confirmation,
                     exitAction = OpenBuyCredit 
                 }
             }
@@ -157,6 +159,11 @@ public class GameService : Service<GameService> {
     //============================
 
     public async void StartGameSession(){
+        if(InSession) {
+            ShowErrorMessage("A Game session is already active", OnStartSessionFailed);
+            return;
+        }
+
         if(Credits < 1){
             _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
             return;
@@ -233,6 +240,7 @@ public class GameService : Service<GameService> {
 
         var response = await _apiService.SendCompleteRequest(param, GameToken);
         if(!response.IsSuccess){
+            _gameToken = null;
             OnEndSessionSuccess?.Invoke();
         }else{
             ShowErrorMessage(response.FailureResponse.message, OnEndSessionFailed);

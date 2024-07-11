@@ -5,11 +5,15 @@ using UnityEngine;
 namespace TA.Menus{
 public class TAMenuService : Service<TAMenuService>{
     [SerializeField] BuyCreditsMenu _buyCreditsMenu;
+    [SerializeField] BuyCreditsMenu inGameBuyCreditMenu;
     [SerializeField] ProfileDetailsPage _profilePage;
     [SerializeField] SettingsPage _settingsPage;
 
     public event Action OnBuyCreditsMenuOpen;
     public event Action OnBuyCreditsMenuClosed;
+
+    public event Action OnInGameCreditShopOpen;
+    public event Action OnInGameCreditShopClosed;
 
     protected override void OnInitialize(){
     }
@@ -23,6 +27,23 @@ public class TAMenuService : Service<TAMenuService>{
     public void CloseBuyCreditMenu(){
         _buyCreditsMenu.Close();
         OnBuyCreditsMenuClosed?.Invoke();
+    }
+
+    public void OpenInGameCreditShop(){
+        CloseAll();
+        inGameBuyCreditMenu.Open();
+        OnInGameCreditShopOpen?.Invoke();
+    }
+
+    public void CloseInGameCreditShop(){
+        Debug.Log("Closing in game credit shop");
+        inGameBuyCreditMenu.Close();
+        OnInGameCreditShopClosed?.Invoke();
+    }
+
+    public void CloseCreditsShop(BuyCreditsMenu menu){
+        if(menu == _buyCreditsMenu) CloseBuyCreditMenu();
+        if(menu == inGameBuyCreditMenu) CloseInGameCreditShop();
     }
 
     public void OpenProfilePage(){
@@ -47,5 +68,6 @@ public class TAMenuService : Service<TAMenuService>{
         CloseBuyCreditMenu();
         CloseProfilePage();
         CloseSettingsPage();
+        CloseInGameCreditShop();
     }
 }}
