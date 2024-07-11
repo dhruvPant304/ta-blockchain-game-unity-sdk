@@ -143,7 +143,7 @@ MonoBehaviour:
   inGameBuyCreditMenu: {fileID: 7811267921620061332}
   _profilePage: {fileID: 8612748595999502090}
   _settingsPage: {fileID: 8863204771563992262}
-  _gameOverMenu: {fileID: 0}
+  _gameOverMenu: {fileID: 1070204639307391599}
 --- !u!1001 &100913917506454630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -485,6 +485,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5c74d8e56b818ff9ae363ae7a3a8404, type: 3}
+--- !u!114 &1070204639307391599 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1133963584984442377, guid: d5c74d8e56b818ff9ae363ae7a3a8404, type: 3}
+  m_PrefabInstance: {fileID: 100913917506454630}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec244014b77366379cf8d2852f8b2ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2642136980187701081 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2723627989624380223, guid: d5c74d8e56b818ff9ae363ae7a3a8404, type: 3}
