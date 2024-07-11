@@ -176,7 +176,7 @@ public class GameService : Service<GameService> {
         }
 
         var response = await _apiService.SendStartGameRequest(_gameId, AuthToken);
-        if(!response.IsSuccess){
+        if(response.IsSuccess){
             var result = await TryUserBalance(OnStartSessionFailed);
             if(!result) return;
 
@@ -188,6 +188,7 @@ public class GameService : Service<GameService> {
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
 
             OnStartSessionSuccess?.Invoke();
+            Debug.Log($"Starting Game session with token: {_gameToken}");
         }
         else{
             ShowErrorMessage(response.FailureResponse.message, OnStartSessionFailed);
@@ -208,11 +209,11 @@ public class GameService : Service<GameService> {
         };
 
         var response = await _apiService.SendUpdateGameRequest(param, GameToken);
-        if(!response.IsSuccess){
-            OnUpdateScoreSucess?.Invoke();
+        if(response.IsSuccess){
             _totalScore = score;
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
+            OnUpdateScoreSucess?.Invoke();
         }else{
             ShowErrorMessage(response.FailureResponse.message, OnUpdateScoreFailed);
         }
@@ -225,7 +226,7 @@ public class GameService : Service<GameService> {
         }
 
         var response = await _apiService.SendContinueRequest(AuthToken);
-        if(!response.IsSuccess){
+        if(response.IsSuccess){
             var result = await TryUserBalance(OnContinueGameFailed);
             if(!result) return;
 
@@ -245,7 +246,7 @@ public class GameService : Service<GameService> {
         };
 
         var response = await _apiService.SendCompleteRequest(param, GameToken);
-        if(!response.IsSuccess){
+        if(response.IsSuccess){
             _gameToken = null;
             OnEndSessionSuccess?.Invoke();
         }else{

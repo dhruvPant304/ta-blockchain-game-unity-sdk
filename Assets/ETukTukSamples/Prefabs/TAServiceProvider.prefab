@@ -351,4 +351,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   registerAsSingle: 1
   useTestCredits: 1
-  testCredits: 0
+  testCredits: 10
