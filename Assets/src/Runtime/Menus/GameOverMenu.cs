@@ -29,6 +29,8 @@ public class GameOverMenu : MonoBehaviour {
         endGameButton.onClick.AddListener(OnEndGame);
         ContinueButton.onClick.AddListener(OnContinueGame);
         buyCreditsButton.onClick.AddListener(OnBuyCredits);
+
+        Hide();
     }
 
     public void ShowEndGameMenu(){
