@@ -225,7 +225,7 @@ public class GameService : Service<GameService> {
             return;
         }
 
-        var response = await _apiService.SendContinueRequest(AuthToken);
+        var response = await _apiService.SendContinueRequest(GameToken);
         if(response.IsSuccess){
             var result = await TryUserBalance(OnContinueGameFailed);
             if(!result) return;
