@@ -1,10 +1,10 @@
 using TA.Game;
-using TA.Menus;
 using TA.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace TA.Menus{
 public class GameOverMenu : MonoBehaviour {
     [Header("Text Fields")]
     [SerializeField] TextMeshProUGUI score;
@@ -36,6 +36,7 @@ public class GameOverMenu : MonoBehaviour {
     public void ShowEndGameMenu(){
         panel.SetActive(true);
         score.text = _gameService.SavedTotalScore.ToString();
+        position.text = _gameService.LeaderBoardPosition.ToString();
         continueCost.text = $"Continue\n{_gameService.NextContinueCost} credit?";
     }
 
@@ -63,4 +64,4 @@ public class GameOverMenu : MonoBehaviour {
         ShowEndGameMenu();
         _taMenuService.OnInGameCreditShopClosed -= ReOpenOnBuyCreditClose;
     }
-}
+}}

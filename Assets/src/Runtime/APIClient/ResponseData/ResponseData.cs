@@ -27,6 +27,9 @@ namespace TA.APIClient.ResponseData{
     public class GameSessionResponse : APIResponse<GameSessionData>{}
 
     [Serializable]
+    public class ScoreUpdateResponse : APIResponse<ScoreUpdateData>{}
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -57,6 +60,11 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
+    public class ScoreUpdateData{
+        public UserLeaderboardData userLeaderboard;
+    }
+
+    [Serializable]
     public class UserBalanceData {
         public int credits;
         public int gameCoin;
@@ -65,6 +73,18 @@ namespace TA.APIClient.ResponseData{
         public int tokens;
         public int xpBalance;
         public int native;
+    }
+
+    [Serializable]
+    public class UserLeaderboardData{
+        public LeaderBoardEntry high;
+        public LeaderBoardEntry total;
+    }
+
+    [Serializable]
+    public class LeaderBoardEntry{
+        public int score;
+        public int rank;
     }
 
     [Serializable]

@@ -29,10 +29,12 @@ public class GameService : Service<GameService> {
     float _duration;
     float _startTime;
     string _timeStamp;
+    int _leaderBoardPosition = -1;
 
     int _retries;
 
     public int SavedTotalScore => _totalScore;
+    public int LeaderBoardPosition => _leaderBoardPosition;
 
     public Action OnStartSessionSuccess;
     public Action OnStartSessionFailed;
@@ -213,6 +215,8 @@ public class GameService : Service<GameService> {
             _totalScore = score;
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
+            _leaderBoardPosition = response.SuccessResponse.data.userLeaderboard.high.rank;
+
             OnUpdateScoreSucess?.Invoke();
         }else{
             ShowErrorMessage(response.FailureResponse.message, OnUpdateScoreFailed);
