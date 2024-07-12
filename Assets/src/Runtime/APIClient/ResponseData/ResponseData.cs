@@ -75,9 +75,9 @@ namespace TA.APIClient.ResponseData{
         public int gameCoin;
         public int freeCredits;
         public int boughtCredits;
-        public int tokens;
-        public int xpBalance;
-        public int native;
+        public float tokens;
+        public float xpBalance;
+        public float native;
     }
 
     [Serializable]
