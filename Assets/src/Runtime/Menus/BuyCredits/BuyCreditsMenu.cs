@@ -11,7 +11,7 @@ public class BuyCreditsMenu : MonoBehaviour{
     [SerializeField] PackageDisplay buttonPrefab;
     [SerializeField] Transform buttonHolder;
 
-    void Awake(){
+    void Start(){
         closeButton.onClick.AddListener(CloseUsingService);
         Close();
     }
