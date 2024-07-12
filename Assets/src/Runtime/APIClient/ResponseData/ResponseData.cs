@@ -53,7 +53,7 @@ namespace TA.APIClient.ResponseData{
         public int boughtCredits;
         public int tokens;
         public int xpBalance;
-        public int native;
+        public float native;
     }
 
     [Serializable]
