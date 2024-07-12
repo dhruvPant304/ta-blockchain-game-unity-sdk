@@ -46,6 +46,50 @@ namespace TA.APIClient{
                     );
         }
 
+        //=====================
+        // GAME 
+        //=====================
+
+        public async UniTask<VariableRequestResponse<GameSessionResponse, FailedResponse>> SendStartGameRequest(string gameId,
+                string authToken){
+            return await SendWebRequest<GameSessionResponse, FailedResponse>(
+                        $"/api/v1/games/start/{gameId}",
+                        "POST",
+                        null,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<ScoreUpdateResponse , FailedResponse>> SendUpdateGameRequest(
+                TA.APIClient.RequestData.UpdateScoreParams updateGameParams,
+                string gameToken){
+            return await SendWebRequest<ScoreUpdateResponse, FailedResponse>(
+                        "/api/v1/games/update",
+                        "PATCH",
+                        updateGameParams,
+                        gameToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<GameSessionResponse, FailedResponse>> SendContinueRequest(string gameToken){
+            return await SendWebRequest<GameSessionResponse, FailedResponse>(
+                        "/api/v1/games/continue",
+                        "PUT",
+                        null,
+                        gameToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<GameSessionResponse, FailedResponse>> SendCompleteRequest(
+                TA.APIClient.RequestData.FinalScoreParams finalScoreParams,
+                string gameToken){
+            return await SendWebRequest<GameSessionResponse, FailedResponse>(
+                        "/api/v1/games/complete",
+                        "PUT",
+                        finalScoreParams,
+                        gameToken
+                    );
+        }
 
         //=====================
         // END

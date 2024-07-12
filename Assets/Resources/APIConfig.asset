@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverUrl: https://d3vejq6fkg8hk0.cloudfront.net
   encryptionPublicKey: 
+  gameId: 1
   logResponses: 1
   logRequest: 1

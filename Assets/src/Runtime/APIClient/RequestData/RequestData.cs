@@ -12,5 +12,18 @@ namespace TA.APIClient.RequestData{
         public string platform;
         public string appType;
     }
+
+    [Serializable]
+    public class UpdateScoreParams{
+        public string sessionScore;
+        public string startTime;
+        public string endTime;
+        public string duration;
+    }
+
+    [Serializable]
+    public class FinalScoreParams {
+        public string totalScore;
+    }
 }
 

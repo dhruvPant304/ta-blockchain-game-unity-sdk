@@ -2,14 +2,17 @@ using System;
 
 namespace TA.APIClient.ResponseData{
     [Serializable]
-    public class APIResponse<T>{
+    public class BaseAPIResponse{
         public string status;
         public string message;
-        public T data;
-
         public bool IsSuccess => status == "success";
     }
-    
+
+    [Serializable]
+    public class APIResponse<T> : BaseAPIResponse {
+        public T data;
+    }
+
     //=====================
     // RESPONSE CLASSES
     //=====================
@@ -19,6 +22,12 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class UserBalanceResponse : APIResponse<UserBalanceData>{}
+
+    [Serializable]
+    public class GameSessionResponse : APIResponse<GameSessionData>{}
+
+    [Serializable]
+    public class ScoreUpdateResponse : APIResponse<ScoreUpdateData>{}
 
     [Serializable]
     public class FailedResponse{
@@ -40,9 +49,24 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
+    public class GameSessionData {
+        public string token;
+    }
+
+    [Serializable]
     public class LoginUserData : UserData{
         public string token;
         public bool isFirstTimeUser;
+    }
+
+    [Serializable]
+    public class ScoreUpdateData{
+        public GameResult result;
+    }
+
+    [Serializable]
+    public class GameResult{
+        public UserLeaderboardData userLeaderboard;
     }
 
     [Serializable]
@@ -54,6 +78,18 @@ namespace TA.APIClient.ResponseData{
         public int tokens;
         public int xpBalance;
         public float native;
+    }
+
+    [Serializable]
+    public class UserLeaderboardData{
+        public LeaderBoardEntry high;
+        public LeaderBoardEntry total;
+    }
+
+    [Serializable]
+    public class LeaderBoardEntry{
+        public int score;
+        public int rank;
     }
 
     [Serializable]

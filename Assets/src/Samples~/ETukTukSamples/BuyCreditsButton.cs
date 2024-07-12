@@ -18,6 +18,11 @@ public class BuyCreditsButton : MonoBehaviour{
         _taMenuService.OnBuyCreditsMenuClosed += OnCloseBuyCredit;
     }
 
+    void OnDestroy(){
+        _taMenuService.OnBuyCreditsMenuOpen -= OnBuyCreditOpen;
+        _taMenuService.OnBuyCreditsMenuClosed -= OnCloseBuyCredit;
+    }
+
     void OpenBuyCreditsPanel(){
         Debug.Log("OpenBuyCreditsMenu");
         _taMenuService.OpenBuyCreditsMenu();

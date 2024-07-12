@@ -8,12 +8,12 @@ public class BuyCreditsMenu : MonoBehaviour{
     [SerializeField] GameObject buyCreditPanel;
     [SerializeField] Button closeButton;
     [SerializeField] CreditPurchasePackageData creditPurchasePackageData; 
-    [SerializeField] BuyPackageButton buttonPrefab;
+    [SerializeField] PackageDisplay buttonPrefab;
     [SerializeField] Transform buttonHolder;
 
     void Awake(){
-        Close();
         closeButton.onClick.AddListener(CloseUsingService);
+        Close();
     }
 
     public void Open(){
@@ -23,15 +23,16 @@ public class BuyCreditsMenu : MonoBehaviour{
 
     public void Close(){
         buyCreditPanel.SetActive(false);
+        Debug.Log("Buy Credit panel closed");
     }
 
     void CloseUsingService(){
-        ServiceLocator.Instance.GetService<TAMenuService>().CloseBuyCreditMenu();
+        ServiceLocator.Instance.GetService<TAMenuService>().CloseCreditsShop(this);
     }
 
-    List<BuyPackageButton> _buttons = new();
+    List<PackageDisplay> _buttons = new();
 
-    BuyPackageButton CreateButton(PurchasePackage package){
+    PackageDisplay CreateButton(PurchasePackage package){
         var button = Instantiate(buttonPrefab, buttonHolder);
         button.ShowPackage(package);
         _buttons.Add(button);

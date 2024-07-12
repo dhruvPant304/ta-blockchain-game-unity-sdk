@@ -8,8 +8,8 @@ public class BlockchainGameCanvas : Service<BlockchainGameCanvas>{
     protected override void OnInitialize(){
     }
 
-    public void ShowMessagePopup(MessagePopup messagePopup){
-        presenter.ShowMessagePopup(messagePopup);
+    public void ShowMessagePopup(MessagePopup messagePopup, int styleIndex = 0){
+        presenter.ShowMessagePopup(messagePopup, styleIndex);
     }
 }
 }
