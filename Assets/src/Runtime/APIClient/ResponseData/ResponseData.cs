@@ -61,6 +61,11 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class ScoreUpdateData{
+        public GameResult result;
+    }
+
+    [Serializable]
+    public class GameResult{
         public UserLeaderboardData userLeaderboard;
     }
 
