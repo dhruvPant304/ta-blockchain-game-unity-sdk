@@ -10,7 +10,7 @@ public class BalanceText : MonoBehaviour{
     TextMeshProUGUI textMesh;
     UserProfileService _userProfileService;
 
-    void OnEnable(){
+    void Start(){
         textMesh = GetComponent<TextMeshProUGUI>();
 
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
