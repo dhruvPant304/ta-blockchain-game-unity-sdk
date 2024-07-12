@@ -19,6 +19,12 @@ public class GameOverMenu : MonoBehaviour {
     [Header("Panels")]
     [SerializeField] GameObject panel;
 
+    [Header("Text options")]
+    [SerializeField] string scoreSuffix;
+    [SerializeField] string scorePrefix;
+    [SerializeField] string positionSuffix;
+    [SerializeField] string positionPrefix;
+
     GameService _gameService;
     TAMenuService _taMenuService;
 
@@ -35,8 +41,8 @@ public class GameOverMenu : MonoBehaviour {
 
     public void ShowEndGameMenu(){
         panel.SetActive(true);
-        score.text = _gameService.SavedTotalScore.ToString();
-        position.text = _gameService.LeaderBoardPosition.ToString();
+        score.text = scorePrefix + _gameService.SavedTotalScore.ToString() + scoreSuffix;
+        position.text = positionPrefix + _gameService.LeaderBoardPosition.ToString() + positionSuffix;
         continueCost.text = $"Continue\n{_gameService.NextContinueCost} credit?";
     }
 
