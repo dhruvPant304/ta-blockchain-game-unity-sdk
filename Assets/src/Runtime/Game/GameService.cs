@@ -215,7 +215,7 @@ public class GameService : Service<GameService> {
             _totalScore = score;
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
-            _leaderBoardPosition = response.SuccessResponse.data.userLeaderboard.high.rank;
+            _leaderBoardPosition = response.SuccessResponse.data.result.userLeaderboard.high.rank;
 
             OnUpdateScoreSucess?.Invoke();
         }else{
