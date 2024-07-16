@@ -19,9 +19,11 @@ public class AuthExceptionHandler : MonoBehaviour{
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _blockChainGameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
 
+        
         _profileService.OnAuthFailed += OnAuthFailed;
         _profileService.OnAuthSuccess += OnAuthSuccess;
 
+        if(_profileService.HasSavedLoginSession()) _profileService.StartSavedLoginSession();
         Debug.Log("Auth exception handler ready");
     }
 

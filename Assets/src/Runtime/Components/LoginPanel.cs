@@ -18,7 +18,6 @@ public class LoginPanel : MonoBehaviour{
 
         if(_userProfileService.HasSavedLoginSession()){
             Hide();
-            _userProfileService.StartSavedLoginSession();
         }
         else {
             _webAuthService.OnWaitingLogin += Hide;
