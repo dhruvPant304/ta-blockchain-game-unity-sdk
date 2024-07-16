@@ -16,8 +16,9 @@ public class LoginPanel : MonoBehaviour{
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _userProfileService.OnAuthComplete += Hide;
 
-        if(_webAuthService.LoggedIn){
+        if(_userProfileService.HasSavedLoginSession()){
             Hide();
+            _userProfileService.StartSavedLoginSession();
         }
         else {
             _webAuthService.OnWaitingLogin += Hide;
