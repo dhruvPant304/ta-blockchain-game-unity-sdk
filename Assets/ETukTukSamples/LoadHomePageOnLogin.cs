@@ -21,7 +21,7 @@ public class LoadHomePageOnLogin : MonoBehaviour{
         _userProfileService.OnAuthSuccess -= OnAuthSuccess;
     }
 
-    void OnAuthSuccess(LoginUserData userData){
+    void OnAuthSuccess(LoginSessionData userData){
         // Debug.Log("Login successful loading home page...");
         // SceneManager.LoadScene("HomePage");
         // _canvasGroupFader.FadeIn().Forget();

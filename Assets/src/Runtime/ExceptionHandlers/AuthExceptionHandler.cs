@@ -45,7 +45,7 @@ public class AuthExceptionHandler : MonoBehaviour{
         _blockChainGameCanvas.ShowMessagePopup(errorPopup);
     }
 
-    void OnAuthSuccess(LoginUserData userData){
+    void OnAuthSuccess(LoginSessionData userData){
         if(!userData.isFirstTimeUser) {
             Debug.Log("not a first time user");
             SceneManager.LoadScene(3);

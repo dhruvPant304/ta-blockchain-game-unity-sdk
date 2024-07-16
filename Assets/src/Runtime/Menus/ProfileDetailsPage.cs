@@ -14,13 +14,13 @@ public class ProfileDetailsPage : MonoBehaviour{
     [SerializeField] TextMeshProUGUI createdAt;
 
     UserProfileService _userProfileService;
-    LoginUserData _userData;
+    LoginSessionData _userData;
 
     void Start(){
         Hide();
     }
 
-    void SaveUserData(LoginUserData data){
+    void SaveUserData(LoginSessionData data){
         _userData = data;
     }
 

@@ -18,7 +18,7 @@ namespace TA.APIClient.ResponseData{
     //=====================
 
     [Serializable]
-    public class LoginResponse : APIResponse<LoginUserData>{}
+    public class LoginResponse : APIResponse<LoginSessionData>{}
 
     [Serializable]
     public class UserBalanceResponse : APIResponse<UserBalanceData>{}
@@ -54,7 +54,7 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class LoginUserData : UserData{
+    public class LoginSessionData : UserData{
         public string token;
         public bool isFirstTimeUser;
     }
