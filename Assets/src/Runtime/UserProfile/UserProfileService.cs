@@ -64,8 +64,10 @@ public class UserProfileService : Service<UserProfileService>{
 
         var requestResponse = await _apiService.SendLoginRequest(loginParams);
 
-        if(requestResponse.IsSuccess) 
+        if(requestResponse.IsSuccess) {
             HandleAuthSuccess(requestResponse.SuccessResponse.data);
+            SaveLoginSession(requestResponse.SuccessResponse.data);
+        }
         else 
             HandleAuthFailiure(requestResponse.FailureResponse);
 
@@ -115,7 +117,7 @@ public class UserProfileService : Service<UserProfileService>{
         PlayerPrefs.Save();
     }
 
-    bool HasSavedLoginSession(){
+    public bool HasSavedLoginSession(){
         return PlayerPrefs.HasKey(LOGIN_SESSION_KEY);
     }
 }
