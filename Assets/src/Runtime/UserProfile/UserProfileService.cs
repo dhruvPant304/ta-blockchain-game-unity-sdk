@@ -112,7 +112,7 @@ public class UserProfileService : Service<UserProfileService>{
         PlayerPrefs.Save();
     }
 
-    void ClearLoginSession(){
+    public void ClearLoginSession(){
         PlayerPrefs.DeleteKey(LOGIN_SESSION_KEY);
         PlayerPrefs.Save();
     }

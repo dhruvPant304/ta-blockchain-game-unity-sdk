@@ -2,15 +2,18 @@ using TA.Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TA.UserProfile;
 
 namespace TA.Authentication{
 [RequireComponent(typeof(Button))]
 public class Web3AuthLogoutButton : MonoBehaviour {
     Web3AuthService _web3AuthService;
+    UserProfileService _userProfileService;
 
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
-        
+        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+
         _web3AuthService.OnLogin += (r) => Show();
         _web3AuthService.OnLogout += OnLogout; 
 
@@ -23,7 +26,8 @@ public class Web3AuthLogoutButton : MonoBehaviour {
 
     void OnLogout(){
         SceneManager.LoadScene(0);
-        ServiceLocator.Instance.CloseServices(); 
+        _userProfileService.ClearLoginSession();
+        ServiceLocator.Instance.CloseServices();
     }
 
     void Show() => gameObject.SetActive(true);
