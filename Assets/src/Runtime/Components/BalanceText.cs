@@ -18,11 +18,14 @@ public class BalanceText : MonoBehaviour{
                 _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
                 _userProfileService.OnBalanceUpdate += OnBalanceUpdate;
                 _userProfileService.OnBalanceUpdateFailed += OnBalanceFailed;
+
+                OnBalanceUpdate(_userProfileService.UserBalanceData);
             }
         );
     }
 
     void OnBalanceUpdate(UserBalanceData data){
+        if(data == null) OnBalanceFailed();
         textMesh.text = data.credits.ToString();
     }
 
