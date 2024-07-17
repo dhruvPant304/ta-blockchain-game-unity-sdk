@@ -65,7 +65,7 @@ public class UserProfileService : Service<UserProfileService>{
         var requestResponse = await _apiService.SendLoginRequest(loginParams);
 
         if(requestResponse.IsSuccess) {
-            HandleAuthSuccess(requestResponse.SuccessResponse.data);
+            TryHandleLogin(requestResponse.SuccessResponse.data).Forget();
             SaveLoginSession(requestResponse.SuccessResponse.data);
         }
         else 
@@ -74,14 +74,18 @@ public class UserProfileService : Service<UserProfileService>{
         OnAuthComplete?.Invoke();
     }
 
-    void HandleAuthSuccess(LoginSessionData response){
+    async UniTask<bool> TryHandleLogin(LoginSessionData response){
          var loginData = response;
         _userData = loginData;
 
-        OnAuthSuccess?.Invoke(_userData);
-        UpdateUserBalance().Forget();
+        var balanceResponse = await UpdateUserBalance();
+        if(balanceResponse.IsSuccess){
+            OnAuthSuccess?.Invoke(_userData);
+            LoggedIn = true;
+            return true;
+        }
 
-        LoggedIn = true;
+        return false;
     }
 
     void HandleAuthFailiure(FailedResponse failedResponse){
@@ -102,9 +106,9 @@ public class UserProfileService : Service<UserProfileService>{
 
     public const string LOGIN_SESSION_KEY = "LOGIN_SESSION_KEY";
 
-    public void StartSavedLoginSession(){
+    public async UniTask<bool> StartSavedLoginSession(){
         var loginData = JsonConvert.DeserializeObject<LoginSessionData>(PlayerPrefs.GetString(LOGIN_SESSION_KEY));
-        HandleAuthSuccess(loginData);
+        return await TryHandleLogin(loginData);
     }
 
     void SaveLoginSession(LoginSessionData loginData){

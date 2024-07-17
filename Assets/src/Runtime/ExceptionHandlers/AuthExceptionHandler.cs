@@ -14,7 +14,7 @@ public class AuthExceptionHandler : MonoBehaviour{
     Web3AuthService _web3AuthService;
     BlockchainGameCanvas _blockChainGameCanvas;
 
-    void Start(){
+    async void Start(){
         _profileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _blockChainGameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
@@ -23,7 +23,12 @@ public class AuthExceptionHandler : MonoBehaviour{
         _profileService.OnAuthFailed += OnAuthFailed;
         _profileService.OnAuthSuccess += OnAuthSuccess;
 
-        if(UserProfileService.HasSavedLoginSession()) _profileService.StartSavedLoginSession();
+        if(UserProfileService.HasSavedLoginSession()) {
+            if(!await _profileService.TryStartSavedLoginSession()){
+                //Jumping back to landing page if game fails to Start saved session
+                SceneManager.LoadScene(0);
+            }
+        }
         Debug.Log("Auth exception handler ready");
     }
 
