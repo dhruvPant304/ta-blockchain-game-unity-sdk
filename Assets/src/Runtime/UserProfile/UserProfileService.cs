@@ -108,7 +108,11 @@ public class UserProfileService : Service<UserProfileService>{
 
     public async UniTask<bool> TryStartSavedLoginSession(){
         var loginData = JsonConvert.DeserializeObject<LoginSessionData>(PlayerPrefs.GetString(LOGIN_SESSION_KEY));
-        return await TryHandleLogin(loginData);
+        if(!await TryHandleLogin(loginData)){
+            ClearLoginSession();
+            return false;
+        }
+        return true;
     }
 
     void SaveLoginSession(LoginSessionData loginData){
