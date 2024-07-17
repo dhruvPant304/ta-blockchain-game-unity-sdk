@@ -106,7 +106,7 @@ public class UserProfileService : Service<UserProfileService>{
 
     public const string LOGIN_SESSION_KEY = "LOGIN_SESSION_KEY";
 
-    public async UniTask<bool> StartSavedLoginSession(){
+    public async UniTask<bool> TryStartSavedLoginSession(){
         var loginData = JsonConvert.DeserializeObject<LoginSessionData>(PlayerPrefs.GetString(LOGIN_SESSION_KEY));
         return await TryHandleLogin(loginData);
     }
