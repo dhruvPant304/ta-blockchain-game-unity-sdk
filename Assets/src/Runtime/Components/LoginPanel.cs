@@ -16,7 +16,7 @@ public class LoginPanel : MonoBehaviour{
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _userProfileService.OnAuthComplete += Hide;
 
-        if(_userProfileService.HasSavedLoginSession()){
+        if(UserProfileService.HasSavedLoginSession()){
             Hide();
         }
         else {

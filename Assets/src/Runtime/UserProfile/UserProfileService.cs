@@ -117,7 +117,7 @@ public class UserProfileService : Service<UserProfileService>{
         PlayerPrefs.Save();
     }
 
-    public bool HasSavedLoginSession(){
+    public static bool HasSavedLoginSession(){
         return PlayerPrefs.HasKey(LOGIN_SESSION_KEY);
     }
 }

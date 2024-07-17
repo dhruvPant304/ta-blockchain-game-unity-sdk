@@ -23,7 +23,7 @@ public class AuthExceptionHandler : MonoBehaviour{
         _profileService.OnAuthFailed += OnAuthFailed;
         _profileService.OnAuthSuccess += OnAuthSuccess;
 
-        if(_profileService.HasSavedLoginSession()) _profileService.StartSavedLoginSession();
+        if(UserProfileService.HasSavedLoginSession()) _profileService.StartSavedLoginSession();
         Debug.Log("Auth exception handler ready");
     }
 
