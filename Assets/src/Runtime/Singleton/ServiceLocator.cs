@@ -5,6 +5,7 @@ using UnityEngine;
 namespace TA.Services{
 public class ServiceLocator : Singleton<ServiceLocator>{
 	Dictionary<Type,MonoBehaviour> _services = new();
+	Dictionary<Type, Action> _registrationCallbacks = new();
 
 	protected override void Initialize(){
 		Debug.Log("Service locator intialised");
@@ -17,7 +18,25 @@ public class ServiceLocator : Singleton<ServiceLocator>{
 		}
 		_services[service.serviceType] = service;
 		if(persistant) MakeGameObjectPersistant(service.gameObject);	
+
+		//Invoking registration callabacks
+		if(_registrationCallbacks.ContainsKey(typeof(T))){
+			_registrationCallbacks[typeof(T)]?.Invoke();
+		}
 		Debug.Log($"Service:{service.serviceType} registered");
+	}
+
+	public void OnServiceRegistered<T>(Action onRegister) where T : Service<T> {		
+		if(!_registrationCallbacks.ContainsKey(typeof(T))){
+			_registrationCallbacks.Add(typeof(T), onRegister);
+		}else{
+			_registrationCallbacks[typeof(T)] += onRegister;
+		}
+
+		//Invoking the callback if the serivce is already registered
+		if(_services.ContainsKey(typeof(T))){
+			onRegister?.Invoke();
+		}
 	}
 
 	public T GetService<T>() where T:Service<T>{

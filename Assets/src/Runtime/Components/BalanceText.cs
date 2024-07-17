@@ -13,9 +13,13 @@ public class BalanceText : MonoBehaviour{
     void Start(){
         textMesh = GetComponent<TextMeshProUGUI>();
 
-        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-        _userProfileService.OnBalanceUpdate += OnBalanceUpdate;
-        _userProfileService.OnBalanceUpdateFailed += OnBalanceFailed;
+        ServiceLocator.Instance.OnServiceRegistered<UserProfileService>(
+            () => {
+                _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+                _userProfileService.OnBalanceUpdate += OnBalanceUpdate;
+                _userProfileService.OnBalanceUpdateFailed += OnBalanceFailed;
+            }
+        );
     }
 
     void OnBalanceUpdate(UserBalanceData data){
