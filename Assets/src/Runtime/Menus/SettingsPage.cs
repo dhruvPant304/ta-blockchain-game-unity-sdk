@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using TA.UserProfile;
 using TA.Services;
+using System.Linq;
 
 namespace TA.Menus{
 public class SettingsPage : MonoBehaviour {
@@ -22,8 +23,8 @@ public class SettingsPage : MonoBehaviour {
         playerName.text = userData.username;
         email.text = userData.email;
 
-        soundToggle.SetValueWithoutNotify(userData.appSettings[0].isSound);
-        vibrationsToggle.SetValueWithoutNotify(userData.appSettings[0].isVibrate);
+        soundToggle.SetValueWithoutNotify(userData.appSettings.Last().isMusic);
+        vibrationsToggle.SetValueWithoutNotify(userData.appSettings.Last().isVibrate);
 
         soundToggle.OnValueChanged = (val) => UpdateSettings();
         vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
