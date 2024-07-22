@@ -54,7 +54,7 @@ namespace TA.APIClient{
             return await SendWebRequest<SettingsUpdateResponse, FailedResponse>(
                         "/api/v1/user/settings",
                         "PUT",
-                        null,
+                        settings,
                         authToken
                     );
         }
