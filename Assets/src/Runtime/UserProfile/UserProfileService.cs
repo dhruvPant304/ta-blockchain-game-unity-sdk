@@ -7,6 +7,8 @@ using TA.Helpers.Crypto;
 using TA.Services;
 using UnityEngine;
 using Newtonsoft.Json;
+using TA.Components;
+using System.Collections.Generic;
 
 namespace TA.UserProfile{
 public class UserProfileService : Service<UserProfileService>{
@@ -16,11 +18,13 @@ public class UserProfileService : Service<UserProfileService>{
 
     Web3AuthService _web3AuthService;
     APIService _apiService;
+    BlockchainGameCanvas _gameCanvas;
+
     string platform = "android";
     string appType = "etuktuk";
 
-    LoginSessionData _userData;
-    public LoginSessionData UserData => _userData;
+    LoginSessionData _userloginData;
+    public LoginSessionData UserData => _userloginData;
 
     UserBalanceData _userBalanceData;
     public UserBalanceData UserBalanceData => _userBalanceData;
@@ -28,6 +32,7 @@ public class UserProfileService : Service<UserProfileService>{
     //Events
     public Action<LoginSessionData> OnAuthSuccess;
     public Action<FailedResponse>  OnAuthFailed;
+    public Action<UserData> OnUserDataUpdate;
     public Action OnAuthComplete;
     public Action<UserBalanceData> OnBalanceUpdate;
     public Action OnBalanceUpdateFailed;
@@ -38,6 +43,7 @@ public class UserProfileService : Service<UserProfileService>{
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _apiService = ServiceLocator.Instance.GetService<APIService>();
+        _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
 
         _web3AuthService.OnLogin += OnLogin;
     }
@@ -45,6 +51,10 @@ public class UserProfileService : Service<UserProfileService>{
     void OnDisable(){
         _web3AuthService.OnLogin -= OnLogin;
     }
+
+    //=======================
+    // WEB3AUTH LOGIN
+    //=======================
 
     async void OnLogin(Web3AuthResponse response){
         var privateKey = response.privKey;
@@ -76,11 +86,12 @@ public class UserProfileService : Service<UserProfileService>{
 
     async UniTask<bool> TryHandleLogin(LoginSessionData response){
          var loginData = response;
-        _userData = loginData;
+        _userloginData = loginData;
 
         var balanceResponse = await UpdateUserBalance();
         if(balanceResponse.IsSuccess){
-            OnAuthSuccess?.Invoke(_userData);
+            OnAuthSuccess?.Invoke(_userloginData);
+            OnUserDataUpdate?.Invoke(_userloginData);
             LoggedIn = true;
             return true;
         }
@@ -103,6 +114,10 @@ public class UserProfileService : Service<UserProfileService>{
         }
         return response;
     }
+
+    //=======================
+    // SAVED LOGIN SESSIONS
+    //=======================
 
     public const string LOGIN_SESSION_KEY = "LOGIN_SESSION_KEY";
 
@@ -128,6 +143,46 @@ public class UserProfileService : Service<UserProfileService>{
     public static bool HasSavedLoginSession(){
         return PlayerPrefs.HasKey(LOGIN_SESSION_KEY);
     }
-}
 
+    //=======================
+    // USER SETTINGS
+    //=======================
+    
+    public Action<bool> OnMusicSettingChanged;
+    public Action<bool> OnSoundSettingChanged;
+    public Action<bool> OnVibrationSetttingChanged;
+
+    public async void UpdateUserSettings(bool isMusic, bool isSound, bool isVibrate){
+        OnMusicSettingChanged?.Invoke(isMusic);
+        OnSoundSettingChanged?.Invoke(isSound);
+        OnVibrationSetttingChanged?.Invoke(isVibrate);
+
+        var appSettings = new AppSettings {
+            id = "0",
+            isMusic = isMusic,
+            isSound = isSound,
+            isVibrate = isVibrate
+        };
+
+        var response = await _apiService.SendUpdateUserSettingsRequest(appSettings, _userloginData.token);
+        if(response.IsSuccess){
+            OnUserDataUpdate?.Invoke(response.SuccessResponse.data);
+        }
+        else{
+            var popup = new MessagePopup{
+                header= "Failed to save settings",
+                message= response.FailureResponse.message,
+                exits = new List<MessagePopupExit>{
+                    new MessagePopupExit{
+                        exitStyle = MessagePopupExit.ExitStyle.Regular,
+                        name = "okay",
+                        exitAction = () => {}
+                    }
+                }
+            };
+
+            _gameCanvas.ShowMessagePopup(popup);
+        }
+    }
+}
 }

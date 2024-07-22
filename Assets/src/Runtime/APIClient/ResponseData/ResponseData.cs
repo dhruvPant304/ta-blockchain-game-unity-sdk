@@ -30,6 +30,9 @@ namespace TA.APIClient.ResponseData{
     public class ScoreUpdateResponse : APIResponse<ScoreUpdateData>{}
 
     [Serializable]
+    public class SettingsUpdateResponse : APIResponse<UserData>{}
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -94,6 +97,7 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class AppSettings{
+        public string id;
         public bool isMusic;
         public bool isSound;
         public bool isVibrate;

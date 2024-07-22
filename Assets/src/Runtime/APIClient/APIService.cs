@@ -47,6 +47,19 @@ namespace TA.APIClient{
         }
 
         //=====================
+        // SETTINGS
+        //=====================
+
+        public async UniTask<VariableRequestResponse<SettingsUpdateResponse, FailedResponse>> SendUpdateUserSettingsRequest(AppSettings settings, string authToken){
+            return await SendWebRequest<SettingsUpdateResponse, FailedResponse>(
+                        "/api/v1/user/settings",
+                        "PUT",
+                        null,
+                        authToken
+                    );
+        }
+
+        //=====================
         // GAME 
         //=====================
 

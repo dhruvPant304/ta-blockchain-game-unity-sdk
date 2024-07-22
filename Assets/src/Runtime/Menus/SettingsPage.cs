@@ -21,13 +21,21 @@ public class SettingsPage : MonoBehaviour {
         var userData = _userProfileService.UserData;
         playerName.text = userData.username;
         email.text = userData.email;
+
         soundToggle.SetValueWithoutNotify(userData.appSettings[0].isSound);
         vibrationsToggle.SetValueWithoutNotify(userData.appSettings[0].isVibrate);
+
+        soundToggle.OnValueChanged = (val) => UpdateSettings();
+        vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
     }
 
     public void Show(){ 
         gameObject.SetActive(true);
         OnShow();
+    }
+
+    void UpdateSettings(){
+        _userProfileService.UpdateUserSettings(soundToggle.Value, false, vibrationsToggle.Value);
     }
 
     public void Hide(){
