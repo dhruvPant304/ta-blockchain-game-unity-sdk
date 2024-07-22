@@ -24,7 +24,10 @@ public class UserProfileService : Service<UserProfileService>{
     string appType = "etuktuk";
 
     LoginSessionData _userloginData;
-    public LoginSessionData UserData => _userloginData;
+    public LoginSessionData LoginUserData => _userloginData;
+
+    UserData _sessionUserData;
+    public UserData SessionUserData => _sessionUserData;
 
     UserBalanceData _userBalanceData;
     public UserBalanceData UserBalanceData => _userBalanceData;
@@ -87,6 +90,7 @@ public class UserProfileService : Service<UserProfileService>{
     async UniTask<bool> TryHandleLogin(LoginSessionData response){
          var loginData = response;
         _userloginData = loginData;
+        _sessionUserData = loginData;
 
         var balanceResponse = await UpdateUserBalance();
         if(balanceResponse.IsSuccess){
@@ -105,7 +109,7 @@ public class UserProfileService : Service<UserProfileService>{
     }
 
     public async UniTask<StaticRequestResponse<UserBalanceResponse>> UpdateUserBalance(){
-        var response = await _apiService.SendFetchUserBalanceRequest(UserData.token);
+        var response = await _apiService.SendFetchUserBalanceRequest(LoginUserData.token);
         if(response.IsSuccess){
             OnBalanceUpdate?.Invoke(response.Response.data);
             _userBalanceData = response.Response.data;
@@ -166,7 +170,8 @@ public class UserProfileService : Service<UserProfileService>{
 
         var response = await _apiService.SendUpdateUserSettingsRequest(appSettings, _userloginData.token);
         if(response.IsSuccess){
-            OnUserDataUpdate?.Invoke(response.SuccessResponse.data);
+            _sessionUserData = response.SuccessResponse.data;
+            OnUserDataUpdate?.Invoke(_sessionUserData);
         }
         else{
             var popup = new MessagePopup{

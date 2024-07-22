@@ -19,7 +19,7 @@ public class SettingsPage : MonoBehaviour {
     }
 
     void OnShow(){
-        var userData = _userProfileService.UserData;
+        var userData = _userProfileService.SessionUserData;
         playerName.text = userData.username;
         email.text = userData.email;
 
