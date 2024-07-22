@@ -52,10 +52,10 @@ public class GameService : Service<GameService> {
 
     string AuthToken { 
         get{
-            if(_userProfileService.UserData == null){
+            if(_userProfileService.LoginUserData == null){
                 throw new System.Exception("Could not get auth token, make sure property is invoked only after autherization success");
             }
-            return _userProfileService.UserData.token;
+            return _userProfileService.LoginUserData.token;
         }
     }
 

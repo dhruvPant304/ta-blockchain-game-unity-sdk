@@ -14,6 +14,6 @@ public class CopyWalletAddressButton : MonoBehaviour{
     }
 
     void CopyAddress(){
-        GUIUtility.systemCopyBuffer = _userProfileService.UserData.walletAddress;
+        GUIUtility.systemCopyBuffer = _userProfileService.LoginUserData.walletAddress;
     }
 }

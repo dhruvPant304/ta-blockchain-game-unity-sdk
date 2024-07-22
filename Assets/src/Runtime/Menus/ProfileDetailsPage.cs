@@ -26,7 +26,7 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     public void Show(){
         gameObject.SetActive(true);
-        _userData = ServiceLocator.Instance.GetService<UserProfileService>().UserData;
+        _userData = ServiceLocator.Instance.GetService<UserProfileService>().LoginUserData;
         userName.text = _userData.username;
         walletAddress.text = GetTruncatedString(6,_userData.walletAddress);
         email.text = _userData.email;

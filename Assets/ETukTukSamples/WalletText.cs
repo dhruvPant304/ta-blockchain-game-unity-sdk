@@ -11,7 +11,7 @@ public class WalletText : MonoBehaviour{
         _userProfileServie = ServiceLocator.Instance.GetService<UserProfileService>();
         
         if(_userProfileServie.LoggedIn){
-             GetComponent<TextMeshProUGUI>().text = "username: " + _userProfileServie.UserData.username;
+             GetComponent<TextMeshProUGUI>().text = "username: " + _userProfileServie.LoginUserData.username;
         }
     }
 }
