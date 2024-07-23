@@ -27,8 +27,10 @@ public class ProfileDetailsPage : MonoBehaviour{
         gameObject.SetActive(true);
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         var userData = _userProfileService.SessionUserData;
+
         UpdateData(userData);
         _userProfileService.OnUserDataUpdate += UpdateData;
+        editProfileButton.onClick.AddListener(OnEditProfile);
     }
 
     void UpdateData(UserData data){
