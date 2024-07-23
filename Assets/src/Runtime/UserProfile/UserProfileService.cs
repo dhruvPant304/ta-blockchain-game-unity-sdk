@@ -208,7 +208,7 @@ public class UserProfileService : Service<UserProfileService>{
         }
         else{
             var popup = new MessagePopup{
-                header= "Failed to update user data",
+                header= "Failed to update!!!",
                 message= response.FailureResponse.message,
                 banner = BannerType.Danger,
                 exits = new List<MessagePopupExit>{
