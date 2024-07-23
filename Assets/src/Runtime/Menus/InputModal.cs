@@ -7,7 +7,7 @@ namespace TA.Menus{
 public class InputModal : MonoBehaviour {
     [SerializeField] Button discardButton;
     [SerializeField] Button updateButton;
-    [SerializeField] InputField inputField;
+    [SerializeField] TMP_InputField inputField;
     [SerializeField] TextMeshProUGUI heading;
 
     bool _confirmed = false;
