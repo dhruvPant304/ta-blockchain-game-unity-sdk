@@ -42,6 +42,8 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     public void Hide(){
         gameObject.SetActive(false);
+        _userProfileService.OnUserDataUpdate -= UpdateData;
+        editProfileButton.onClick.RemoveListener(OnEditProfile);
     }
 
     string GetTruncatedString(int characters, string str){
