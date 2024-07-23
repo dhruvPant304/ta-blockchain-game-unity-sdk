@@ -21,16 +21,16 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     void Start(){
         Hide();
+        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        _userProfileService.OnUserDataUpdate += UpdateData;
+        editProfileButton.onClick.AddListener(OnEditProfile);
+
+        var userData = _userProfileService.SessionUserData;
+        UpdateData(userData);
     }
 
     public void Show(){
         gameObject.SetActive(true);
-        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-        var userData = _userProfileService.SessionUserData;
-
-        UpdateData(userData);
-        _userProfileService.OnUserDataUpdate += UpdateData;
-        editProfileButton.onClick.AddListener(OnEditProfile);
     }
 
     void UpdateData(UserData data){
@@ -42,8 +42,6 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     public void Hide(){
         gameObject.SetActive(false);
-        _userProfileService.OnUserDataUpdate -= UpdateData;
-        editProfileButton.onClick.RemoveListener(OnEditProfile);
     }
 
     string GetTruncatedString(int characters, string str){
