@@ -9,6 +9,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using TA.Components;
 using System.Collections.Generic;
+using TA.APIClient.RequestData;
 
 namespace TA.UserProfile{
 public class UserProfileService : Service<UserProfileService>{
@@ -177,6 +178,7 @@ public class UserProfileService : Service<UserProfileService>{
             var popup = new MessagePopup{
                 header= "Failed to save settings",
                 message= response.FailureResponse.message,
+                banner = BannerType.Danger,
                 exits = new List<MessagePopupExit>{
                     new MessagePopupExit{
                         exitStyle = MessagePopupExit.ExitStyle.Regular,
@@ -189,5 +191,38 @@ public class UserProfileService : Service<UserProfileService>{
             _gameCanvas.ShowMessagePopup(popup);
         }
     }
+
+    //=======================
+    // UPDATE PROFILE
+    //=======================
+
+    public async void UpdateUserName(string username){
+        var requestData = new UpdateProfileParams{
+            username = username
+        };
+
+        var response = await _apiService.SendUpdateProfileRequest(requestData, _userloginData.token);
+        if(response.IsSuccess) {
+            _sessionUserData = response.SuccessResponse.data;
+            OnUserDataUpdate?.Invoke(_sessionUserData);
+        }
+        else{
+            var popup = new MessagePopup{
+                header= "Failed to update user data",
+                message= response.FailureResponse.message,
+                banner = BannerType.Danger,
+                exits = new List<MessagePopupExit>{
+                    new MessagePopupExit{
+                        exitStyle = MessagePopupExit.ExitStyle.Regular,
+                        name = "okay",
+                        exitAction = () => {}
+                    }
+                }
+            };
+
+            _gameCanvas.ShowMessagePopup(popup);
+        }
+    }
+
 }
 }

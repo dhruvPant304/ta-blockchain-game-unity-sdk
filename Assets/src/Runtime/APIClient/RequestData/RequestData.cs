@@ -25,5 +25,10 @@ namespace TA.APIClient.RequestData{
     public class FinalScoreParams {
         public string totalScore;
     }
+
+    [Serializable]
+    public class UpdateProfileParams{
+        public string username;
+    }
 }
 

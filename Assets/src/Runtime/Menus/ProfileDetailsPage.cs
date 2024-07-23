@@ -1,10 +1,12 @@
 using System;
 using System.Globalization;
 using TA.APIClient.ResponseData;
+using TA.Components;
 using TA.Services;
 using TA.UserProfile;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TA.Menus{
 public class ProfileDetailsPage : MonoBehaviour{
@@ -12,25 +14,28 @@ public class ProfileDetailsPage : MonoBehaviour{
     [SerializeField] TextMeshProUGUI walletAddress;
     [SerializeField] TextMeshProUGUI email;
     [SerializeField] TextMeshProUGUI createdAt;
+    [SerializeField] Button editProfileButton;
+    [SerializeField] InputModal editProfileInputModal;
 
     UserProfileService _userProfileService;
-    LoginSessionData _userData;
 
     void Start(){
         Hide();
     }
 
-    void SaveUserData(LoginSessionData data){
-        _userData = data;
-    }
-
     public void Show(){
         gameObject.SetActive(true);
-        _userData = ServiceLocator.Instance.GetService<UserProfileService>().LoginUserData;
-        userName.text = _userData.username;
-        walletAddress.text = GetTruncatedString(6,_userData.walletAddress);
-        email.text = _userData.email;
-        createdAt.text = "Member since," + ConvertToCustomFormat(_userData.createdAt);
+        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        var userData = _userProfileService.SessionUserData;
+        UpdateData(userData);
+        _userProfileService.OnUserDataUpdate += UpdateData;
+    }
+
+    void UpdateData(UserData data){
+        userName.text = data.username;
+        walletAddress.text = GetTruncatedString(6,data.walletAddress);
+        email.text = data.email;
+        createdAt.text = "Member since," + ConvertToCustomFormat(data.createdAt);
     }
 
     public void Hide(){
@@ -46,6 +51,13 @@ public class ProfileDetailsPage : MonoBehaviour{
         DateTime dateTime = DateTime.Parse(inputDate, null, DateTimeStyles.RoundtripKind);
         string formattedDate = dateTime.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture);
         return formattedDate;
+    }
+
+    async void OnEditProfile(){
+        var result = await editProfileInputModal.WaitInput("Edit Profile");
+        if(result.option == Option.Some){
+            _userProfileService.UpdateUserName(result.result);
+        }
     }
 }
 }

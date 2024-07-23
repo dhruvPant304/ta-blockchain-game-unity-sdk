@@ -30,7 +30,7 @@ namespace TA.APIClient.ResponseData{
     public class ScoreUpdateResponse : APIResponse<ScoreUpdateData>{}
 
     [Serializable]
-    public class SettingsUpdateResponse : APIResponse<UserData>{}
+    public class UserDataResponse : APIResponse<UserData>{}
 
     [Serializable]
     public class FailedResponse{

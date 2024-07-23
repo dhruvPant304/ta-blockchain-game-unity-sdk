@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
+using TA.APIClient.RequestData;
 using TA.APIClient.ResponseData;
 using TA.Services;
 using UnityEngine;
@@ -46,12 +47,21 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<UserDataResponse, FailedResponse>> SendUpdateProfileRequest(UpdateProfileParams updatedUserData, string authToken){
+            return await SendWebRequest<UserDataResponse, FailedResponse>(
+                        "api/v1/user/profile",
+                        "PUT",
+                        updatedUserData,
+                        authToken
+                    );
+        }
+
         //=====================
         // SETTINGS
         //=====================
 
-        public async UniTask<VariableRequestResponse<SettingsUpdateResponse, FailedResponse>> SendUpdateUserSettingsRequest(AppSettings settings, string authToken){
-            return await SendWebRequest<SettingsUpdateResponse, FailedResponse>(
+        public async UniTask<VariableRequestResponse<UserDataResponse, FailedResponse>> SendUpdateUserSettingsRequest(AppSettings settings, string authToken){
+            return await SendWebRequest<UserDataResponse, FailedResponse>(
                         "/api/v1/user/settings",
                         "PUT",
                         settings,
