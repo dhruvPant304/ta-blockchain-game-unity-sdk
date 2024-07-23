@@ -49,7 +49,7 @@ namespace TA.APIClient{
 
         public async UniTask<VariableRequestResponse<UserDataResponse, FailedResponse>> SendUpdateProfileRequest(UpdateProfileParams updatedUserData, string authToken){
             return await SendWebRequest<UserDataResponse, FailedResponse>(
-                        "api/v1/user/profile",
+                        "/api/v1/user/profile",
                         "PUT",
                         updatedUserData,
                         authToken
