@@ -14,7 +14,6 @@ public class ProfileDetailsPage : MonoBehaviour{
     [SerializeField] TextMeshProUGUI walletAddress;
     [SerializeField] TextMeshProUGUI email;
     [SerializeField] TextMeshProUGUI createdAt;
-    [SerializeField] Web3AuthLogoutButton deleteButton; 
     [SerializeField] Button editProfileButton;
     [SerializeField] InputModal editProfileInputModal;
 
@@ -32,7 +31,6 @@ public class ProfileDetailsPage : MonoBehaviour{
         UpdateData(userData);
         _userProfileService.OnUserDataUpdate += UpdateData;
         editProfileButton.onClick.AddListener(OnEditProfile);
-        deleteButton.onLogout += OnDeleteAccount;
     }
 
     void UpdateData(UserData data){
@@ -62,10 +60,6 @@ public class ProfileDetailsPage : MonoBehaviour{
         if(result.option == Option.Some){
             _userProfileService.UpdateUserName(result.result);
         }
-    }
-
-    void OnDeleteAccount(){
-        _userProfileService.DeleteUser();
     }
 }
 }
