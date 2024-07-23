@@ -56,6 +56,15 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<StaticRequestResponse<BaseAPIResponse>> SendDeleteUserRequest(string authToken){
+            return await SendWebRequest<BaseAPIResponse>(
+                        "/api/v1/user",
+                        "DELETE",
+                        null,
+                        authToken
+                    );
+        }
+
         //=====================
         // SETTINGS
         //=====================

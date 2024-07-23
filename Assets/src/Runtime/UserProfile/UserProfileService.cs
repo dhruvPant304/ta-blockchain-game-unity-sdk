@@ -224,5 +224,32 @@ public class UserProfileService : Service<UserProfileService>{
         }
     }
 
+    //=======================
+    // DELETE USER
+    //=======================
+
+    public async void DeleteUser(){
+        var response = await _apiService.SendDeleteUserRequest(_userloginData.token);
+        if(response.IsSuccess) {
+            Debug.Log("User, Deleted");
+        }
+        else{
+            var popup = new MessagePopup{
+                header= "Failed to Delete!!!",
+                message= response.Response.message,
+                banner = BannerType.Danger,
+                exits = new List<MessagePopupExit>{
+                    new MessagePopupExit{
+                        exitStyle = MessagePopupExit.ExitStyle.Regular,
+                        name = "okay",
+                        exitAction = () => {}
+                    }
+                }
+            };
+
+            _gameCanvas.ShowMessagePopup(popup);
+        }
+    }
+
 }
 }
