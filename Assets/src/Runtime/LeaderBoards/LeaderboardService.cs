@@ -113,6 +113,7 @@ namespace TA.Leaderboard {
         public string startDate;
         public string endDate;
         public bool isActive;
+        public LeaderBoardEntry userEntry = null;
         public Dictionary<int, List<LeaderBoardEntry>> pages = new();
 
         public LeaderBoard(){
@@ -129,6 +130,16 @@ namespace TA.Leaderboard {
 
             string displayName = $"{startDateFormatted} - {endDateFormatted}";
             return displayName;
+        }
+
+        public async UniTask<LeaderBoardEntry> GetUserStats(){
+            if(userEntry != null) return userEntry;
+            var response = await _apiService.SendFetchUserLeaderBoardStatsRequest(_apiConfigProvide.APIConfig.gameId, id, type);
+            if(response.IsSuccess){
+                userEntry = response.SuccessResponse.data;
+            }
+
+            return userEntry;
         }
 
         public async UniTask<List<LeaderBoardEntry>> GetPage(int page){

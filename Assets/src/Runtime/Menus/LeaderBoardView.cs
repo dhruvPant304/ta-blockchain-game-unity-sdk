@@ -13,7 +13,7 @@ public class LeaderBoardView : MonoBehaviour {
 
     [Header("list Pool")]
     [SerializeField] LeaderBoardEntry listEntryPrefab;
-    [SerializeField] LeaderBoardEntry userEntryPrefab;
+    [SerializeField] LeaderBoardEntry userEntry;
     [SerializeField] int poolSize;
 
     [Header("Content View")]
@@ -140,7 +140,25 @@ public class LeaderBoardView : MonoBehaviour {
         _ended = false;
 
         ClearActiveLeaderboard();
+        SetUserStatsOnActiveLeaderBoard().Forget();
         LoadNextPageOnActiveLeaderBoard().Forget();
+    }
+
+    async UniTask SetUserStatsOnActiveLeaderBoard(){
+        if(_activeLeaderBoard == null) return;
+        var userEntry = await _activeLeaderBoard.GetUserStats();
+        if(userEntry == null){
+            this.userEntry.gameObject.SetActive(false);
+        }
+        else {
+            this.userEntry.gameObject.SetActive(true);
+            this.userEntry.SetValues(
+                    userEntry.rank.ToString(),
+                    userEntry.user.username,
+                    userEntry.score.ToString(),
+                    userEntry.reward.ToString()
+                );
+        }
     }
 
     async UniTask LoadNextPageOnActiveLeaderBoard(){

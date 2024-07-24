@@ -150,6 +150,19 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<UserLeaderBoardStatsResponse, FailedResponse>> SendFetchUserLeaderBoardStatsRequest(
+                string gameId,
+                string leaderboardId,
+                string type
+                ) {
+            return await SendWebRequest<UserLeaderBoardStatsResponse, FailedResponse>(
+                    $"/api/v1/leaderboard/user-stat/{gameId}/{leaderboardId}?type={type}",
+                    "GET",
+                    null,
+                    null
+                    );
+        }
+
         //=====================
         // END
         //=====================

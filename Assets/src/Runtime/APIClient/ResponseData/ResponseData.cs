@@ -39,6 +39,9 @@ namespace TA.APIClient.ResponseData{
     public class LeaderBoardResponse : APIResponse<LeaderBoardEntry[]>{}
 
     [Serializable]
+    public class UserLeaderBoardStatsResponse : APIResponse<LeaderBoardEntry> {};
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
