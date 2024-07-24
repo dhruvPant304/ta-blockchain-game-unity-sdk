@@ -169,7 +169,7 @@ public class LeaderBoardView : MonoBehaviour {
         _loadingNextPage = true;
 
         _activePage += 1;
-        var page = await _activeLeaderBoard.GetPage(_activePage + 1);
+        var page = await _activeLeaderBoard.GetPage(_activePage);
         if(page.Count == 0){
             _ended = true;
         }
