@@ -154,7 +154,7 @@ public class LeaderBoardView : MonoBehaviour {
             this.userEntry.gameObject.SetActive(true);
             this.userEntry.SetValues(
                     userEntry.rank.ToString(),
-                    userEntry.user.username,
+                    $"YOU({userEntry.user.username})",
                     userEntry.score.ToString(),
                     userEntry.reward.ToString()
                 );
