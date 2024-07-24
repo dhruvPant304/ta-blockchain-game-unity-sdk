@@ -108,6 +108,7 @@ public class LeaderBoardView : MonoBehaviour {
         element.gameObject.SetActive(true);
         element.transform.SetParent(contentRoot);
         element.transform.localScale = listEntryPrefab.transform.localScale;
+        _active.Add(element);
         return element;
     }
 
