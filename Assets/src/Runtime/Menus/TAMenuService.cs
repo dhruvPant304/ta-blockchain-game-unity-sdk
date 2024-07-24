@@ -84,5 +84,6 @@ public class TAMenuService : Service<TAMenuService>{
         CloseProfilePage();
         CloseSettingsPage();
         CloseInGameCreditShop();
+        CloseLeaderBoardPage();
     }
 }}
