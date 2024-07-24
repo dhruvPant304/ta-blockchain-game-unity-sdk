@@ -32,5 +32,7 @@ public class LeaderBoardTypeSelector : MonoBehaviour {
     void Start(){
         total.onClick.AddListener(OnTotal);
         high.onClick.AddListener(OnHigh);
+
+        OnHigh();
     }
 }

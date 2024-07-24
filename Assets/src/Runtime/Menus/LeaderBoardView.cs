@@ -141,6 +141,7 @@ public class LeaderBoardView : MonoBehaviour {
 
     async UniTask LoadNextPageOnActiveLeaderBoard(){
         if(_ended) return;
+        if(_activeLeaderBoard == null) return;
         leaderBoardNameDropdown.interactable = false;
         leaderBoardTypeSelector.interactable = false;
 
