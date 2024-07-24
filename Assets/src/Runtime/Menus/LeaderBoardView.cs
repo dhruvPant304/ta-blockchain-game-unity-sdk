@@ -115,7 +115,6 @@ public class LeaderBoardView : MonoBehaviour {
     void ReturnToPool(LeaderBoardEntry entry){
         entry.gameObject.SetActive(false);
         entry.transform.SetParent(poolTransform);
-        _active.Remove(entry);
         _pool.Add(entry);
     } 
 
@@ -172,6 +171,8 @@ public class LeaderBoardView : MonoBehaviour {
         foreach (var entryUI in _active){
             ReturnToPool(entryUI);
         }
+
+        _active.Clear();
     }
 
     public void Show() {
