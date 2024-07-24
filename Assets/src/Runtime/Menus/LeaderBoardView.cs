@@ -52,6 +52,8 @@ public class LeaderBoardView : MonoBehaviour {
         leaderBoardTypeSelector.OnSelection += (s) => LoadSelectedLeaderBoard();
         leaderBoardNameDropdown.onValueChanged.AddListener((val) => LoadSelectedLeaderBoard());
         scrollView.onValueChanged.AddListener(OnScrollValueChanged);
+
+        Hide();
     }
 
     void InitializeOptions(){
