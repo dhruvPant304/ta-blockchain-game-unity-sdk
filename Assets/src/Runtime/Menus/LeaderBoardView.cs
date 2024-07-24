@@ -150,7 +150,6 @@ public class LeaderBoardView : MonoBehaviour {
         _activePage += 1;
         if(page.Count == 0){
             _ended = true;
-            return;
         }
 
         foreach(var entry in page){
