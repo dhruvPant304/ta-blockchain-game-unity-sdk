@@ -28,8 +28,8 @@ public class LeaderBoardView : MonoBehaviour {
     UserProfileService _userProfileService;
     LeaderboardService _leaderBoardService;
 
-    List<LeaderBoardEntry> _pool;
-    List<LeaderBoardEntry> _active;
+    List<LeaderBoardEntry> _pool = new();
+    List<LeaderBoardEntry> _active = new();
 
     Transform poolTransform;
 
