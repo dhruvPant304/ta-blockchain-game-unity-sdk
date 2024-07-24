@@ -25,7 +25,6 @@ public class LeaderBoardView : MonoBehaviour {
     [SerializeField] LeaderBoardTypeSelector leaderBoardTypeSelector;
     [SerializeField] TMP_Dropdown leaderBoardNameDropdown;
 
-    UserProfileService _userProfileService;
     LeaderboardService _leaderBoardService;
 
     List<LeaderBoardEntry> _pool = new();
@@ -38,7 +37,6 @@ public class LeaderBoardView : MonoBehaviour {
     bool _ended = false;
 
     void Start(){
-        _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
  
         InitializePool();
@@ -51,7 +49,6 @@ public class LeaderBoardView : MonoBehaviour {
 
     async void OnShow(){
         await _leaderBoardService.FetchMaster();
-        var activeName = _leaderBoardService.GetActiveName();
 
         InitializeOptions();
         SelectActiveLeaderBoard();
@@ -162,14 +159,17 @@ public class LeaderBoardView : MonoBehaviour {
         }
     }
 
+    bool _loadingNextPage;
     async UniTask LoadNextPageOnActiveLeaderBoard(){
         if(_ended) return;
         if(_activeLeaderBoard == null) return;
+        if(_loadingNextPage) return;
         leaderBoardNameDropdown.interactable = false;
         leaderBoardTypeSelector.interactable = false;
+        _loadingNextPage = true;
 
-        var page = await _activeLeaderBoard.GetPage(_activePage + 1);
         _activePage += 1;
+        var page = await _activeLeaderBoard.GetPage(_activePage + 1);
         if(page.Count == 0){
             _ended = true;
         }
@@ -186,6 +186,7 @@ public class LeaderBoardView : MonoBehaviour {
 
         leaderBoardNameDropdown.interactable = true;
         leaderBoardTypeSelector.interactable = true;
+        _loadingNextPage = false;
     }
 
     void ClearActiveLeaderboard(){
