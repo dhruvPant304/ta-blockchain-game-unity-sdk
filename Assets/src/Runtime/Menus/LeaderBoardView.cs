@@ -37,11 +37,19 @@ public class LeaderBoardView : MonoBehaviour {
     int _activePage = 0;
     bool _ended = false;
 
-    async void Start(){
+    void Start(){
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
-
+ 
         InitializePool();
+        leaderBoardTypeSelector.OnSelection += (s) => LoadSelectedLeaderBoard();
+        leaderBoardNameDropdown.onValueChanged.AddListener((val) => LoadSelectedLeaderBoard());
+        scrollView.onValueChanged.AddListener(OnScrollValueChanged);
+
+        Hide();
+    }
+
+    async void OnShow(){
         await _leaderBoardService.FetchMaster();
         var activeName = _leaderBoardService.GetActiveName();
 
@@ -49,11 +57,6 @@ public class LeaderBoardView : MonoBehaviour {
         SelectActiveLeaderBoard();
         LoadSelectedLeaderBoard();
 
-        leaderBoardTypeSelector.OnSelection += (s) => LoadSelectedLeaderBoard();
-        leaderBoardNameDropdown.onValueChanged.AddListener((val) => LoadSelectedLeaderBoard());
-        scrollView.onValueChanged.AddListener(OnScrollValueChanged);
-
-        Hide();
     }
 
     void InitializeOptions(){
@@ -168,9 +171,9 @@ public class LeaderBoardView : MonoBehaviour {
         }
     }
 
-    public async void Show() {
+    public void Show() {
         gameObject.SetActive(true);
-        await _leaderBoardService.FetchMaster();
+        OnShow();
     }
 
     public void Hide(){
