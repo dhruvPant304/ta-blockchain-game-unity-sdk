@@ -33,6 +33,12 @@ namespace TA.APIClient.ResponseData{
     public class UserDataResponse : APIResponse<UserData>{}
 
     [Serializable]
+    public class MasterLeaderboardResponse : APIResponse<LeaderBoard[]>{}
+
+    [Serializable]
+    public class LeaderBoardResponse : APIResponse<LeaderBoardEntry[]>{}
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -93,6 +99,8 @@ namespace TA.APIClient.ResponseData{
     public class LeaderBoardEntry{
         public int score;
         public int rank;
+        public float reward;
+        public UserData user;
     }
 
     [Serializable]
@@ -102,4 +110,15 @@ namespace TA.APIClient.ResponseData{
         public bool isSound;
         public bool isVibrate;
     }
+
+    [Serializable]
+    public class LeaderBoard{
+        public string id;
+        public string createdAt;
+        public string updatedAt;
+        public bool isActive;
+        public bool isDeleted;
+        public string startTime;
+        public string endTime;
+    } 
 }

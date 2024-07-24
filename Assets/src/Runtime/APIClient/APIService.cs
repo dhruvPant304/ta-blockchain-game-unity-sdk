@@ -124,6 +124,33 @@ namespace TA.APIClient{
         }
 
         //=====================
+        // LEADER BOARDS 
+        //=====================
+
+        public async UniTask<VariableRequestResponse<MasterLeaderboardResponse, FailedResponse>> SendFetchMasterLeaderboardRequest(string gameId){
+            return await SendWebRequest<MasterLeaderboardResponse, FailedResponse>(
+                        $"/api/v1/leaderboard/{gameId}",
+                        "GET",
+                        null,
+                        null
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<LeaderBoardResponse, FailedResponse>> SendFetchLeaderBoardResponse(
+                string gameId, 
+                string leaderboardId,
+                string type,
+                int pageLimit, 
+                int page) {
+            return await SendWebRequest<LeaderBoardResponse, FailedResponse>(
+                        $"/api/v1/leaderboard/{gameId}/{leaderboardId}?type={type}&limit={pageLimit}&page={page}",
+                        "GET",
+                        null,
+                        null
+                    );
+        }
+
+        //=====================
         // END
         //=====================
 

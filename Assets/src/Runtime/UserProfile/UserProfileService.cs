@@ -27,6 +27,8 @@ public class UserProfileService : Service<UserProfileService>{
     LoginSessionData _userloginData;
     public LoginSessionData LoginUserData => _userloginData;
 
+    public string LoginToken => _userloginData.token;
+
     UserData _sessionUserData;
     public UserData SessionUserData => _sessionUserData;
 
