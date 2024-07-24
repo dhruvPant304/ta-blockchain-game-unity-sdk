@@ -66,6 +66,7 @@ public class LeaderBoardView : MonoBehaviour {
                         text = name
                     });
         }
+        leaderBoardNameDropdown.ClearOptions();
         leaderBoardNameDropdown.AddOptions(options);
     }
 
