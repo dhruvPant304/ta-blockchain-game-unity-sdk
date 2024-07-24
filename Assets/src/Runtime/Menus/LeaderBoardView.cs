@@ -136,6 +136,9 @@ public class LeaderBoardView : MonoBehaviour {
             _activeLeaderBoard = _leaderBoardService.GetTotalScoreLeaderBoard(selectedName);
         }
 
+        _activePage = 0;
+        _ended = false;
+
         ClearActiveLeaderboard();
         LoadNextPageOnActiveLeaderBoard().Forget();
     }
