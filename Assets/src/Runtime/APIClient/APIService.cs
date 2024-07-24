@@ -156,7 +156,7 @@ namespace TA.APIClient{
                 string type
                 ) {
             return await SendWebRequest<UserLeaderBoardStatsResponse, FailedResponse>(
-                    $"/api/v1/leaderboard/user-stat/{gameId}/{leaderboardId}?type={type}",
+                    $"/api/v1/leaderboard/user-stats/{gameId}/{leaderboardId}?type={type}",
                     "GET",
                     null,
                     null
