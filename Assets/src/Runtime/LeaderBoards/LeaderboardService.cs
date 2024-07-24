@@ -7,6 +7,7 @@ using TA.APIClient;
 using TA.Components;
 using TA.Menus;
 using TA.Services;
+using TA.UserProfile;
 using LeaderBoardEntry = TA.APIClient.ResponseData.LeaderBoardEntry;
 
 namespace TA.Leaderboard {
@@ -107,6 +108,7 @@ namespace TA.Leaderboard {
     public class LeaderBoard{
         APIService _apiService;
         APIConfigProviderService _apiConfigProvide;
+        UserProfileService _userProfileService;
 
         public string id;
         public string type;
@@ -118,6 +120,7 @@ namespace TA.Leaderboard {
 
         public LeaderBoard(){
             _apiService = ServiceLocator.Instance.GetService<APIService>();
+            _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>(); 
             _apiConfigProvide = ServiceLocator.Instance.GetService<APIConfigProviderService>();
         }
 
@@ -134,7 +137,11 @@ namespace TA.Leaderboard {
 
         public async UniTask<LeaderBoardEntry> GetUserStats(){
             if(userEntry != null) return userEntry;
-            var response = await _apiService.SendFetchUserLeaderBoardStatsRequest(_apiConfigProvide.APIConfig.gameId, id, type);
+            var response = await _apiService.SendFetchUserLeaderBoardStatsRequest(
+                    _apiConfigProvide.APIConfig.gameId, 
+                    id, 
+                    type,
+                    _userProfileService.LoginToken);
             if(response.IsSuccess){
                 userEntry = response.SuccessResponse.data;
             }

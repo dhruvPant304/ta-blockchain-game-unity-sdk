@@ -153,13 +153,14 @@ namespace TA.APIClient{
         public async UniTask<VariableRequestResponse<UserLeaderBoardStatsResponse, FailedResponse>> SendFetchUserLeaderBoardStatsRequest(
                 string gameId,
                 string leaderboardId,
-                string type
+                string type,
+                string authToken
                 ) {
             return await SendWebRequest<UserLeaderBoardStatsResponse, FailedResponse>(
                     $"/api/v1/leaderboard/user-stats/{gameId}/{leaderboardId}?type={type}",
                     "GET",
                     null,
-                    null
+                    authToken
                     );
         }
 
