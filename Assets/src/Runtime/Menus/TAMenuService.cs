@@ -9,6 +9,7 @@ public class TAMenuService : Service<TAMenuService>{
     [SerializeField] ProfileDetailsPage _profilePage;
     [SerializeField] SettingsPage _settingsPage;
     [SerializeField] GameOverMenu _gameOverMenu;
+    [SerializeField] LeaderBoardView _leaderBoardView;
 
     public event Action OnBuyCreditsMenuOpen;
     public event Action OnBuyCreditsMenuClosed;
@@ -67,6 +68,15 @@ public class TAMenuService : Service<TAMenuService>{
 
     public void CloseSettingsPage(){
         _settingsPage.Hide();
+    }
+
+    public void OpenLeaderBoardPage(){
+        CloseAll();
+        _leaderBoardView.Show();
+    }
+
+    public void CloseLeaderBoardPage(){
+        _leaderBoardView.Hide();
     }
 
     public void CloseAll(){
