@@ -28,13 +28,13 @@ public class Web3AuthLogoutButton : MonoBehaviour {
 
         _web3AuthService.OnLogout += OnLogout; 
         _web3AuthService.LogOut();
-        _web3AuthService.OnLogout -= OnLogout;
     }
 
     void OnLogout(){
         onLogout?.Invoke();
         _userProfileService.ClearLoginSession();
         SceneManager.LoadScene(0);
+        _web3AuthService.OnLogout -= OnLogout;
     }
 
     void Show() => gameObject.SetActive(true);
