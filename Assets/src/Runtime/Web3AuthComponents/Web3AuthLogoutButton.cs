@@ -15,10 +15,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-
         _web3AuthService.OnLogin += (r) => Show();
-        _web3AuthService.OnLogout += OnLogout; 
-
         GetComponent<Button>().onClick.AddListener(LogOut);
     }
 
@@ -29,7 +26,9 @@ public class Web3AuthLogoutButton : MonoBehaviour {
             return;
         }
 
+        _web3AuthService.OnLogout += OnLogout; 
         _web3AuthService.LogOut();
+        _web3AuthService.OnLogout -= OnLogout;
     }
 
     void OnLogout(){
