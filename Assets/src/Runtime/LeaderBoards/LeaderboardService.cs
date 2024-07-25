@@ -132,6 +132,7 @@ namespace TA.Leaderboard {
             string endDateFormatted = endDateTime.ToString("dd MMMM", CultureInfo.InvariantCulture);
 
             string displayName = $"{startDateFormatted} - {endDateFormatted}";
+            if(isActive) displayName += " (Active)";
             return displayName;
         }
 

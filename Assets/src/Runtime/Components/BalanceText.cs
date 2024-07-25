@@ -19,7 +19,7 @@ public class BalanceText : MonoBehaviour{
                 _userProfileService.OnBalanceUpdate += OnBalanceUpdate;
                 _userProfileService.OnBalanceUpdateFailed += OnBalanceFailed;
 
-                OnBalanceUpdate(_userProfileService.UserBalanceData);
+               OnBalanceUpdate(_userProfileService.UserBalanceData);
             }
         );
     }
