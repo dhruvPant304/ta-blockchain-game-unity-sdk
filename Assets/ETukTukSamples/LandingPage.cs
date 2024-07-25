@@ -9,8 +9,12 @@ public class LandingPage : MonoBehaviour
     [SerializeField] Button loginInButton;
     // Start is called before the first frame update
     void Start(){
-       signInButton.onClick.AddListener(LoadSignInScene);
-       loginInButton.onClick.AddListener(LoadLoginScene);
+        if(ServiceLocator.Instance != null){
+            ServiceLocator.Instance.CloseServices();
+        }
+
+        signInButton.onClick.AddListener(LoadSignInScene);
+        loginInButton.onClick.AddListener(LoadLoginScene);
     }
 
     // Update is called once per frame

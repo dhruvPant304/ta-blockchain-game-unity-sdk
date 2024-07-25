@@ -23,14 +23,19 @@ public class Web3AuthLogoutButton : MonoBehaviour {
     }
 
     void LogOut(){
+        Debug.Log("Logging out...");
+        if(_userProfileService.IsAutoLoginSession){
+            OnLogout();
+            return;
+        }
+
         _web3AuthService.LogOut();
     }
 
     void OnLogout(){
         onLogout?.Invoke();
-        SceneManager.LoadScene(0);
         _userProfileService.ClearLoginSession();
-        ServiceLocator.Instance.CloseServices();
+        SceneManager.LoadScene(0);
     }
 
     void Show() => gameObject.SetActive(true);
