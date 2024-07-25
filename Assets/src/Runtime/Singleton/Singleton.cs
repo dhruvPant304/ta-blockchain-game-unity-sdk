@@ -3,12 +3,10 @@ using UnityEngine;
 namespace TA{
 public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>{
 	static T _instance;
-	public static bool instantiated;
 	public static T Instance { get {
 		if(_instance == null){
 			_instance = GameObject.FindObjectOfType<T>();	
 		}			
-		instantiated = true;
 		return _instance;	
 	}}
 
