@@ -44,7 +44,7 @@ namespace TA.Leaderboard {
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
                         endDate = leaderboard.endTime,
-                        totalPrizePool = leaderboard.minimumPrizePoolData.prize_pool
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool
                     };
 
                     _totalScoreLeaderBoards[totalBoard.DisplayName()] = totalBoard;
@@ -55,7 +55,7 @@ namespace TA.Leaderboard {
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
                         endDate = leaderboard.endTime,
-                        totalPrizePool = leaderboard.minimumPrizePoolData.prize_pool
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool
                     };
 
                     _highScoreLeaderBoards[highBoard.DisplayName()] = highBoard;
