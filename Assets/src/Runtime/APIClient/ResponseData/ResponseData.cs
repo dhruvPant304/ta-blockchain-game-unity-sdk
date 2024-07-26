@@ -123,5 +123,11 @@ namespace TA.APIClient.ResponseData{
         public bool isDeleted;
         public string startTime;
         public string endTime;
+        public MinimumPrizePoolData minimumPrizePoolData;
     } 
+
+    [Serializable]
+    public class MinimumPrizePoolData{
+        public float prize_pool;
+    }
 }
