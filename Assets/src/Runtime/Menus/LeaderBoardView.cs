@@ -17,7 +17,7 @@ public class LeaderBoardView : MonoBehaviour {
 
     [Header("Content Filds")]
     [SerializeField] LeaderBoardEntry userEntry;
-    [SerializeField] TextMeshPro prizepool;
+    [SerializeField] TextMeshProUGUI prizepool;
 
     [Header("Content List View")]
     [SerializeField] Transform contentRoot;
@@ -141,7 +141,6 @@ public class LeaderBoardView : MonoBehaviour {
         _ended = false;
 
         ClearActiveLeaderboard();
-        SetTotalPrizePool();
         SetUserStatsOnActiveLeaderBoard().Forget();
         LoadNextPageOnActiveLeaderBoard().Forget();
     }
