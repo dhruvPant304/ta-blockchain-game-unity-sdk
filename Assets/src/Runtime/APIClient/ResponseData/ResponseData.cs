@@ -128,6 +128,6 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class MinimumPrizePoolData{
-        public float prize_pool;
+        public float prizePool;
     }
 }
