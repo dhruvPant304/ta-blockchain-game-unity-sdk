@@ -141,6 +141,7 @@ public class LeaderBoardView : MonoBehaviour {
         _ended = false;
 
         ClearActiveLeaderboard();
+        SetTotalPrizePool();
         SetUserStatsOnActiveLeaderBoard().Forget();
         LoadNextPageOnActiveLeaderBoard().Forget();
     }
