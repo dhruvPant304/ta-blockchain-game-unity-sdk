@@ -13,10 +13,13 @@ public class LeaderBoardView : MonoBehaviour {
 
     [Header("list Pool")]
     [SerializeField] LeaderBoardEntry listEntryPrefab;
-    [SerializeField] LeaderBoardEntry userEntry;
     [SerializeField] int poolSize;
 
-    [Header("Content View")]
+    [Header("Content Filds")]
+    [SerializeField] LeaderBoardEntry userEntry;
+    [SerializeField] TextMeshProUGUI prizepool;
+
+    [Header("Content List View")]
     [SerializeField] Transform contentRoot;
     [SerializeField] ScrollRect scrollView;
     [SerializeField] float loadNewPageScrollThreshold = 0.1f;
@@ -138,8 +141,14 @@ public class LeaderBoardView : MonoBehaviour {
         _ended = false;
 
         ClearActiveLeaderboard();
+        SetTotalPrizePool();
         SetUserStatsOnActiveLeaderBoard().Forget();
         LoadNextPageOnActiveLeaderBoard().Forget();
+    }
+
+    void SetTotalPrizePool(){
+        if(_activeLeaderBoard == null) return;
+        prizepool.text = _activeLeaderBoard.totalPrizePool.ToString();
     }
 
     async UniTask SetUserStatsOnActiveLeaderBoard(){

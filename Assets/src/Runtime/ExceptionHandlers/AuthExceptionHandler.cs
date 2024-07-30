@@ -18,7 +18,6 @@ public class AuthExceptionHandler : MonoBehaviour{
         _profileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _blockChainGameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
-
         
         _profileService.OnAuthFailed += OnAuthFailed;
         _profileService.OnAuthSuccess += OnAuthSuccess;
@@ -53,7 +52,7 @@ public class AuthExceptionHandler : MonoBehaviour{
     }
 
     void OnAuthSuccess(LoginSessionData userData){
-        if(!userData.isFirstTimeUser) {
+        if(!userData.isFirstTimeUser || _profileService.IsAutoLoginSession) {
             Debug.Log("not a first time user");
             SceneManager.LoadScene(3);
             return;

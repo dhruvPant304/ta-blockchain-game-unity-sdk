@@ -43,7 +43,8 @@ namespace TA.Leaderboard {
                         type = "total",
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
-                        endDate = leaderboard.endTime
+                        endDate = leaderboard.endTime,
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool
                     };
 
                     _totalScoreLeaderBoards[totalBoard.DisplayName()] = totalBoard;
@@ -53,7 +54,8 @@ namespace TA.Leaderboard {
                         type = "high",
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
-                        endDate = leaderboard.endTime
+                        endDate = leaderboard.endTime,
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool
                     };
 
                     _highScoreLeaderBoards[highBoard.DisplayName()] = highBoard;
@@ -115,6 +117,7 @@ namespace TA.Leaderboard {
         public string startDate;
         public string endDate;
         public bool isActive;
+        public float totalPrizePool;
         public LeaderBoardEntry userEntry = null;
         public Dictionary<int, List<LeaderBoardEntry>> pages = new();
 
