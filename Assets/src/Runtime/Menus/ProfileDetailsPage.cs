@@ -57,7 +57,7 @@ public class ProfileDetailsPage : MonoBehaviour{
     }
 
     async void OnEditProfile(){
-        var result = await editProfileInputModal.WaitInput("Edit Profile", "user name",ValidateUserName);
+        var result = await editProfileInputModal.WaitInput("Edit Profile", "name",ValidateUserName);
         if(result.option == Option.Some){
             _userProfileService.UpdateUserName(result.result);
         }
