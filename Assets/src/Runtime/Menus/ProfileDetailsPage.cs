@@ -1,7 +1,8 @@
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using Cysharp.Threading.Tasks;
 using TA.APIClient.ResponseData;
-using TA.Authentication;
 using TA.Services;
 using TA.UserProfile;
 using TMPro;
@@ -56,10 +57,38 @@ public class ProfileDetailsPage : MonoBehaviour{
     }
 
     async void OnEditProfile(){
-        var result = await editProfileInputModal.WaitInput("Edit Profile");
+        var result = await editProfileInputModal.WaitInput("Edit Profile", "user name",ValidateUserName);
         if(result.option == Option.Some){
             _userProfileService.UpdateUserName(result.result);
         }
+    }
+
+    async UniTask<ValidationResult> ValidateUserName(string username){
+        return IsValid(username);
+    }
+
+    public ValidationResult IsValid(string playerName) {
+        if (playerName.Length < 3) {
+            return new ValidationResult { IsValid = false, 
+                ErrorMessage = "Player name must be a minimum of 3 characters." };
+        }
+        if (playerName.Length > 25) {
+            return new ValidationResult { IsValid = false, 
+                ErrorMessage = "Player name must be a maximum of 25 characters." };
+        }
+
+        if (!Regex.IsMatch(playerName, "^[a-zA-Z0-9]+$")) {
+            return new ValidationResult { IsValid = false, 
+                ErrorMessage = "Player name can include only alphanumeric characters and must be a single word." };
+        }
+
+        if (new ProfanityFilter.ProfanityFilter().ContainsProfanity(playerName)) {
+            return new ValidationResult { IsValid = false, 
+                ErrorMessage = "Player name contains inappropriate language." };
+        }
+
+        return new ValidationResult { IsValid = true, 
+            ErrorMessage = "Player name is valid." };
     }
 }
 }

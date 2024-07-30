@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Profanity.Detector</id>
+    <version>0.1.8</version>
+    <title>Profanity Detector</title>
+    <authors>Stephen Haunts</authors>
+    <owners>Stephen Haunts</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/stephenhaunts/ProfanityDetector/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/stephenhaunts/ProfanityDetector</projectUrl>
+    <description>Profanity Filter used to detect or censor text in an application. You can use the inbuilt profanity list, or load up your organizations custom list.</description>
+    <tags>Profanity Filter, Profanity Detector</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

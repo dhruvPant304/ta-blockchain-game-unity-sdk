@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,9 @@ public class InputModal : MonoBehaviour {
     [SerializeField] Button discardButton;
     [SerializeField] Button updateButton;
     [SerializeField] TMP_InputField inputField;
+    [SerializeField] TextMeshProUGUI lable;
     [SerializeField] TextMeshProUGUI heading;
+    [SerializeField] TextMeshProUGUI validationErrorMessage;
 
     bool _confirmed = false;
     bool _cancelled = false;
@@ -33,7 +36,7 @@ public class InputModal : MonoBehaviour {
         _cancelled = true;
     }
 
-    public async UniTask<Result> WaitInput(string header) {
+    public async UniTask<Result> WaitInput(string header, string lable, Func<string, UniTask<ValidationResult>> validation, string validationError = "") {
         Show();
 
         _confirmed = false;
@@ -41,6 +44,17 @@ public class InputModal : MonoBehaviour {
 
         updateButton.onClick.AddListener(Confirm);
         discardButton.onClick.AddListener(Cancel);
+
+        this.heading.text = header;
+        this.lable.text = lable;
+        validationErrorMessage.text = validationError;
+
+        inputField.onValueChanged.AddListener(async (val) => {
+            var response = await validation(val);
+            if(!response.IsValid){
+                validationErrorMessage.text = response.ErrorMessage;
+            }
+        });
 
         await UniTask.WaitUntil(() => _confirmed || _cancelled);
 
@@ -56,13 +70,24 @@ public class InputModal : MonoBehaviour {
             };
         }
 
+        var input = inputField.text;
+        var result = await validation(input);
         Hide();
+
+        if(!result.IsValid){
+            return await WaitInput(header, lable, validation, validationError);
+        }
 
         return new Result {
             option = Option.Some,
-            result = inputField.text
+            result = input
         };
     }
+}
+
+public class ValidationResult{
+    public bool IsValid;
+    public string ErrorMessage;
 }
 
 public class Result{
