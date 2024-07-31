@@ -79,7 +79,7 @@ public class ProfileDetailsPage : MonoBehaviour{
 
         if (!Regex.IsMatch(playerName, "^[a-zA-Z0-9]+$")) {
             return new ValidationResult { IsValid = false, 
-                ErrorMessage = "Player name can include only alphanumeric characters and must be a single word." };
+                ErrorMessage = "Special characters are not allowed" };
         }
 
         if (new ProfanityFilter.ProfanityFilter().ContainsProfanity(playerName)) {

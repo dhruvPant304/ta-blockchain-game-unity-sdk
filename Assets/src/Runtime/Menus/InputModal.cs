@@ -51,6 +51,10 @@ public class InputModal : MonoBehaviour {
         if(validationError == ""){
             validationErrorMessage.gameObject.SetActive(false);
         }
+        else{
+            validationErrorMessage.gameObject.SetActive(true);
+        }
+
         validationErrorMessage.text = validationError;
 
         inputField.onValueChanged.AddListener(async (val) => {
