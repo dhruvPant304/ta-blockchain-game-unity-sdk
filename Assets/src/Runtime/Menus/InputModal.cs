@@ -59,24 +59,26 @@ public class InputModal : MonoBehaviour {
 
         validationErrorMessage.text = validationError;
 
-        inputField.onValueChanged.AddListener(async (val) => {
+        async void OnValueChanged(string val) {
             var response = await validation(val);
-            if(!response.IsValid){
+            if (!response.IsValid) {
                 validationErrorMessage.text = response.ErrorMessage;
                 validationErrorMessage.gameObject.SetActive(true);
                 updateButton.interactable = false;
             }
-            else{
+            else {
                 validationErrorMessage.gameObject.SetActive(false);
                 updateButton.interactable = true;
             }
-        });
+        }
+
+        inputField.onValueChanged.AddListener(OnValueChanged);
 
         await UniTask.WaitUntil(() => _confirmed || _cancelled);
 
         updateButton.onClick.RemoveListener(Confirm);
         discardButton.onClick.RemoveListener(Cancel);
-        inputField.onValueChanged.RemoveAllListeners();
+        inputField.onValueChanged.RemoveListener(OnValueChanged);
 
         if(_cancelled){
             Hide();
