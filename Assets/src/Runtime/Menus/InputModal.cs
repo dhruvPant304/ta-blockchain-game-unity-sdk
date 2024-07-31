@@ -63,14 +63,12 @@ public class InputModal : MonoBehaviour {
             var response = await validation(val);
             if(!response.IsValid){
                 validationErrorMessage.text = response.ErrorMessage;
-                if(response.ErrorMessage != null && response.ErrorMessage != ""){
-                    validationErrorMessage.gameObject.SetActive(true);
-                    updateButton.interactable = false;
-                }
-                else{
-                    validationErrorMessage.gameObject.SetActive(false);
-                    updateButton.interactable = true;
-                }
+                validationErrorMessage.gameObject.SetActive(true);
+                updateButton.interactable = false;
+            }
+            else{
+                validationErrorMessage.gameObject.SetActive(false);
+                updateButton.interactable = true;
             }
         });
 
