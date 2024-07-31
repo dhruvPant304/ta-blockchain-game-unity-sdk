@@ -50,9 +50,11 @@ public class InputModal : MonoBehaviour {
 
         if(validationError == ""){
             validationErrorMessage.gameObject.SetActive(false);
+            updateButton.interactable = true;
         }
         else{
             validationErrorMessage.gameObject.SetActive(true);
+            updateButton.interactable = false;
         }
 
         validationErrorMessage.text = validationError;
@@ -61,6 +63,14 @@ public class InputModal : MonoBehaviour {
             var response = await validation(val);
             if(!response.IsValid){
                 validationErrorMessage.text = response.ErrorMessage;
+                if(response.ErrorMessage != null && response.ErrorMessage != ""){
+                    validationErrorMessage.gameObject.SetActive(true);
+                    updateButton.interactable = false;
+                }
+                else{
+                    validationErrorMessage.gameObject.SetActive(false);
+                    updateButton.interactable = true;
+                }
             }
         });
 
@@ -68,6 +78,7 @@ public class InputModal : MonoBehaviour {
 
         updateButton.onClick.RemoveListener(Confirm);
         discardButton.onClick.RemoveListener(Cancel);
+        inputField.onValueChanged.RemoveAllListeners();
 
         if(_cancelled){
             Hide();
