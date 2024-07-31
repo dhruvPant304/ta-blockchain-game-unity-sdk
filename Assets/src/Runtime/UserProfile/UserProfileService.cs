@@ -66,7 +66,7 @@ public class UserProfileService : Service<UserProfileService>{
         var privateKey = response.privKey;
 
         var walletAddress = CryptoHelper.GetWalletAddress(privateKey);
-        var signature = CryptoHelper.GetMessageSignature("etuktuk", privateKey);
+        var signature = CryptoHelper.GetMessageSignature($"Welcome to eTukTuk! Sign this message to prove you have access to this wallet. This won't cost you any Ether. Your authentication status will reset after 24 hours. Wallet address: {walletAddress}", privateKey);
 
         var loginParams = new TA.APIClient.RequestData.LoginParams(){
             verifierId = response.userInfo.verifierId,
