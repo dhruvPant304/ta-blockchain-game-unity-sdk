@@ -184,6 +184,11 @@ public class LeaderBoardView : MonoBehaviour {
         }
 
         foreach(var entry in page){
+            if(_activeLeaderBoard.userEntry != null){
+                if(entry.user.username == _activeLeaderBoard.userEntry.user.username){
+                    continue;
+                }
+            }
             var entryUI = SpawnFromPool();
             entryUI.SetValues(
                     entry.rank.ToString(),
