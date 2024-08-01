@@ -249,13 +249,13 @@ public class GameService : Service<GameService> {
             totalScore = _totalScore.ToString()
         };
 
-        var response = await _apiService.SendCompleteRequest(param, GameToken);
-        if(response.IsSuccess){
-            _gameToken = null;
-            OnEndSessionSuccess?.Invoke();
-        }else{
-            ShowErrorMessage(response.FailureResponse.message, OnEndSessionFailed);
-        }
+        _gameToken = null;
+        OnEndSessionSuccess?.Invoke();
+        //var response = await _apiService.SendCompleteRequest(param, GameToken);
+        // if(response.IsSuccess){
+        // }else{
+        //     //ShowErrorMessage(response.FailureResponse.message, OnEndSessionFailed);
+        // }
     }
 
     public void MakeExitGameRequest(){
