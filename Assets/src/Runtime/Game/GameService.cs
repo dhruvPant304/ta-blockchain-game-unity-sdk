@@ -244,7 +244,7 @@ public class GameService : Service<GameService> {
         }
     }
 
-    public async void EndGameSession(){
+    public void EndGameSession(){
         var param = new FinalScoreParams{
             totalScore = _totalScore.ToString()
         };
