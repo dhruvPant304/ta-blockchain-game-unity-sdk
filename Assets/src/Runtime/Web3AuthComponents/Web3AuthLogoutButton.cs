@@ -19,6 +19,8 @@ public class Web3AuthLogoutButton : MonoBehaviour {
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
+
         _web3AuthService.OnLogin += (r) => Show();
         GetComponent<Button>().onClick.AddListener(OnButtonClick);
     }
@@ -30,6 +32,8 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                     exit.exitAction = LogOut;
                 }
             }
+            
+            _gameCanvas.ShowMessagePopup(confirmationPopUp);
             return;
         }
         LogOut();
