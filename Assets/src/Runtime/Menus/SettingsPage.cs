@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 namespace TA.Menus{
 public class SettingsPage : MonoBehaviour {
-    [SerializeField] TextMeshProUGUI playerName; 
-    [SerializeField] TextMeshProUGUI email; 
+    [SerializeField] TextMeshProUGUI playerName;
+    [SerializeField] TextMeshProUGUI email;
     [SerializeField] SliderToggle soundToggle;
     [SerializeField] SliderToggle vibrationsToggle;
     [SerializeField] Web3AuthLogoutButton deleteLogout;

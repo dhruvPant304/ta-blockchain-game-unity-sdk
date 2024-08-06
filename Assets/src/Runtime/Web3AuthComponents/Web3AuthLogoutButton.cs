@@ -30,6 +30,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                     exit.exitAction = LogOut;
                 }
             }
+            return;
         }
         LogOut();
     }
