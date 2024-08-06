@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TA.Leaderboard;
 using TA.Services;
-using TA.UserProfile;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -128,7 +127,7 @@ public class LeaderBoardView : MonoBehaviour {
         }
     }
 
-    void LoadSelectedLeaderBoard(){
+    async void LoadSelectedLeaderBoard(){
         var selectedName = leaderBoardNameDropdown.options[leaderBoardNameDropdown.value].text;
         if(leaderBoardTypeSelector.Selection == "high"){
            _activeLeaderBoard = _leaderBoardService.GetHighScoreLeaderBoard(selectedName);
@@ -142,7 +141,7 @@ public class LeaderBoardView : MonoBehaviour {
 
         ClearActiveLeaderboard();
         SetTotalPrizePool();
-        SetUserStatsOnActiveLeaderBoard().Forget();
+        await SetUserStatsOnActiveLeaderBoard();
         LoadNextPageOnActiveLeaderBoard().Forget();
     }
 
