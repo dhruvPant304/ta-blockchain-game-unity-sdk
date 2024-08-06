@@ -4,19 +4,34 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TA.UserProfile;
 using System;
+using TA.Components;
 
 namespace TA.Authentication{
 [RequireComponent(typeof(Button))]
 public class Web3AuthLogoutButton : MonoBehaviour {
     Web3AuthService _web3AuthService;
     UserProfileService _userProfileService;
+    BlockchainGameCanvas _gameCanvas;
+
     public Action onLogout;
+    public MessagePopup confirmationPopUp;
 
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
         _web3AuthService.OnLogin += (r) => Show();
-        GetComponent<Button>().onClick.AddListener(LogOut);
+        GetComponent<Button>().onClick.AddListener(OnButtonClick);
+    }
+
+    void OnButtonClick(){
+        if(confirmationPopUp !=null){
+            foreach (var exit in confirmationPopUp.exits){
+                if(exit.exitStyle == MessagePopupExit.ExitStyle.Confirmation){
+                    exit.exitAction = LogOut;
+                }
+            }
+        }
+        LogOut();
     }
 
     void LogOut(){

@@ -16,12 +16,9 @@ public class SettingsPage : MonoBehaviour {
     [SerializeField] Web3AuthLogoutButton deleteLogout;
 
     UserProfileService _userProfileService;
-    BlockchainGameCanvas _gameCanvas;
 
     void Start(){
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-        _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
-
         Hide();
     }
 
@@ -35,7 +32,8 @@ public class SettingsPage : MonoBehaviour {
 
         soundToggle.OnValueChanged = (val) => UpdateSettings();
         vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
-        deleteLogout.onLogout = ShowDeleteUser;
+        deleteLogout.onLogout = DeleteUser;
+        deleteLogout.confirmationPopUp = DeleteConfirmationPopUp();
     }
 
     public void Show(){ 
@@ -51,7 +49,7 @@ public class SettingsPage : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    void ShowDeleteUser(){
+    MessagePopup DeleteConfirmationPopUp(){
         var popup = new MessagePopup{
             hasBackground = true,
             banner = BannerType.None,
@@ -66,12 +64,11 @@ public class SettingsPage : MonoBehaviour {
                 new MessagePopupExit(){
                     name = "Delete",
                     exitStyle = MessagePopupExit.ExitStyle.Confirmation,
-                    exitAction = DeleteUser
                 }
             }
         };
 
-        _gameCanvas.ShowMessagePopup(popup);
+        return popup;
     }
 
     void DeleteUser(){
