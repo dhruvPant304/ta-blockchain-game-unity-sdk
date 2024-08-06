@@ -4,6 +4,8 @@ using TA.UserProfile;
 using TA.Services;
 using System.Linq;
 using TA.Authentication;
+using TA.Components;
+using System.Collections.Generic;
 
 namespace TA.Menus{
 public class SettingsPage : MonoBehaviour {
@@ -14,9 +16,12 @@ public class SettingsPage : MonoBehaviour {
     [SerializeField] Web3AuthLogoutButton deleteLogout;
 
     UserProfileService _userProfileService;
+    BlockchainGameCanvas _gameCanvas;
 
     void Start(){
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
+
         Hide();
     }
 
@@ -30,7 +35,7 @@ public class SettingsPage : MonoBehaviour {
 
         soundToggle.OnValueChanged = (val) => UpdateSettings();
         vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
-        deleteLogout.onLogout = DeleteUser;
+        deleteLogout.onLogout = ShowDeleteUser;
     }
 
     public void Show(){ 
@@ -44,6 +49,29 @@ public class SettingsPage : MonoBehaviour {
 
     public void Hide(){
         gameObject.SetActive(false);
+    }
+
+    void ShowDeleteUser(){
+        var popup = new MessagePopup{
+            hasBackground = true,
+            banner = BannerType.None,
+            header = "Leaving Us?",
+            message = "Are you sure you want to delete your account? your details will be removed.",
+            exits = new List<MessagePopupExit>(){
+                new MessagePopupExit(){
+                    name = "Cancel",
+                    exitStyle = MessagePopupExit.ExitStyle.Regular,
+                    exitAction = null
+                },
+                new MessagePopupExit(){
+                    name = "Delete",
+                    exitStyle = MessagePopupExit.ExitStyle.Confirmation,
+                    exitAction = DeleteUser
+                }
+            }
+        };
+
+        _gameCanvas.ShowMessagePopup(popup);
     }
 
     void DeleteUser(){
