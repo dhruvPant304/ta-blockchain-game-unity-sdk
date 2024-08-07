@@ -16,7 +16,7 @@ namespace TA.Components{
         }
 
         void Start(){
-            FadeIn().Forget();
+            //FadeIn().Forget();
         }
 
         public async UniTask FadeIn(){
