@@ -43,7 +43,7 @@ public class GameOverMenu : MonoBehaviour {
         panel.SetActive(true);
         score.text = scorePrefix + _gameService.SavedTotalScore.ToString() + scoreSuffix;
         position.text = positionPrefix + _gameService.LeaderBoardPosition.ToString() + positionSuffix;
-        continueCost.text = $"Continue\n{_gameService.NextContinueCost} credit?";
+        continueCost.text = $"Continue {_gameService.NextContinueCost} credit?";
     }
 
     void Hide(){
