@@ -28,7 +28,10 @@ public class Web3AuthLogoutButton : MonoBehaviour {
     void OnButtonClick(){
         if(confirmationPopUp !=null){
             foreach (var exit in confirmationPopUp.exits){
-                if(exit.exitStyle == MessagePopupExit.ExitStyle.Confirmation){
+                //Regular buttons would act as confirmation to Execute On Logout logic
+                //This was done to give cancellation button in Delete account pop-up a
+                //confirmation style highlight
+                if(exit.exitStyle == MessagePopupExit.ExitStyle.Regular){ 
                     exit.exitAction = LogOut;
                 }
             }
