@@ -58,12 +58,12 @@ public class SettingsPage : MonoBehaviour {
             exits = new List<MessagePopupExit>(){
                 new MessagePopupExit(){
                     name = "Cancel",
-                    exitStyle = MessagePopupExit.ExitStyle.Regular,
+                    exitStyle = MessagePopupExit.ExitStyle.Confirmation,
                     exitAction = null
                 },
                 new MessagePopupExit(){
                     name = "Delete",
-                    exitStyle = MessagePopupExit.ExitStyle.Confirmation,
+                    exitStyle = MessagePopupExit.ExitStyle.Regular,
                 }
             }
         };

@@ -52,7 +52,7 @@ public class ProfileDetailsPage : MonoBehaviour{
 
     string ConvertToCustomFormat(string inputDate){
         DateTime dateTime = DateTime.Parse(inputDate, null, DateTimeStyles.RoundtripKind);
-        string formattedDate = dateTime.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture);
+        string formattedDate = dateTime.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
         return formattedDate;
     }
 
