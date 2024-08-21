@@ -34,7 +34,7 @@ public class AuthExceptionHandler : MonoBehaviour{
     void OnAuthFailed(FailedResponse failedResponse){
         var errorPopup = new MessagePopup(){
             header = "Something went wrong!!",
-            message = "Failed to authenticate user" + failedResponse.message,
+            message = failedResponse.message,
             banner = BannerType.Danger,
             hasBackground = true,
             exits = new List<MessagePopupExit>(){
