@@ -39,11 +39,13 @@ public class GameOverMenu : MonoBehaviour {
         Hide();
     }
 
-    public void ShowEndGameMenu(){
+    public async void ShowEndGameMenu(){
         panel.SetActive(true);
         score.text = scorePrefix + _gameService.SavedTotalScore.ToString() + scoreSuffix;
-        position.text = positionPrefix + _gameService.LeaderBoardPosition.ToString() + positionSuffix;
         continueCost.text = $"Continue {_gameService.NextContinueCost} credit?";
+
+        var rank = await _gameService.FetchCurrentUserRank();
+        position.text = positionPrefix + rank.ToString() + positionSuffix;
     }
 
     void Hide(){

@@ -105,6 +105,18 @@ namespace TA.Leaderboard {
                 }
             };
         }
+
+        public async UniTask<LeaderBoard> GetActiveHighScoreLeaderBoard(){
+            await FetchMaster();
+            var activeName = GetActiveName();
+            return GetHighScoreLeaderBoard(activeName);
+        }
+
+        public async UniTask<LeaderBoard> GetActiveTotalScoreLeaderBoard(){
+            await FetchMaster();
+            var activeName = GetActiveName();
+            return GetTotalScoreLeaderBoard(activeName);
+        }
     }
 
     public class LeaderBoard{
