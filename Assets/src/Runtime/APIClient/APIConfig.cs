@@ -11,6 +11,9 @@ public class APIConfig : ScriptableObject {
     public string encryptionPublicKey;
     public string gameId;
 
+    [Header("Login Config")]
+    public string signatureString;
+
     [Header("Leaderboard")]
     public int entriesPerPage = 20;
     public bool hasHighScoreLeaderboard = true;

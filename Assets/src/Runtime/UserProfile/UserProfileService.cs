@@ -20,6 +20,7 @@ public class UserProfileService : Service<UserProfileService>{
     Web3AuthService _web3AuthService;
     APIService _apiService;
     BlockchainGameCanvas _gameCanvas;
+    APIConfigProviderService _apiConfigService;
 
     string platform = "android";
     string appType = "etuktuk";
@@ -50,6 +51,7 @@ public class UserProfileService : Service<UserProfileService>{
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
         _apiService = ServiceLocator.Instance.GetService<APIService>();
         _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
+        _apiConfigService = ServiceLocator.Instance.GetService<APIConfigProviderService>();
 
         _web3AuthService.OnLogin += OnLogin;
     }
@@ -66,7 +68,7 @@ public class UserProfileService : Service<UserProfileService>{
         var privateKey = response.privKey;
 
         var walletAddress = CryptoHelper.GetWalletAddress(privateKey);
-        var signature = CryptoHelper.GetMessageSignature($"Welcome to eTukTuk! Sign this message to prove you have access to this wallet. This won't cost you any Ether. Your authentication status will reset after 24 hours. Wallet address: {walletAddress}", privateKey);
+        var signature = CryptoHelper.GetMessageSignature($"{_apiConfigService.APIConfig.signatureString} Wallet address: {walletAddress}", privateKey);
 
         var loginParams = new TA.APIClient.RequestData.LoginParams(){
             verifierId = response.userInfo.verifierId,
