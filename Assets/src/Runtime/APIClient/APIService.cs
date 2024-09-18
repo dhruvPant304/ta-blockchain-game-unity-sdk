@@ -87,7 +87,7 @@ namespace TA.APIClient{
             return await SendWebRequest<GameSessionResponse, FailedResponse>(
                         $"/api/v1/games/start/{gameId}",
                         "POST",
-                        null,
+                        startParams,
                         authToken
                     );
         }
