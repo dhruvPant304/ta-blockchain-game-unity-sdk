@@ -1,6 +1,10 @@
 using System;
 
 namespace TA.APIClient.RequestData{
+    [Serializable]
+    public class StartGameParams {
+        public bool isFreeToPlay;
+    }
 
     [Serializable]
     public class LoginParams{

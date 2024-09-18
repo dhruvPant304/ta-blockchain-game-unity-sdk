@@ -83,7 +83,7 @@ namespace TA.APIClient{
         //=====================
 
         public async UniTask<VariableRequestResponse<GameSessionResponse, FailedResponse>> SendStartGameRequest(string gameId,
-                string authToken){
+                StartGameParams startParams, string authToken){
             return await SendWebRequest<GameSessionResponse, FailedResponse>(
                         $"/api/v1/games/start/{gameId}",
                         "POST",
