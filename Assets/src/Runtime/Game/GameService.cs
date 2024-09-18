@@ -22,6 +22,7 @@ public class GameService : Service<GameService> {
     BlockchainGameCanvas _blockChainGameCanvas;
     TAMenuService _taMenuService;
     LeaderboardService _leaderBoardService;
+    APIConfig _apiConfig;
 
     string _gameId;
     string _gameToken = null;
@@ -84,6 +85,7 @@ public class GameService : Service<GameService> {
         _blockChainGameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
         _taMenuService = ServiceLocator.Instance.GetService<TAMenuService>();
         _gameId = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig.gameId;
+        _apiConfig = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
     } 
 
     void OpenBuyCredit(){
@@ -172,7 +174,7 @@ public class GameService : Service<GameService> {
             return;
         }
 
-        if(Credits < 1){
+        if(Credits < 1 && _apiConfig.requireCreditsToPlay){
             _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
             return;
         }
@@ -229,7 +231,7 @@ public class GameService : Service<GameService> {
     }
 
     public async void ContinueGame(){
-        if(Credits < GetContinueCost(_retries)){
+        if(Credits < GetContinueCost(_retries) && _apiConfig.requireCreditsToPlay){
             _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
             return;
         }

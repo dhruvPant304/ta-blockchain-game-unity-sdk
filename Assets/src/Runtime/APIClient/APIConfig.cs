@@ -14,6 +14,9 @@ public class APIConfig : ScriptableObject {
     [Header("Login Config")]
     public string signatureString;
 
+    [Header("Game Config")]
+    public bool requireCreditsToPlay = true;
+
     [Header("Leaderboard")]
     public int entriesPerPage = 20;
     public bool hasHighScoreLeaderboard = true;
