@@ -179,7 +179,11 @@ public class GameService : Service<GameService> {
             return;
         }
 
-        var response = await _apiService.SendStartGameRequest(_gameId, AuthToken);
+        var startParams = new StartGameParams(){
+            isFreeToPlay = !_apiConfig.requireCreditsToPlay
+        };
+
+        var response = await _apiService.SendStartGameRequest(_gameId, startParams, AuthToken);
         if(response.IsSuccess){
             var result = await TryUserBalance(OnStartSessionFailed);
             if(!result) return;
