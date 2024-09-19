@@ -56,16 +56,15 @@ public class AuthExceptionHandler : MonoBehaviour{
 
     void OnAuthSuccess(LoginSessionData userData){
         if(!userData.isFirstTimeUser 
-                || _profileService.IsAutoLoginSession 
-                || !_apiConfig.requireCreditsToPlay) {
+                || _profileService.IsAutoLoginSession ) {
             if(!userData.isFirstTimeUser) Debug.Log("not a first time user");
             SceneManager.LoadScene(3);
             _profileService.OnAuthSuccess -= OnAuthSuccess;
             return;
         }
         var popup = new MessagePopup(){
-            header = "Login Successful!",
-            message = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you",
+            header = _apiConfig.firstLoginMessageHeader,
+            message = _apiConfig.firstLoginMessage,
             banner = BannerType.Reward,
             hasBackground = true,
             exits = new List<MessagePopupExit>(){
