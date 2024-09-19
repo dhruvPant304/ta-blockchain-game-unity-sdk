@@ -13,6 +13,8 @@ public class APIConfig : ScriptableObject {
 
     [Header("Login Config")]
     public string signatureString;
+    public string firstLoginMessage = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you";
+    public string firstLoginMessageHeader = "Login Successful!";
 
     [Header("Game Config")]
     public bool requireCreditsToPlay = true;
