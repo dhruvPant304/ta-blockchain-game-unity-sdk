@@ -24,16 +24,23 @@ public class SettingsPage : MonoBehaviour {
 
     void OnShow(){
         var userData = _userProfileService.SessionUserData;
-        playerName.text = userData.username;
-        email.text = userData.email;
+        if(playerName) playerName.text = userData.username;
+        if (email) email.text = userData.email;
 
-        soundToggle.SetValueWithoutNotify(userData.appSettings.Last().isMusic);
-        vibrationsToggle.SetValueWithoutNotify(userData.appSettings.Last().isVibrate);
+        if(soundToggle){
+            soundToggle.SetValueWithoutNotify(userData.appSettings.Last().isMusic);
+            soundToggle.OnValueChanged = (val) => UpdateSettings();
+        }
 
-        soundToggle.OnValueChanged = (val) => UpdateSettings();
-        vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
-        deleteLogout.onLogout = DeleteUser;
-        deleteLogout.confirmationPopUp = DeleteConfirmationPopUp();
+        if(vibrationsToggle){
+            vibrationsToggle.SetValueWithoutNotify(userData.appSettings.Last().isVibrate);
+            vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
+        }
+
+        if(deleteLogout){
+            deleteLogout.onLogout = DeleteUser;
+            deleteLogout.confirmationPopUp = DeleteConfirmationPopUp();
+        }
     }
 
     public void Show(){ 
