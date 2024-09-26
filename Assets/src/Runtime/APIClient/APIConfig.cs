@@ -16,6 +16,11 @@ public class APIConfig : ScriptableObject {
     public string firstLoginMessage = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you";
     public string firstLoginMessageHeader = "Login Successful!";
 
+    [Header("Credit Shop config")]
+    public bool inAppCreditPurchaseAvailable;
+    public bool showShopInBrowser;
+    public string shopUrl;
+
     [Header("Game Config")]
     public bool requireCreditsToPlay = true;
 
