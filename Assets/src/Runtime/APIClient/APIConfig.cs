@@ -28,6 +28,9 @@ public class APIConfig : ScriptableObject {
     public int entriesPerPage = 20;
     public bool hasHighScoreLeaderboard = true;
     public bool hasTotalScoreLeaderboard = true;
+    public string rewardUnit;
+    public string totalRewardTextPrefix;
+    public string totalRewardSuffix;
 
     [Header("DebugSettings")]
     public bool logResponses;
