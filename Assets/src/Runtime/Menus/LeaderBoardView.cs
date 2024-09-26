@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static TMPro.TMP_Dropdown;
+using TA.APIClient;
 
 namespace TA.Menus{
 public class LeaderBoardView : MonoBehaviour {
@@ -33,6 +34,7 @@ public class LeaderBoardView : MonoBehaviour {
     List<LeaderBoardEntry> _active = new();
 
     Transform poolTransform;
+    APIConfig _config;
 
     LeaderBoard _activeLeaderBoard;
     int _activePage = 0;
@@ -40,6 +42,7 @@ public class LeaderBoardView : MonoBehaviour {
 
     void Start(){
         _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
+        _config = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
  
         InitializePool();
         leaderBoardTypeSelector.OnSelection += (s) => LoadSelectedLeaderBoard();
@@ -147,7 +150,7 @@ public class LeaderBoardView : MonoBehaviour {
 
     void SetTotalPrizePool(){
         if(_activeLeaderBoard == null) return;
-        prizepool.text = _activeLeaderBoard.totalPrizePool.ToString();
+        prizepool.text = _config.totalRewardTextPrefix + _activeLeaderBoard.totalPrizePool.ToString() + _config.totalRewardSuffix;
     }
 
     async UniTask SetUserStatsOnActiveLeaderBoard(){
@@ -162,7 +165,7 @@ public class LeaderBoardView : MonoBehaviour {
                     userEntry.rank.ToString(),
                     $"YOU({userEntry.user.username})",
                     userEntry.score.ToString(),
-                    userEntry.reward.ToString()
+                    userEntry.reward.ToString() + _config.rewardUnit
                 );
         }
     }
@@ -193,7 +196,7 @@ public class LeaderBoardView : MonoBehaviour {
                     entry.rank.ToString(),
                     entry.user.username,
                     entry.score.ToString(),
-                    entry.reward.ToString()
+                    entry.reward.ToString() + _config.rewardUnit
                 );
         }
 
