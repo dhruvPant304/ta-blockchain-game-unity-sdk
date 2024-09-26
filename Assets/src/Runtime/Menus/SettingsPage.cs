@@ -19,6 +19,7 @@ public class SettingsPage : MonoBehaviour {
 
     void Start(){
         _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
+        InitializeDeleteButton();
         Hide();
     }
 
@@ -36,7 +37,9 @@ public class SettingsPage : MonoBehaviour {
             vibrationsToggle.SetValueWithoutNotify(userData.appSettings.Last().isVibrate);
             vibrationsToggle.OnValueChanged = (val) => UpdateSettings();
         }
+    }
 
+    void InitializeDeleteButton(){
         if(deleteLogout){
             deleteLogout.onLogout = DeleteUser;
             deleteLogout.confirmationPopUp = DeleteConfirmationPopUp();
