@@ -1,4 +1,5 @@
 using System;
+using TA.APIClient;
 using TA.Services;
 using UnityEngine;
 
@@ -27,8 +28,16 @@ public class TAMenuService : Service<TAMenuService>{
     }
 
     public void CloseBuyCreditMenu(){
-        _buyCreditsMenu.Close();
-        OnBuyCreditsMenuClosed?.Invoke();
+        var config = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
+
+        if(config.inAppCreditPurchaseAvailable){
+            _buyCreditsMenu.Close();
+            OnBuyCreditsMenuClosed?.Invoke();
+        }
+
+        if(config.showShopInBrowser){
+            Application.OpenURL(config.shopUrl);
+        }
     }
 
     public void OpenGameOverMenu(){
