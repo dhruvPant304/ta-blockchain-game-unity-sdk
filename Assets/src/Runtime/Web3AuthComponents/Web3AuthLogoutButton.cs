@@ -67,8 +67,8 @@ public class Web3AuthLogoutButton : MonoBehaviour {
         onLogout?.Invoke();
         _userProfileService.ClearLoginSession();
         SceneManager.LoadScene(0);
-        _web3AuthService.OnLogout -= OnLogout;
         ShowLogOutSuccessPopUp();
+        _web3AuthService.OnLogout -= OnLogout;
     }
 
     void Show() => gameObject.SetActive(true);
