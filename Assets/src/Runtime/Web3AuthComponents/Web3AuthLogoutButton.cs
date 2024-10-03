@@ -15,6 +15,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
 
     public Action onLogout;
     public MessagePopup confirmationPopUp;
+    public MessagePopup successPopUp; 
 
     void Start(){
         _web3AuthService = ServiceLocator.Instance.GetService<Web3AuthService>();
@@ -32,9 +33,9 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                 //This was done to give cancellation button in Delete account pop-up a
                 //confirmation style highlight
                 if(exit.exitStyle == MessagePopupExit.ExitStyle.Regular){ 
-                    exit.exitAction = LogOut;
+                    exit.exitAction = ShowLogOutSuccessPopUp;
                 }
-            }
+        }
             
             _gameCanvas.ShowMessagePopup(confirmationPopUp);
             return;
@@ -51,6 +52,22 @@ public class Web3AuthLogoutButton : MonoBehaviour {
 
         _web3AuthService.OnLogout += OnLogout; 
         _web3AuthService.LogOut();
+    }
+
+    void ShowLogOutSuccessPopUp(){
+         if(successPopUp !=null){
+            foreach (var exit in successPopUp.exits){
+                //Regular buttons would act as confirmation to Execute On Logout logic
+                //This was done to give cancellation button in Delete account pop-up a
+                //confirmation style highlight
+                if(exit.exitStyle == MessagePopupExit.ExitStyle.Regular){ 
+                    exit.exitAction = LogOut;
+                }
+            }
+        }
+        else {
+            LogOut();
+        }
     }
 
     void OnLogout(){
