@@ -37,7 +37,7 @@ public class APIConfig : ScriptableObject {
     public bool showDeleteConfirmationPopUp = true;
     public string deleteConfirmationMessageHeader = "Leaving Us?";
     public string deleteConfirmationMessage = "Are you sure you want to delete your account? your details will be removed.";
-    public string successMessageHeader;
+    public string deleteSuccessMessageHeader;
     public string deleteSuccessMessage;
 
     [Header("DebugSettings")]
