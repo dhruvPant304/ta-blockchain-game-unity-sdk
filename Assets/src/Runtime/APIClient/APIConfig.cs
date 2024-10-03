@@ -32,6 +32,14 @@ public class APIConfig : ScriptableObject {
     public string totalRewardTextPrefix;
     public string totalRewardSuffix;
 
+    [Header("Delete Account Config")]
+    public bool showDeleteSuccessPopUp;
+    public bool showDeleteConfirmationPopUp = true;
+    public string deleteConfirmationMessageHeader = "Leaving Us?";
+    public string deleteConfirmationMessage = "Are you sure you want to delete your account? your details will be removed.";
+    public string successMessageHeader;
+    public string deleteSuccessMessage;
+
     [Header("DebugSettings")]
     public bool logResponses;
     public bool logRequest;
