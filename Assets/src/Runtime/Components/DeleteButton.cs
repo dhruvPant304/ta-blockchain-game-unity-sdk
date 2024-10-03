@@ -50,8 +50,8 @@ namespace TA.Components{
             var popup = new MessagePopup{
                 hasBackground = true,
                 banner = BannerType.Reward,
-                header = _apiConfig.deleteSuccessMessage,
-                message = _apiConfig.deleteSuccessMessageHeader,
+                header = _apiConfig.deleteSuccessMessageHeader,
+                message = _apiConfig.deleteSuccessMessage,
                 exits = new List<MessagePopupExit>(){
                     new MessagePopupExit(){
                         name = "Okay",
