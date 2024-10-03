@@ -36,7 +36,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                     exit.exitAction = ShowLogOutSuccessPopUp;
                 }
         }
-            
+
             _gameCanvas.ShowMessagePopup(confirmationPopUp);
             return;
         }
@@ -64,6 +64,9 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                     exit.exitAction = LogOut;
                 }
             }
+
+            _gameCanvas.ShowMessagePopup(successPopUp);
+            return;
         }
         else {
             LogOut();
