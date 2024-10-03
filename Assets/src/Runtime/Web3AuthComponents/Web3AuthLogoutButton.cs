@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TA.UserProfile;
 using System;
 using TA.Components;
+using Cysharp.Threading.Tasks;
 
 namespace TA.Authentication{
 [RequireComponent(typeof(Button))]
@@ -54,7 +55,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
         _web3AuthService.LogOut();
     }
 
-    void ShowLogOutSuccessPopUp(){
+    async void ShowLogOutSuccessPopUp(){
          if(successPopUp !=null){
             foreach (var exit in successPopUp.exits){
                 //Regular buttons would act as confirmation to Execute On Logout logic
@@ -65,6 +66,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
                 }
             }
 
+            await UniTask.WaitForSeconds(0.5f);
             _gameCanvas.ShowMessagePopup(successPopUp);
             return;
         }
