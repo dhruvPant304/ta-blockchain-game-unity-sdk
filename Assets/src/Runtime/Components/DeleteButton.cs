@@ -49,7 +49,7 @@ namespace TA.Components{
         MessagePopup DeleteSuccessPopUp(){
             var popup = new MessagePopup{
                 hasBackground = true,
-                banner = BannerType.Good,
+                banner = BannerType.Reward,
                 header = _apiConfig.deleteSuccessMessage,
                 message = _apiConfig.deleteSuccessMessageHeader,
                 exits = new List<MessagePopupExit>(){
