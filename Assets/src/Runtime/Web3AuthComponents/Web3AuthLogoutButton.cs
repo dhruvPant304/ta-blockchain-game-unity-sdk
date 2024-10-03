@@ -68,9 +68,7 @@ public class Web3AuthLogoutButton : MonoBehaviour {
             _gameCanvas.ShowMessagePopup(successPopUp);
             return;
         }
-        else {
-            LogOut();
-        }
+        LogOut();
     }
 
     void OnLogout(){
