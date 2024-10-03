@@ -38,7 +38,7 @@ public class ProfileDetailsPage : MonoBehaviour{
         userName.text = data.username;
         walletAddress.text = GetTruncatedString(6,data.walletAddress);
         email.text = data.email;
-        createdAt.text = "Member since," + ConvertToCustomFormat(data.createdAt);
+        createdAt.text = "Member since: " + ConvertToCustomFormat(data.createdAt);
     }
 
     public void Hide(){

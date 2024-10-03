@@ -470,7 +470,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1261.2959, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 50.7031}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9100754832274069941
@@ -1390,6 +1390,8 @@ MonoBehaviour:
   walletAddress: {fileID: 9040112518482199127}
   email: {fileID: 2505421206589119112}
   createdAt: {fileID: 6116871325622603972}
+  editProfileButton: {fileID: 0}
+  editProfileInputModal: {fileID: 0}
 --- !u!1 &6176468074896720303
 GameObject:
   m_ObjectHideFlags: 0
@@ -2022,7 +2024,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa44d4ed539e78677bb1360f91a6c2b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMesh: {fileID: 0}
 --- !u!1001 &681598508722338889
 PrefabInstance:
   m_ObjectHideFlags: 0
