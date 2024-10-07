@@ -6,6 +6,7 @@ using TA.UserProfile;
 using System;
 using TA.Components;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace TA.Authentication{
 [RequireComponent(typeof(Button))]
@@ -56,18 +57,28 @@ public class Web3AuthLogoutButton : MonoBehaviour {
     }
 
     async void ShowLogOutSuccessPopUp(){
-         if(successPopUp !=null){
-            await UniTask.WaitForSeconds(0.5f);
-            _gameCanvas.ShowMessagePopup(successPopUp);
-            return;
-        }
+        await UniTask.WaitForSeconds(0.5f);
+        successPopUp.exits = new List<MessagePopupExit>(){
+                new MessagePopupExit(){
+                    name = "Okay",
+                    exitStyle = MessagePopupExit.ExitStyle.Regular,
+                    exitAction = LoadLandingPageScene 
+                }
+        };
+
+        _gameCanvas.ShowMessagePopup(successPopUp);
+        return;
     }
 
     void OnLogout(){
         onLogout?.Invoke();
         _userProfileService.ClearLoginSession();
-        SceneManager.LoadScene(0);
-        ShowLogOutSuccessPopUp();
+        if(successPopUp != null) ShowLogOutSuccessPopUp();
+        else LoadLandingPageScene();
+    }
+
+    void LoadLandingPageScene(){
+        SceneManager.LoadScene("LandingPage");
         _web3AuthService.OnLogout -= OnLogout;
     }
 
