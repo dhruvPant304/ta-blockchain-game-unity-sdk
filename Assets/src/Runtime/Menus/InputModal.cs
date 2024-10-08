@@ -15,17 +15,21 @@ public class InputModal : MonoBehaviour {
 
     bool _confirmed = false;
     bool _cancelled = false;
+
+    public bool IsOpen {get; private set;}
     
     void Start(){
         Hide();
     }
 
-    public void Hide(){
+    void Hide(){
         gameObject.SetActive(false);
+        IsOpen = false;
     }
 
-    public void Show(){
+    void Show(){
         gameObject.SetActive(true);
+        IsOpen = true;
     }
 
     void Confirm(){
@@ -37,6 +41,7 @@ public class InputModal : MonoBehaviour {
     }
 
     public async UniTask<Result> WaitInput(string header, string lable, Func<string, UniTask<ValidationResult>> validation, string validationError = "") {
+        if(IsOpen) throw new Exception("Input modal is alread awaiting user input, make sure previous input is handled before making another, input request using this input modal");
         Show();
 
         _confirmed = false;
