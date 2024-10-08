@@ -57,10 +57,12 @@ public class ProfileDetailsPage : MonoBehaviour{
     }
 
     async void OnEditProfile(){
+        editProfileButton.onClick.RemoveAllListeners();
         var result = await editProfileInputModal.WaitInput("Edit Profile", "name",ValidateUserName);
         if(result.option == Option.Some){
             _userProfileService.UpdateUserName(result.result);
         }
+        editProfileButton.onClick.AddListener(OnEditProfile);
     }
 
     async UniTask<ValidationResult> ValidateUserName(string username){
