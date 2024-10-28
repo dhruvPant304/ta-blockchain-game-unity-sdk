@@ -6,7 +6,7 @@ public class BuyPackageButton : PackageDisplay{
     [SerializeField] TextMeshProUGUI creditAmountText;
     [SerializeField] TextMeshProUGUI priceText;
 
-    public override void ShowPackage(PurchasePackage package){
+    protected override void ShowPackage(PurchasePackage package){
         creditAmountText.text = package.creditAmount.ToString() + " CREDITS";
         priceText.text = "-$ " + package.price.ToString();
     }
