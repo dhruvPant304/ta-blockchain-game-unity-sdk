@@ -11,6 +11,9 @@ public class APIConfig : ScriptableObject {
     public string encryptionPublicKey;
     public string gameId;
 
+    [Header("User Balance Config")]
+    public bool fetchUserBalanceOnLogin = true;
+
     [Header("Login Config")]
     public string signatureString;
     public string firstLoginMessage = "Welcome to TukTuk Crazy Taxi, We have 20 free credits for you";

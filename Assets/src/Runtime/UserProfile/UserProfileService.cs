@@ -113,7 +113,11 @@ public class UserProfileService : Service<UserProfileService>{
         OnAuthFailed?.Invoke(failedResponse);
     }
 
-    public async UniTask<StaticRequestResponse<UserBalanceResponse>> UpdateUserBalance(){
+    public async UniTask<StaticRequestResponse<BaseAPIResponse>> UpdateUserBalance(){
+        if(!_apiConfigService.APIConfig.fetchUserBalanceOnLogin){
+            return APIService.CreateBaseResponse(true, "Not checking for user balance on login");
+        }
+
         var response = await _apiService.SendFetchUserBalanceRequest(LoginUserData.token);
         if(response.IsSuccess){
             OnBalanceUpdate?.Invoke(response.Response.data);
@@ -121,7 +125,7 @@ public class UserProfileService : Service<UserProfileService>{
         } else{
             OnBalanceUpdateFailed?.Invoke();
         }
-        return response;
+        return APIService.CreateBaseResponse(response.IsSuccess, response.Response.message);
     }
 
     //=======================

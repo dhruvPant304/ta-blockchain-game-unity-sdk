@@ -231,6 +231,18 @@ namespace TA.APIClient{
             if (body != null) request.uploadHandler = new UploadHandlerRaw(data);
             return request;
         }
+
+        public static StaticRequestResponse<BaseAPIResponse> CreateBaseResponse(bool isSuccess, string message){
+            VariableRequestResponse<BaseAPIResponse,BaseAPIResponse> variableResponse = new VariableRequestResponse<BaseAPIResponse,BaseAPIResponse>(){
+                IsSuccess = isSuccess,
+                SuccessResponse = new BaseAPIResponse(){
+                    status = isSuccess? "SUCCESS" : "FAILED",
+                    message = message
+                }
+            };
+
+            return new StaticRequestResponse<BaseAPIResponse>(variableResponse);
+        }
     }
 
     [Serializable]
