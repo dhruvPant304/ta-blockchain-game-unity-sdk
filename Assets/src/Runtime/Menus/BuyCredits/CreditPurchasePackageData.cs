@@ -11,6 +11,7 @@ public class CreditPurchasePackageData : ScriptableObject{
 
 [Serializable]
 public class PurchasePackage{
+    public string storeProductId;
     public int creditAmount;
     public int price;
 }

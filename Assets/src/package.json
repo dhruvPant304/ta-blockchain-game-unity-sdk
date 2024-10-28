@@ -19,5 +19,8 @@
 			"description": "Menu prefabs and assets for etuk tuk game",
 			"path": "Samples~/ETUK-TUK Samples"
 		}
-	]
+	],
+	"dependencies": {
+		"com.unity.purchasing": "4.12.2",
+	}
 }

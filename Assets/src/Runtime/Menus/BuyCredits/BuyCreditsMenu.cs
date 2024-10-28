@@ -34,7 +34,7 @@ public class BuyCreditsMenu : MonoBehaviour{
 
     PackageDisplay CreateButton(PurchasePackage package){
         var button = Instantiate(buttonPrefab, buttonHolder);
-        button.ShowPackage(package);
+        button.AssignPackage(package);
         _buttons.Add(button);
         return button;
     }
