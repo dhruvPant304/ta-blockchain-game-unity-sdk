@@ -116,7 +116,7 @@ namespace TA.IAP{
             
 
             var initiateData = new InitiatePurchaseData(){
-                amount = (double)purchaseEvent.purchasedProduct.metadata.localizedPrice,
+                amount = (int)purchaseEvent.purchasedProduct.metadata.localizedPrice,
                 credits = creditPackage.creditAmount,
                 platform = Platform,
                 currency = purchaseEvent.purchasedProduct.metadata.isoCurrencyCode
@@ -133,7 +133,7 @@ namespace TA.IAP{
 
         async UniTask<BaseAPIResponse> VerifyPayment(string uuid, PurchasePackage creditPackage, PurchaseEventArgs purchaseEvent){
             var verificationData = new PurhcaseVerificationData(){
-                amount = (double)purchaseEvent.purchasedProduct.metadata.localizedPrice,
+                amount = (int)purchaseEvent.purchasedProduct.metadata.localizedPrice,
                 credits = creditPackage.creditAmount,
                 verifyUUID = uuid,
                 currency = purchaseEvent.purchasedProduct.metadata.isoCurrencyCode,
@@ -212,7 +212,7 @@ namespace TA.IAP{
 
     [Serializable]
     public class InitiatePurchaseData{
-        public double amount;
+        public int amount;
         public int credits;
         public string platform;
         public string currency;
@@ -220,7 +220,7 @@ namespace TA.IAP{
 
     [Serializable]
     public class PurhcaseVerificationData{
-        public double amount;
+        public int amount;
         public int credits;
         public string verifyUUID;
         public string currency;
