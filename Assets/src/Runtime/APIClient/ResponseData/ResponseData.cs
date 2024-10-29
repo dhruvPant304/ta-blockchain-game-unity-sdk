@@ -42,6 +42,9 @@ namespace TA.APIClient.ResponseData{
     public class UserLeaderBoardStatsResponse : APIResponse<LeaderBoardEntry> {};
 
     [Serializable]
+    public class InitiatePaymentResponse : APIResponse<InitiatePaymentData> {};
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -129,5 +132,10 @@ namespace TA.APIClient.ResponseData{
     [Serializable]
     public class MinimumPrizePoolData{
         public float prizePool;
+    }
+
+    [Serializable]
+    public class InitiatePaymentData{
+        public string uuid;
     }
 }
