@@ -127,7 +127,7 @@ namespace TA.IAP{
             
             return new InitiatePaymentResponse(){
                 status = "FAILED",
-                message = response.FailureResponse.message
+                message = response.FailureResponse.error
             };
         }
 
@@ -145,7 +145,7 @@ namespace TA.IAP{
 
             return new BaseAPIResponse(){
                 status = "FAILED",
-                message = response.FailureResponse.message
+                message = response.FailureResponse.error
             };
         }
 
