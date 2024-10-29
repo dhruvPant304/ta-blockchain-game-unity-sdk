@@ -11,6 +11,7 @@ public abstract class PackageDisplay : MonoBehaviour {
     
     void Start(){
         _iapService = ServiceLocator.Instance.GetService<IAPService>();
+        buyButton.onClick.AddListener(InitiateIAP);
     }
 
     public void AssignPackage(PurchasePackage package){
