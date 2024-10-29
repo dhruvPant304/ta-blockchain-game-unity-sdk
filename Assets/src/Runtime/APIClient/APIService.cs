@@ -172,7 +172,7 @@ namespace TA.APIClient{
                 TA.IAP.InitiatePurchaseData data, 
                 string authToken){
             return await SendWebRequest<InitiatePaymentResponse, FailedResponse>(
-                    $"/api/v1/initiate-payment",
+                    $"/api/v1/payments/initiate-payment",
                     "POST",
                     data,
                     authToken
@@ -183,7 +183,7 @@ namespace TA.APIClient{
                 TA.IAP.PurhcaseVerificationData data,
                 string authToken){
             return await SendWebRequest<BaseAPIResponse, FailedResponse>(
-                    $"/api/v1/verify-payment",
+                    $"/api/v1/payments/verify-payment",
                     "POST",
                     data,
                     authToken
