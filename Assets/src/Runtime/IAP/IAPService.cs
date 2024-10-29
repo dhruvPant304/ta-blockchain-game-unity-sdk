@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TA.Menus;
 using UnityEngine.Purchasing.Extension;
+using System;
+using Cysharp.Threading.Tasks;
+using TA.APIClient.ResponseData;
+using System.Linq;
+using TA.UserProfile;
 
 namespace TA.IAP{
     public class IAPService : Service<IAPService>, IDetailedStoreListener {
@@ -13,15 +18,18 @@ namespace TA.IAP{
 
         BlockchainGameCanvas _canvas;
         APIService _apiService;
+        UserProfileService _userProfile; 
 
         IStoreController _storeController;
         IExtensionProvider _extensionProvider;
 
         public bool Initialized => _storeController != null && _extensionProvider != null;
+        public string Platform => Application.platform == RuntimePlatform.Android? "android" : "ios";
 
         void Start(){
             _canvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
             _apiService = ServiceLocator.Instance.GetService<APIService>();
+            _userProfile = ServiceLocator.Instance.GetService<UserProfileService>();
 
             if(!Initialized) InitializePurchasing();
         }
@@ -84,6 +92,64 @@ namespace TA.IAP{
             };
         }
 
+        MessagePopup CreatePurchaseSuccessPopUp(string message){
+            return new MessagePopup(){
+                banner = BannerType.Reward,
+                header = "Purchase Successful",
+                message = message,
+                exits = new List<MessagePopupExit>(){
+                    new MessagePopupExit(){
+                        name = "Okay",
+                        exitAction = () => {},
+                        exitStyle = MessagePopupExit.ExitStyle.Confirmation
+                    }
+                }
+            };
+        }
+
+
+        //=====================
+        // PAYMENT VERIFICATION 
+        //=====================
+
+        async UniTask<InitiatePaymentResponse> InitiatePayment(PurchaseEventArgs purchaseEvent, PurchasePackage creditPackage){
+            
+
+            var initiateData = new InitiatePurchaseData(){
+                amount = purchaseEvent.purchasedProduct.metadata.localizedPrice,
+                credits = creditPackage.creditAmount,
+                platform = Platform,
+                currency = purchaseEvent.purchasedProduct.metadata.isoCurrencyCode
+            };
+
+            var response = await _apiService.SendInitiatePaymentRequest(initiateData,_userProfile.LoginToken);
+            if(response.IsSuccess) return response.SuccessResponse;
+            
+            return new InitiatePaymentResponse(){
+                status = "FAILED",
+                message = response.FailureResponse.message
+            };
+        }
+
+        async UniTask<BaseAPIResponse> VerifyPayment(string uuid, PurchasePackage creditPackage, PurchaseEventArgs purchaseEvent){
+            var verificationData = new PurhcaseVerificationData(){
+                amount = purchaseEvent.purchasedProduct.metadata.localizedPrice,
+                credits = creditPackage.creditAmount,
+                verifyUUID = uuid,
+                currency = purchaseEvent.purchasedProduct.metadata.isoCurrencyCode,
+                recipt = purchaseEvent.purchasedProduct.receipt
+            };
+
+            var response =await _apiService.SendVerificationRequest(verificationData, _userProfile.LoginToken);
+            if(response.IsSuccess) return response.SuccessResponse;
+
+            return new BaseAPIResponse(){
+                status = "FAILED",
+                message = response.FailureResponse.message
+            };
+        }
+
+
         //=====================
         // STORE LISTENER IMPLEMENTATION
         //=====================
@@ -97,7 +163,7 @@ namespace TA.IAP{
             // throw new System.NotImplementedException();
         }
 
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)        {
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason){
             // throw new System.NotImplementedException();
         }
 
@@ -106,13 +172,56 @@ namespace TA.IAP{
         }
 
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs purchaseEvent){
-            throw new System.NotImplementedException();
+            VerifyPaymentFromServer(purchaseEvent).Forget();
+            return PurchaseProcessingResult.Complete;
         }
 
-        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)        {
+        public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription){
             _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp(failureDescription.message));
         }
 
+        async UniTask VerifyPaymentFromServer(PurchaseEventArgs purchaseEvent){
+            PurchasePackage creditPackage;
+            try{
+                creditPackage = purchasePackageData.packages.First((p) => p.storeProductId == purchaseEvent.purchasedProduct.definition.id);
+            }
+            catch{
+                _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp($"Cannot identify package in game id:{purchaseEvent.purchasedProduct.definition.id}"));
+                return;
+            }
+
+            var response = await InitiatePayment(purchaseEvent, creditPackage);
+            
+            if(!response.IsSuccess){
+                _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp(response.message));
+            }
+
+            var verifyResponse = await VerifyPayment(response.data.uuid, creditPackage, purchaseEvent);
+
+            if(!response.IsSuccess){
+                _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp(verifyResponse.message));
+            }
+
+            _canvas.ShowMessagePopup(CreatePurchaseSuccessPopUp("Credits purchased successfully"));
+        }
+
+    }
+
+    [Serializable]
+    public class InitiatePurchaseData{
+        public decimal amount;
+        public int credits;
+        public string platform;
+        public string currency;
+    }
+
+    [Serializable]
+    public class PurhcaseVerificationData{
+        public decimal amount;
+        public int credits;
+        public string verifyUUID;
+        public string currency;
+        public string recipt;
     }
 }
 
