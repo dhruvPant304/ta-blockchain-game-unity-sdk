@@ -156,7 +156,8 @@ namespace TA.IAP{
 
 
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions){
-            // throw new System.NotImplementedException();
+            _storeController = controller;
+            _extensionProvider = extensions;
         }
 
         public void OnInitializeFailed(InitializationFailureReason error){
