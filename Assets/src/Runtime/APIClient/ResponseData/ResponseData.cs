@@ -46,7 +46,7 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class FailedResponse{
-        public string message;
+        public string[] message;
         public string error;
     }
 
