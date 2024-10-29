@@ -137,7 +137,7 @@ namespace TA.IAP{
                 credits = creditPackage.creditAmount,
                 verifyUUID = uuid,
                 currency = purchaseEvent.purchasedProduct.metadata.isoCurrencyCode,
-                recipt = purchaseEvent.purchasedProduct.receipt
+                receipt = purchaseEvent.purchasedProduct.receipt
             };
 
             var response =await _apiService.SendVerificationRequest(verificationData, _userProfile.LoginToken);
@@ -221,7 +221,7 @@ namespace TA.IAP{
         public int credits;
         public string verifyUUID;
         public string currency;
-        public string recipt;
+        public string receipt;
     }
 }
 
