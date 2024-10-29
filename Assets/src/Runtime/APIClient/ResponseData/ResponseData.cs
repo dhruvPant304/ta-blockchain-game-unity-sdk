@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TA.APIClient.ResponseData{
     [Serializable]
@@ -46,7 +47,7 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class FailedResponse{
-        public string[] message;
+        public List<string> message;
         public string error;
     }
 
