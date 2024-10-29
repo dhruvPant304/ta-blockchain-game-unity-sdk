@@ -195,12 +195,14 @@ namespace TA.IAP{
             
             if(!response.IsSuccess){
                 _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp(response.message));
+                return;
             }
 
             var verifyResponse = await VerifyPayment(response.data.uuid, creditPackage, purchaseEvent);
 
             if(!response.IsSuccess){
                 _canvas.ShowMessagePopup(CreatePurchaseErrorPopUp(verifyResponse.message));
+                return;
             }
 
             _canvas.ShowMessagePopup(CreatePurchaseSuccessPopUp("Credits purchased successfully"));
