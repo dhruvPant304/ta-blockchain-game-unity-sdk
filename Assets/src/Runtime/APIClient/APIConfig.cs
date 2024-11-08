@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace TA.APIClient{
@@ -6,6 +7,7 @@ public class APIConfig : ScriptableObject {
 
     [Header("Env")]
     public string serverUrl;
+    public Environment environment = Environment.Development;
 
     [Header("Keys")]
     public string encryptionPublicKey;
@@ -46,5 +48,14 @@ public class APIConfig : ScriptableObject {
     [Header("DebugSettings")]
     public bool logResponses;
     public bool logRequest;
+}
+
+[Flags]
+public enum Environment{
+    None = 0,
+    Development = 1 << 0,
+    Testing= 1 << 1,
+    Staging = 1<< 2,
+    Production = 1 << 3
 }
 }
