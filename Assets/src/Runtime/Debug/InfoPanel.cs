@@ -12,8 +12,6 @@ namespace TA.TADebug{
         [SerializeField] Button copyButton;
 
         void Start(){
-            infoText.overflowMode = TextOverflowModes.ScrollRect;
-
             var apiConfig = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
             var web3AuthConfig = ServiceLocator.Instance.GetService<Web3AuthConfigProviderService>().Config;
 
