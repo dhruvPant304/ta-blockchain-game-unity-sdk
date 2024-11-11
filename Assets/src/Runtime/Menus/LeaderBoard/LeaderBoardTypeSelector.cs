@@ -1,4 +1,6 @@
 using System;
+using TA.APIClient;
+using TA.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +32,16 @@ public class LeaderBoardTypeSelector : MonoBehaviour {
     }
 
     void Start(){
+        var config = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
+
+        if(!config.hasHighScoreLeaderboard && !config.hasTotalScoreLeaderboard) {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        total.gameObject.SetActive(config.hasTotalScoreLeaderboard);
+        high.gameObject.SetActive(config.hasHighScoreLeaderboard);
+
         total.onClick.AddListener(OnTotal);
         high.onClick.AddListener(OnHigh);
 
