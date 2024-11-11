@@ -174,9 +174,11 @@ public class GameService : Service<GameService> {
             return;
         }
 
-        if(Credits < 1 && _apiConfig.requireCreditsToPlay){
-            _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
-            return;
+        if(_apiConfig.requireCreditsToPlay){
+            if(Credits < 1){
+                _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
+                return;
+            }
         }
 
         var startParams = new StartGameParams(){
@@ -235,9 +237,11 @@ public class GameService : Service<GameService> {
     }
 
     public async void ContinueGame(){
-        if(Credits < GetContinueCost(_retries) && _apiConfig.requireCreditsToPlay){
-            _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
-            return;
+        if(_apiConfig.requireCreditsToPlay){
+            if(Credits < GetContinueCost(_retries)){
+                _blockChainGameCanvas.ShowMessagePopup(GetInsufficientFundsPopUp(), 1);
+                return;
+            }
         }
 
         var response = await _apiService.SendContinueRequest(GameToken);
