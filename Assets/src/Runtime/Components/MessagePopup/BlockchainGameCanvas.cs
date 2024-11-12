@@ -24,9 +24,9 @@ public class BlockchainGameCanvas : Service<BlockchainGameCanvas>{
         while(true){
             await UniTask.WaitWhile(() => requests.Count == 0);
             var req = requests.Peek();
+            requests.Pop();
             presenter.ShowMessagePopup(req.popup, req.styleIndex);
             await UniTask.WaitUntil(() => presenter.IsHidden);
-            requests.Pop();
         }
     }
 
