@@ -24,6 +24,7 @@ public class MessagePopupPresenter : MonoBehaviour{
     [SerializeField] List<PopUpStyle> style;
 
     List<DynamicButton> _activeExitButtons = new();
+    public bool IsHidden {get; private set;}
 
     void Start(){
         Hide();
@@ -102,10 +103,12 @@ public class MessagePopupPresenter : MonoBehaviour{
     }
 
     void Show(){
+        IsHidden = false;
         gameObject.SetActive(true);
     }
 
     void Hide(){
+        IsHidden = true;
         gameObject.SetActive(false);
     }
 }
