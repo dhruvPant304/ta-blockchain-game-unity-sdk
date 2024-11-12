@@ -14,7 +14,7 @@ public class BlockchainGameCanvas : Service<BlockchainGameCanvas>{
         StartCoroutine(ProcessRequestStack().ToCoroutine());
     }
 
-    private Stack<PopUpRequest> requests;
+    private Stack<PopUpRequest> requests = new();
 
     public void ShowMessagePopup(MessagePopup messagePopup, int styleIndex = 0){
         requests.Push(new PopUpRequest{popup = messagePopup, styleIndex = styleIndex});
