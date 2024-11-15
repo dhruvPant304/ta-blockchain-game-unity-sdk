@@ -238,7 +238,7 @@ public class GameService : Service<GameService> {
 
     async UniTask ExecuteUpdateRequest(UpdateScoreRequest request){
         var response = await _apiService.SendUpdateGameRequest(request, GameToken);
-        var added = int.Parse(request.sessionScore);
+        var added = Mathf.RoundToInt(float.Parse(request.sessionScore));
         if(response.IsSuccess){
             _totalScore += added;
             _duration = Time.time;
