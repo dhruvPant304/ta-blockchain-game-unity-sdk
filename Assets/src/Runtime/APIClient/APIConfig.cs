@@ -28,6 +28,8 @@ public class APIConfig : ScriptableObject {
 
     [Header("Game Config")]
     public bool requireCreditsToPlay = true;
+    public bool bufferUpdateScoreRequest = false;
+    public float updateScoreBufferDuration = 1f;
 
     [Header("Leaderboard")]
     public int entriesPerPage = 20;
