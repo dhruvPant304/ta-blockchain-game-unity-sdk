@@ -261,7 +261,7 @@ public class GameService : Service<GameService> {
     }
 
     public class UpdateRequestBuffer{
-        List<UpdateScoreRequest> queue;
+        List<UpdateScoreRequest> queue = new();
 
         public void Add(UpdateScoreRequest item){
             queue.Add(item);
