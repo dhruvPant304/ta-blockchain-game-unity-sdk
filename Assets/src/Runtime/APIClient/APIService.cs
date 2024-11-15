@@ -93,7 +93,7 @@ namespace TA.APIClient{
         }
 
         public async UniTask<VariableRequestResponse<ScoreUpdateResponse , FailedResponse>> SendUpdateGameRequest(
-                TA.APIClient.RequestData.UpdateScoreParams updateGameParams,
+                TA.APIClient.RequestData.UpdateScoreRequest updateGameParams,
                 string gameToken){
             return await SendWebRequest<ScoreUpdateResponse, FailedResponse>(
                         "/api/v1/games/update",
