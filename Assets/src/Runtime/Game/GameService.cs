@@ -232,15 +232,19 @@ public class GameService : Service<GameService> {
             endTime = endStamp
         };
 
-        updateRequestBuffer.Add(request);
+        var queuedRequest = new UpdateScoreQueuedRequest{
+            request = request,
+            addedScore = sessionScore
+        };
+
+        updateRequestBuffer.Add(queuedRequest);
         if(_apiConfig.bufferUpdateScoreRequest) updateRequestBuffer.Compress(_apiConfig.updateScoreBufferDuration);
     }
 
-    async UniTask ExecuteUpdateRequest(UpdateScoreRequest request){
-        var response = await _apiService.SendUpdateGameRequest(request, GameToken);
-        var added = Mathf.RoundToInt(float.Parse(request.sessionScore));
+    async UniTask ExecuteUpdateRequest(UpdateScoreQueuedRequest queuedRequest){
+        var response = await _apiService.SendUpdateGameRequest(queuedRequest.request, GameToken);
         if(response.IsSuccess){
-            _totalScore += added;
+            _totalScore += queuedRequest.addedScore;
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
 
@@ -260,13 +264,13 @@ public class GameService : Service<GameService> {
     }
 
     public class UpdateRequestBuffer{
-        List<UpdateScoreRequest> queue = new();
+        List<UpdateScoreQueuedRequest> queue = new();
 
-        public void Add(UpdateScoreRequest item){
+        public void Add(UpdateScoreQueuedRequest item){
             queue.Add(item);
             queue.Sort((a,b) => {
-                var startA = (DateTime.Parse(a.startTime) - DateTime.UnixEpoch).TotalSeconds;
-                var startB = (DateTime.Parse(b.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var startA = (DateTime.Parse(a.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var startB = (DateTime.Parse(b.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
                 return startA.CompareTo(startB);
             });
         }
@@ -278,17 +282,17 @@ public class GameService : Service<GameService> {
 
         public void Compress(float duration){
             if(queue.Count == 0) return;
-            List<UpdateScoreRequest> compressedList = new();
+            List<UpdateScoreQueuedRequest> compressedList = new();
             compressedList.Add(queue[0]);
             for(int i =1 ; i < queue.Count; i++){
                 var compressed = compressedList[compressedList.Count - 1];
-                var start = (DateTime.Parse(compressed.startTime) - DateTime.UnixEpoch).TotalSeconds;
-                var current = (DateTime.Parse(queue[i].endTime) - DateTime.UnixEpoch).TotalSeconds;
+                var start = (DateTime.Parse(compressed.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var current = (DateTime.Parse(queue[i].request.endTime) - DateTime.UnixEpoch).TotalSeconds;
 
                 if(current - start <= duration){
-                    compressed.sessionScore += queue[i].sessionScore;
-                    compressed.endTime = queue[i].endTime;
-                    compressed.duration += queue[i].duration;
+                    compressed.request.sessionScore += queue[i].request.sessionScore;
+                    compressed.request.endTime = queue[i].request.endTime;
+                    compressed.request.duration += queue[i].request.duration;
                     continue;
                 }
                 compressedList.Add(queue[i]);
@@ -297,9 +301,14 @@ public class GameService : Service<GameService> {
             queue = compressedList;
         }
 
-        public UpdateScoreRequest Peek => queue[0];
+        public UpdateScoreQueuedRequest Peek => queue[0];
 
         public bool HasAny => queue.Count > 0;
+    }
+
+    public class UpdateScoreQueuedRequest{
+        public UpdateScoreRequest request;
+        public int addedScore;
     }
 
     //============================
