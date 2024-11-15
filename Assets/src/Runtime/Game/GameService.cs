@@ -253,7 +253,6 @@ public class GameService : Service<GameService> {
     async UniTask ExecuteUpdateRequestQueue(){
         while(true){
             await UniTask.WaitUntil(() => updateRequestBuffer.HasAny);
-            await UniTask.WaitForSeconds(_apiConfig.updateScoreBufferDuration);
             var curr = updateRequestBuffer.Peek;
             updateRequestBuffer.Pop();
             await ExecuteUpdateRequest(curr);
