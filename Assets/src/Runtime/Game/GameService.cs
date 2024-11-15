@@ -265,9 +265,9 @@ public class GameService : Service<GameService> {
         public void Add(UpdateScoreRequest item){
             queue.Add(item);
             queue.Sort((a,b) => {
-                var startA = (DateTime.Parse(a.startTime) - DateTime.UnixEpoch).Seconds;
-                var startB = (DateTime.Parse(b.startTime) - DateTime.UnixEpoch).Seconds;
-                return startA - startB;
+                var startA = (DateTime.Parse(a.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var startB = (DateTime.Parse(b.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                return startA.CompareTo(startB);
             });
         }
 
@@ -277,26 +277,24 @@ public class GameService : Service<GameService> {
         }
 
         public void Compress(float duration){
-            var compressingTo = 0;
-            List<UpdateScoreRequest> newList = new();
-            var compressedRequest = queue[compressingTo];
-            for(int i =0 ; i < queue.Count; i++){
-                var start = (DateTime.Parse(queue[compressingTo].startTime) - DateTime.UnixEpoch).Seconds;
-                var current = (DateTime.Parse(queue[i].endTime) - DateTime.UnixEpoch).Seconds;
+            if(queue.Count == 0) return;
+            List<UpdateScoreRequest> compressedList = new();
+            compressedList.Add(queue[0]);
+            for(int i =1 ; i < queue.Count; i++){
+                var compressed = compressedList[compressedList.Count - 1];
+                var start = (DateTime.Parse(compressed.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var current = (DateTime.Parse(queue[i].endTime) - DateTime.UnixEpoch).TotalSeconds;
 
                 if(current - start <= duration){
-                    compressedRequest.sessionScore += queue[i].sessionScore;
-                    compressedRequest.endTime = queue[i].endTime;
-                    compressedRequest.duration += queue[i].duration;
+                    compressed.sessionScore += queue[i].sessionScore;
+                    compressed.endTime = queue[i].endTime;
+                    compressed.duration += queue[i].duration;
                     continue;
                 }
-
-                newList.Add(compressedRequest);
-                compressingTo = i;
-                compressedRequest = queue[i];
+                compressedList.Add(queue[i]);
             }
 
-            queue = newList;
+            queue = compressedList;
         }
 
         public UpdateScoreRequest Peek => queue[0];
