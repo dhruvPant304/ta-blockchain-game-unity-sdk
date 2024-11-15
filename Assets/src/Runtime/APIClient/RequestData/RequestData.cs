@@ -18,7 +18,7 @@ namespace TA.APIClient.RequestData{
     }
 
     [Serializable]
-    public class UpdateScoreParams{
+    public class UpdateScoreRequest{
         public string sessionScore;
         public string startTime;
         public string endTime;
