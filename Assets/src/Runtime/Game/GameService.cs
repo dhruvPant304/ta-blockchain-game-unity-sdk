@@ -11,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using static TA.Components.MessagePopupExit;
 using TA.Leaderboard;
+using System.Globalization;
 
 namespace TA.Game{
 public class GameService : Service<GameService> {
@@ -86,6 +87,9 @@ public class GameService : Service<GameService> {
         _taMenuService = ServiceLocator.Instance.GetService<TAMenuService>();
         _gameId = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig.gameId;
         _apiConfig = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
+
+
+        StartCoroutine(ExecuteUpdateRequestQueue().ToCoroutine());
     } 
 
     void OpenBuyCredit(){
@@ -168,6 +172,10 @@ public class GameService : Service<GameService> {
     // API METHODS
     //============================
 
+    //============================
+    // START GAME 
+    //============================
+
     public async void StartGameSession(){
         if(InSession) {
             ShowErrorMessage("A Game session is already active", OnStartSessionFailed);
@@ -205,22 +213,38 @@ public class GameService : Service<GameService> {
         }
     }
 
-    public async void UpdateScore(int score){
+    //============================
+    // UPDATE GAME - BEGIN
+    //============================
+    
+    UpdateRequestBuffer updateRequestBuffer = new();
+
+    public void UpdateScore(int score){
         var sessionScore = score - _totalScore; 
         var duration = Time.time - _duration;
         var endStamp = DataTimeHelper.GetCurrentTimeInIsoFormat(); 
         var starStamp = _timeStamp;
  
-        var param = new UpdateScoreParams{
+        var request = new UpdateScoreRequest{
             sessionScore = sessionScore.ToString(),
             duration = duration.ToString(),
             startTime = starStamp,
             endTime = endStamp
         };
 
-        var response = await _apiService.SendUpdateGameRequest(param, GameToken);
+        var queuedRequest = new UpdateScoreQueuedRequest{
+            request = request,
+            addedScore = sessionScore
+        };
+
+        updateRequestBuffer.Add(queuedRequest);
+        if(_apiConfig.bufferUpdateScoreRequest) updateRequestBuffer.Compress(_apiConfig.updateScoreBufferDuration);
+    }
+
+    async UniTask ExecuteUpdateRequest(UpdateScoreQueuedRequest queuedRequest){
+        var response = await _apiService.SendUpdateGameRequest(queuedRequest.request, GameToken);
         if(response.IsSuccess){
-            _totalScore = score;
+            _totalScore += queuedRequest.addedScore;
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
 
@@ -229,6 +253,67 @@ public class GameService : Service<GameService> {
             ShowErrorMessage(response.FailureResponse.message, OnUpdateScoreFailed);
         }
     }
+
+    async UniTask ExecuteUpdateRequestQueue(){
+        while(true){
+            await UniTask.WaitUntil(() => updateRequestBuffer.HasAny);
+            var curr = updateRequestBuffer.Peek;
+            updateRequestBuffer.Pop();
+            await ExecuteUpdateRequest(curr);
+        }
+    }
+
+    public class UpdateRequestBuffer{
+        List<UpdateScoreQueuedRequest> queue = new();
+
+        public void Add(UpdateScoreQueuedRequest item){
+            queue.Add(item);
+            queue.Sort((a,b) => {
+                var startA = (DateTime.Parse(a.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var startB = (DateTime.Parse(b.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                return startA.CompareTo(startB);
+            });
+        }
+
+        public void Pop(){
+            if(queue.Count == 0) return;
+            queue.RemoveAt(0);
+        }
+
+        public void Compress(float duration){
+            if(queue.Count == 0) return;
+            List<UpdateScoreQueuedRequest> compressedList = new();
+            compressedList.Add(queue[0]);
+            for(int i =1 ; i < queue.Count; i++){
+                var compressed = compressedList[compressedList.Count - 1];
+                var start = (DateTime.Parse(compressed.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var current = (DateTime.Parse(queue[i].request.endTime) - DateTime.UnixEpoch).TotalSeconds;
+
+                if(current - start <= duration){
+                    compressed.request.sessionScore += queue[i].request.sessionScore;
+                    compressed.request.endTime = queue[i].request.endTime;
+                    compressed.request.duration += queue[i].request.duration;
+                    continue;
+                }
+                compressedList.Add(queue[i]);
+            }
+
+            queue = compressedList;
+        }
+
+        public UpdateScoreQueuedRequest Peek => queue[0];
+
+        public bool HasAny => queue.Count > 0;
+    }
+
+    public class UpdateScoreQueuedRequest{
+        public UpdateScoreRequest request;
+        public int addedScore;
+    }
+
+    //============================
+    // UPDATE GAME - END
+    //============================
 
     public async UniTask<int> FetchCurrentUserRank(){
         var activeLeaderBoard = await _leaderBoardService.GetActiveHighScoreLeaderBoard();
