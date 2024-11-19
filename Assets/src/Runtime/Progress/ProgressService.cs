@@ -24,7 +24,7 @@ public class ProgressController<T> where T : class{
         return controller;
     }
 
-    InventoryObject<T> inventory;
+    InventoryObject<T> inventory = new();
     T defaultLoadData;
 
     void DefineSchema(T schema){
@@ -59,7 +59,7 @@ public class ProgressController<T> where T : class{
 }
 
 public class InventoryObject<T> {
-    JObject data;
+    JObject data = new();
    
     public void Set(JObject jobject){
         data = jobject;
