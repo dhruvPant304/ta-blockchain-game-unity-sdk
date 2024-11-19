@@ -20,22 +20,17 @@ public class ProgressController<T> where T : class{
         var profile = ServiceLocator.Instance.GetService<UserProfileService>();
         var api = ServiceLocator.Instance.GetService<APIService>();
         var controller = new ProgressController<T>(profile,api);
-        controller.DefineSchema(schema);
         return controller;
     }
 
-    InventoryObject<T> inventory = new();
     T defaultLoadData;
-
-    void DefineSchema(T schema){
-        inventory.Set(schema);
-        defaultLoadData = schema;
-    }
 
     public async UniTask SaveProgress(T updatedData){
         await WaitLogin();
-        inventory.Set(updatedData);
-        await _apiService.SendUpdateGameProgressRequest(inventory.GetUpdateParams(), _userProfileService.LoginToken);
+        var progressParam = new ProgressParams{
+            progress = new JObject(updatedData)
+        };
+        await _apiService.SendUpdateGameProgressRequest(progressParam, _userProfileService.LoginToken);
     }
 
     public T GetDefaultValues(){
@@ -46,8 +41,7 @@ public class ProgressController<T> where T : class{
         await WaitLogin();
         var res = await _apiService.SendFetchGameProgressRequest(_userProfileService.LoginToken); 
         if(res.IsSuccess){
-            inventory.Set(res.SuccessResponse.data.progress);
-            return inventory.Get();
+            return JsonConvert.DeserializeObject<T>(res.SuccessResponse.data.progress.ToString());
         }else{
             return null;
         }
@@ -55,28 +49,6 @@ public class ProgressController<T> where T : class{
 
     async UniTask WaitLogin(){
         await UniTask.WaitUntil(() => _userProfileService.LoggedIn);
-    }
-}
-
-public class InventoryObject<T> {
-    JObject data = new();
-   
-    public void Set(JObject jobject){
-        data = jobject;
-    }
-
-    public void Set(T defaultValue){
-        data = new JObject(defaultValue);
-    }
-
-    public T Get(){
-        return JsonConvert.DeserializeObject<T>(data.ToString());
-    }
-
-    public ProgressParams GetUpdateParams(){
-        return new ProgressParams(){
-            progress = data
-        };
     }
 }
 }
