@@ -271,7 +271,7 @@ namespace TA.APIClient{
             }
            var json = JsonConvert.SerializeObject(body);
             if (_config.logRequest)
-                Debug.Log($"Sent: [{method}] {uri} \n body: {json}");
+                Debug.Log($"Sent: [{method}] {uri} \nAuthToken: {authToken}\n body: {json}");
             var data = Encoding.UTF8.GetBytes(json);
             if (body != null) request.uploadHandler = new UploadHandlerRaw(data);
             return request;
