@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace TA.APIClient.RequestData{
     [Serializable]
@@ -33,6 +34,11 @@ namespace TA.APIClient.RequestData{
     [Serializable]
     public class UpdateProfileParams{
         public string username;
+    }
+
+    [Serializable]
+    public class ProgressParams{
+        public JObject progress;
     }
 }
 

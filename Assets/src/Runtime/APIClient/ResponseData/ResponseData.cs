@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace TA.APIClient.ResponseData{
     [Serializable]
@@ -43,6 +44,12 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class InitiatePaymentResponse : APIResponse<InitiatePaymentData> {};
+
+    [Serializable]
+    public class JSONStringResponse : APIResponse<string> {};
+
+    [Serializable]
+    public class ProgressResponse : APIResponse<ProgressData> {};
 
     [Serializable]
     public class FailedResponse{
@@ -118,12 +125,16 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class LeaderBoard{
+    public class CRUDDBData{
         public string id;
         public string createdAt;
         public string updatedAt;
         public bool isActive;
         public bool isDeleted;
+    }
+
+    [Serializable]
+    public class LeaderBoard : CRUDDBData{
         public string startTime;
         public string endTime;
         public MinimumPrizePoolData minimumPrizePoolData;
@@ -137,5 +148,11 @@ namespace TA.APIClient.ResponseData{
     [Serializable]
     public class InitiatePaymentData{
         public string uuid;
+    }
+
+    [Serializable]
+    public class ProgressData : CRUDDBData{
+        public string userLevel;
+        public JObject progress;
     }
 }
