@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
 namespace TA.Progress{
-public class ProgressController<T> where T : struct{
+public class ProgressController<T> where T : class{
     UserProfileService _userProfileService;
     APIService _apiService;
 
@@ -42,7 +42,7 @@ public class ProgressController<T> where T : struct{
         return defaultLoadData;
     }
 
-    public async UniTask<T?> LoadProgress(){
+    public async UniTask<T> LoadProgress(){
         await WaitLogin();
         var res = await _apiService.SendFetchGameProgressRequest(_userProfileService.LoginToken); 
         if(res.IsSuccess){
