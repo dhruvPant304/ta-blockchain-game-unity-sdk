@@ -123,6 +123,24 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<ProgressResponse, FailedResponse>> SendFetchGameProgressRequest(string authToken){
+            return await SendWebRequest<ProgressResponse, FailedResponse>(
+                        "/api/v1/games/progress",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<ProgressResponse, FailedResponse>> SendUpdateGameProgressRequest(ProgressParams progress, string authToken){
+            return await SendWebRequest<ProgressResponse, FailedResponse>(
+                        "/api/v1/games/progress",
+                        "PATCH",
+                        progress,
+                        authToken
+                    );
+        }
+
         //=====================
         // LEADER BOARDS 
         //=====================
@@ -251,7 +269,7 @@ namespace TA.APIClient{
             if (!string.IsNullOrEmpty(authToken)) {
                 request.SetRequestHeader("Authorization", $"Bearer {authToken}");
             }
-           var json = JsonUtility.ToJson(body);
+           var json = JsonConvert.SerializeObject(body);
             if (_config.logRequest)
                 Debug.Log($"Sent: {uri} \n body: {json}");
             var data = Encoding.UTF8.GetBytes(json);
