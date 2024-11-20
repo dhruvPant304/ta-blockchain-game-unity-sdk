@@ -123,8 +123,10 @@ namespace TA.APIClient{
                     );
         }
 
-        public async UniTask<VariableRequestResponse<ProgressResponse, FailedResponse>> SendFetchGameProgressRequest(string authToken){
-            return await SendWebRequest<ProgressResponse, FailedResponse>(
+        public async UniTask<VariableRequestResponse<ProgressResponse<T>, FailedResponse>> SendFetchGameProgressRequest<T>
+            (string authToken)
+            where T : class{
+            return await SendWebRequest<ProgressResponse<T>, FailedResponse>(
                         "/api/v1/games/progress",
                         "GET",
                         null,
@@ -132,8 +134,10 @@ namespace TA.APIClient{
                     );
         }
 
-        public async UniTask<VariableRequestResponse<ProgressResponse, FailedResponse>> SendUpdateGameProgressRequest(ProgressParams progress, string authToken){
-            return await SendWebRequest<ProgressResponse, FailedResponse>(
+        public async UniTask<VariableRequestResponse<ProgressResponse<T>, FailedResponse>> SendUpdateGameProgressRequest<T>  
+            (ProgressParams progress, string authToken)
+            where T: class{
+            return await SendWebRequest<ProgressResponse<T>, FailedResponse>(
                         "/api/v1/games/progress",
                         "PATCH",
                         progress,

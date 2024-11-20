@@ -30,7 +30,7 @@ public class ProgressController<T> where T : class{
         var progressParam = new ProgressParams{
             progress = updatedData
         };
-        await _apiService.SendUpdateGameProgressRequest(progressParam, _userProfileService.LoginToken);
+        await _apiService.SendUpdateGameProgressRequest<T>(progressParam, _userProfileService.LoginToken);
     }
 
     public T GetDefaultValues(){
@@ -39,10 +39,10 @@ public class ProgressController<T> where T : class{
 
     public async UniTask<T> LoadProgress(){
         await WaitLogin();
-        var res = await _apiService.SendFetchGameProgressRequest(_userProfileService.LoginToken); 
+        var res = await _apiService.SendFetchGameProgressRequest<T>(_userProfileService.LoginToken); 
         if(res.IsSuccess){
             try{
-                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res.SuccessResponse.data.progress));
+                return res.SuccessResponse.data.progress;
             }
             catch(System.Exception e){
                 Debug.LogError($"Error while fetchin user save data: {e}");
