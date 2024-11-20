@@ -28,7 +28,7 @@ public class ProgressController<T> where T : class{
     public async UniTask SaveProgress(T updatedData){
         await WaitLogin();
         var progressParam = new ProgressParams{
-            progress = new JObject(updatedData)
+            progress = updatedData
         };
         await _apiService.SendUpdateGameProgressRequest(progressParam, _userProfileService.LoginToken);
     }
