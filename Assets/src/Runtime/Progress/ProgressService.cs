@@ -3,8 +3,8 @@ using TA.Services;
 using TA.UserProfile;
 using TA.APIClient;
 using TA.APIClient.RequestData;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace TA.Progress{
 public class ProgressController<T> where T : class{
@@ -42,9 +42,10 @@ public class ProgressController<T> where T : class{
         var res = await _apiService.SendFetchGameProgressRequest(_userProfileService.LoginToken); 
         if(res.IsSuccess){
             try{
-                return JsonConvert.DeserializeObject<T>(res.SuccessResponse.data.progress.ToString());
+                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res.SuccessResponse.data.progress));
             }
-            catch{
+            catch(System.Exception e){
+                Debug.LogError($"Error while fetchin user save data: {e}");
                 return null;
             }
         }else{
