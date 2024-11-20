@@ -153,6 +153,6 @@ namespace TA.APIClient.ResponseData{
     [Serializable]
     public class ProgressData : CRUDDBData{
         public string userLevel;
-        public JObject progress;
+        public object progress;
     }
 }
