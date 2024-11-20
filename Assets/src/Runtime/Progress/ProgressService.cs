@@ -41,7 +41,12 @@ public class ProgressController<T> where T : class{
         await WaitLogin();
         var res = await _apiService.SendFetchGameProgressRequest(_userProfileService.LoginToken); 
         if(res.IsSuccess){
-            return JsonConvert.DeserializeObject<T>(res.SuccessResponse.data.progress.ToString());
+            try{
+                return JsonConvert.DeserializeObject<T>(res.SuccessResponse.data.progress.ToString());
+            }
+            catch{
+                return null;
+            }
         }else{
             return null;
         }
