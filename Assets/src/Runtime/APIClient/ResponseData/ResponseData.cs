@@ -49,7 +49,7 @@ namespace TA.APIClient.ResponseData{
     public class JSONStringResponse : APIResponse<string> {};
 
     [Serializable]
-    public class ProgressResponse : APIResponse<ProgressData> {};
+    public class ProgressResponse<T> : APIResponse<ProgressData<T>> where T : class{};
 
     [Serializable]
     public class FailedResponse{
@@ -151,8 +151,8 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class ProgressData : CRUDDBData{
+    public class ProgressData<T> : CRUDDBData where T : class{
         public string userLevel;
-        public object progress;
+        public T progress;
     }
 }
