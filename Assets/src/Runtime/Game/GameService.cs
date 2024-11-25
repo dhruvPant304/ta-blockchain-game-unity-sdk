@@ -229,7 +229,7 @@ public class GameService : Service<GameService> {
         int sessionScore = score - updateRequestBuffer.ActiveScore;
         var starStamp = updateRequestBuffer.LastUpdateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
         var endStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
-        var duration = (DateTime.Parse(starStamp) - DateTime.Parse(endStamp)).ToString();
+        var duration = (DateTime.Parse(starStamp) - DateTime.Parse(endStamp)).TotalSeconds;
 
         request = new UpdateScoreRequest{
             sessionScore = sessionScore.ToString(),
@@ -305,10 +305,11 @@ public class GameService : Service<GameService> {
                 var current = DateTime.Parse(queue[i].request.endTime);
 
                 if((current - start).TotalSeconds < duration){
-                    var compressedScore = int.Parse(compressedList[i].request.sessionScore) + int.Parse(queue[i].request.sessionScore);
+                    var compressedScore = int.Parse(compressedList[last].request.sessionScore) + int.Parse(queue[i].request.sessionScore);
+                    var compressedDuration = float.Parse(compressedList[last].request.duration + float.Parse(queue[i].request.duration));
                     compressedList[last].request.sessionScore = compressedScore.ToString();
                     compressedList[last].request.endTime = queue[i].request.endTime;
-                    compressedList[last].request.duration += queue[i].request.duration;
+                    compressedList[last].request.duration = compressedScore.ToString();
                     continue;
                 }
                 compressedList.Add(queue[i]);
