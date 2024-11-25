@@ -206,6 +206,7 @@ public class GameService : Service<GameService> {
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
 
             OnStartSessionSuccess?.Invoke();
+            updateRequestBuffer = new(DateTime.Parse(_timeStamp));
             Debug.Log($"Starting Game session with token: {_gameToken}");
         }
         else{
@@ -217,15 +218,20 @@ public class GameService : Service<GameService> {
     // UPDATE GAME - BEGIN
     //============================
     
-    UpdateRequestBuffer updateRequestBuffer = new();
+    UpdateRequestBuffer updateRequestBuffer = null;
 
     public void UpdateScore(int score){
-        var sessionScore = score - _totalScore; 
-        var duration = Time.time - _duration;
-        var endStamp = DataTimeHelper.GetCurrentTimeInIsoFormat(); 
-        var starStamp = updateRequestBuffer.Last.request.endTime;
- 
-        var request = new UpdateScoreRequest{
+        if(updateRequestBuffer == null){
+            throw new Exception("Failed to update score: Update request buffer is null");
+        }
+
+        UpdateScoreRequest request = null;
+        int sessionScore = score - updateRequestBuffer.ActiveScore;
+        var starStamp = updateRequestBuffer.LastUpdateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        var endStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
+        var duration = (DateTime.Parse(starStamp) - DateTime.Parse(endStamp)).ToString();
+
+        request = new UpdateScoreRequest{
             sessionScore = sessionScore.ToString(),
             duration = duration.ToString(),
             startTime = starStamp,
@@ -265,14 +271,22 @@ public class GameService : Service<GameService> {
 
     public class UpdateRequestBuffer{
         List<UpdateScoreQueuedRequest> queue = new();
+        public int ActiveScore {get; private set;} = 0;
+        public DateTime LastUpdateTime {get; private set;}
+
+        public UpdateRequestBuffer(DateTime startTime){
+            LastUpdateTime =startTime;
+        }
 
         public void Add(UpdateScoreQueuedRequest item){
             queue.Add(item);
+            ActiveScore += item.addedScore;
             queue.Sort((a,b) => {
                 var startA = DateTime.Parse(a.request.startTime); 
                 var startB = DateTime.Parse(b.request.startTime);
                 return startA.CompareTo(startB);
             });
+            LastUpdateTime = DateTime.Parse(Last.request.endTime);
         }
 
         public void Pop(){
@@ -300,11 +314,8 @@ public class GameService : Service<GameService> {
 
             queue = compressedList;
         }
-
         public UpdateScoreQueuedRequest Peek => queue[0];
-
         public UpdateScoreQueuedRequest Last => queue[queue.Count - 1];
-
         public bool HasAny => queue.Count > 0;
     }
 
