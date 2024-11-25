@@ -285,14 +285,14 @@ public class GameService : Service<GameService> {
             List<UpdateScoreQueuedRequest> compressedList = new();
             compressedList.Add(queue[0]);
             for(int i =1 ; i < queue.Count; i++){
-                var compressed = compressedList[compressedList.Count - 1];
-                var start = (DateTime.Parse(compressed.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var last = compressedList.Count - 1;
+                var start = (DateTime.Parse(compressedList[last].request.startTime) - DateTime.UnixEpoch).TotalSeconds;
                 var current = (DateTime.Parse(queue[i].request.endTime) - DateTime.UnixEpoch).TotalSeconds;
 
                 if(current - start <= duration){
-                    compressed.request.sessionScore += queue[i].request.sessionScore;
-                    compressed.request.endTime = queue[i].request.endTime;
-                    compressed.request.duration += queue[i].request.duration;
+                    compressedList[last].request.sessionScore += queue[i].request.sessionScore;
+                    compressedList[last].request.endTime = queue[i].request.endTime;
+                    compressedList[last].request.duration += queue[i].request.duration;
                     continue;
                 }
                 compressedList.Add(queue[i]);
