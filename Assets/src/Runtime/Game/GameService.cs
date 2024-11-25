@@ -306,10 +306,10 @@ public class GameService : Service<GameService> {
 
                 if((current - start).TotalSeconds < duration){
                     var compressedScore = int.Parse(compressedList[last].request.sessionScore) + int.Parse(queue[i].request.sessionScore);
-                    var compressedDuration = float.Parse(compressedList[last].request.duration + float.Parse(queue[i].request.duration));
+                    var compressedDuration = float.Parse(compressedList[last].request.duration) + float.Parse(queue[i].request.duration);
                     compressedList[last].request.sessionScore = compressedScore.ToString();
                     compressedList[last].request.endTime = queue[i].request.endTime;
-                    compressedList[last].request.duration = compressedScore.ToString();
+                    compressedList[last].request.duration = compressedDuration.ToString();
                     continue;
                 }
                 compressedList.Add(queue[i]);
