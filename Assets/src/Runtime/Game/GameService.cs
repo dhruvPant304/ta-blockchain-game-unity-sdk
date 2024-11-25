@@ -223,7 +223,7 @@ public class GameService : Service<GameService> {
         var sessionScore = score - _totalScore; 
         var duration = Time.time - _duration;
         var endStamp = DataTimeHelper.GetCurrentTimeInIsoFormat(); 
-        var starStamp = _timeStamp;
+        var starStamp = updateRequestBuffer.Last.request.endTime;
  
         var request = new UpdateScoreRequest{
             sessionScore = sessionScore.ToString(),
@@ -269,8 +269,8 @@ public class GameService : Service<GameService> {
         public void Add(UpdateScoreQueuedRequest item){
             queue.Add(item);
             queue.Sort((a,b) => {
-                var startA = (DateTime.Parse(a.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
-                var startB = (DateTime.Parse(b.request.startTime) - DateTime.UnixEpoch).TotalSeconds;
+                var startA = DateTime.Parse(a.request.startTime); 
+                var startB = DateTime.Parse(b.request.startTime);
                 return startA.CompareTo(startB);
             });
         }
@@ -286,10 +286,10 @@ public class GameService : Service<GameService> {
             compressedList.Add(queue[0]);
             for(int i =1 ; i < queue.Count; i++){
                 var last = compressedList.Count - 1;
-                var start = (DateTime.Parse(compressedList[last].request.startTime) - DateTime.UnixEpoch).TotalSeconds;
-                var current = (DateTime.Parse(queue[i].request.endTime) - DateTime.UnixEpoch).TotalSeconds;
+                var start = DateTime.Parse(compressedList[last].request.startTime);
+                var current = DateTime.Parse(queue[i].request.endTime);
 
-                if(current - start <= duration){
+                if((current - start).TotalSeconds < duration){
                     compressedList[last].request.sessionScore += queue[i].request.sessionScore;
                     compressedList[last].request.endTime = queue[i].request.endTime;
                     compressedList[last].request.duration += queue[i].request.duration;
@@ -302,6 +302,8 @@ public class GameService : Service<GameService> {
         }
 
         public UpdateScoreQueuedRequest Peek => queue[0];
+
+        public UpdateScoreQueuedRequest Last => queue[queue.Count - 1];
 
         public bool HasAny => queue.Count > 0;
     }
