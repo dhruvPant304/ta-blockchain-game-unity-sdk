@@ -305,7 +305,8 @@ public class GameService : Service<GameService> {
                 var current = DateTime.Parse(queue[i].request.endTime);
 
                 if((current - start).TotalSeconds < duration){
-                    compressedList[last].request.sessionScore += queue[i].request.sessionScore;
+                    var compressedScore = int.Parse(compressedList[i].request.sessionScore) + int.Parse(queue[i].request.sessionScore);
+                    compressedList[last].request.sessionScore = compressedScore.ToString();
                     compressedList[last].request.endTime = queue[i].request.endTime;
                     compressedList[last].request.duration += queue[i].request.duration;
                     continue;
