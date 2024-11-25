@@ -262,6 +262,7 @@ public class GameService : Service<GameService> {
 
     async UniTask ExecuteUpdateRequestQueue(){
         while(true){
+            await UniTask.WaitUntil(() => updateRequestBuffer != null);
             await UniTask.WaitUntil(() => updateRequestBuffer.HasAny);
             var curr = updateRequestBuffer.Peek;
             updateRequestBuffer.Pop();
