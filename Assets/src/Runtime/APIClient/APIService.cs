@@ -212,6 +212,11 @@ namespace TA.APIClient{
                     );
         }
 
+        //=====================
+        // SHOP
+        //=====================
+
+        //public async UniTask SendVerificationResponse
 
         //=====================
         // END
