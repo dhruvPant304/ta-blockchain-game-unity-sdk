@@ -38,6 +38,10 @@ namespace TA.Leaderboard {
             var response = await _apiService.SendFetchMasterLeaderboardRequest(_apiConfigProvider.APIConfig.gameId);
             if(response.IsSuccess){
                 foreach(var leaderboard in response.SuccessResponse.data){
+                    var leaderBoardCount = 0;
+                    if(_apiConfigProvider.APIConfig.hasTotalScoreLeaderboard) leaderBoardCount++;
+                    if(_apiConfigProvider.APIConfig.hasHighScoreLeaderboard) leaderBoardCount++;
+                    leaderBoardCount = Math.Max(1,leaderBoardCount);
                     var totalBoard = new LeaderBoard(){
                         id = leaderboard.id,
                         type = "total",
