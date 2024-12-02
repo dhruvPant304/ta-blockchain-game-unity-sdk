@@ -3,13 +3,14 @@ using TA.Services;
 using TA.UserProfile;
 using TA.APIClient;
 using TA.APIClient.RequestData;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace TA.Progress{
 public class ProgressController<T> where T : class{
     UserProfileService _userProfileService;
     APIService _apiService;
+
+    public int UserLevel {get; private set;}
 
     ProgressController(UserProfileService profile, APIService api){
         _userProfileService = profile;
@@ -42,6 +43,7 @@ public class ProgressController<T> where T : class{
         var res = await _apiService.SendFetchGameProgressRequest<T>(_userProfileService.LoginToken); 
         if(res.IsSuccess){
             try{
+                UserLevel = res.SuccessResponse.data.userLevel;
                 return res.SuccessResponse.data.progress;
             }
             catch(System.Exception e){
