@@ -113,9 +113,7 @@ namespace TA.IAP{
         //=====================
 
         async UniTask<InitiatePaymentResponse> InitiatePayment(PurchaseEventArgs purchaseEvent, PurchasePackage creditPackage){
-            
-
-            var initiateData = new InitiatePurchaseData(){
+            var initiateData = new InitiatePurchaseRequest(){
                 amount = (int)purchaseEvent.purchasedProduct.metadata.localizedPrice,
                 credits = creditPackage.creditAmount,
                 platform = Platform,
@@ -123,8 +121,9 @@ namespace TA.IAP{
             };
 
             var response = await _apiService.SendInitiatePaymentRequest(initiateData,_userProfile.LoginToken);
-            if(response.IsSuccess) return response.SuccessResponse;
-            
+            if(response.IsSuccess) {
+                return response.SuccessResponse;
+            }
             return new InitiatePaymentResponse(){
                 status = "FAILED",
                 message = response.FailureResponse.error
@@ -132,7 +131,7 @@ namespace TA.IAP{
         }
 
         async UniTask<BaseAPIResponse> VerifyPayment(string uuid, PurchasePackage creditPackage, PurchaseEventArgs purchaseEvent){
-            var verificationData = new PurhcaseVerificationData(){
+            var verificationData = new PurhcaseVerificationRequest(){
                 amount = (int)purchaseEvent.purchasedProduct.metadata.localizedPrice,
                 credits = creditPackage.creditAmount,
                 verifyUUID = uuid,
@@ -141,7 +140,10 @@ namespace TA.IAP{
             };
 
             var response =await _apiService.SendVerificationRequest(verificationData, _userProfile.LoginToken);
-            if(response.IsSuccess) return response.SuccessResponse;
+            if(response.IsSuccess) {
+                _userProfile.UpdateUserBalance().Forget();
+                return response.SuccessResponse;
+            }
 
             return new BaseAPIResponse(){
                 status = "FAILED",
@@ -211,7 +213,7 @@ namespace TA.IAP{
     }
 
     [Serializable]
-    public class InitiatePurchaseData{
+    public class InitiatePurchaseRequest{
         public int amount;
         public int credits;
         public string platform;
@@ -219,7 +221,7 @@ namespace TA.IAP{
     }
 
     [Serializable]
-    public class PurhcaseVerificationData{
+    public class PurhcaseVerificationRequest{
         public int amount;
         public int credits;
         public string verifyUUID;
