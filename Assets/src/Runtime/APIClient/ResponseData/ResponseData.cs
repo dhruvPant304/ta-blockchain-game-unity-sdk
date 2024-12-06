@@ -64,8 +64,19 @@ namespace TA.APIClient.ResponseData{
     // DATA CLASSES
     //=====================
 
+    public class SerializedClass{
+        public T? GetFild<T>(string fieldName) where T : struct{
+            var fieldInfo = this.GetType().GetField(fieldName);
+            if(fieldInfo != null && fieldInfo.FieldType == typeof(T)){
+                return (T)fieldInfo.GetValue(this);
+            }else{
+                return null;
+            }
+        }
+    }
+
     [Serializable]
-    public class UserData{
+    public class UserData : SerializedClass {
         public string username;
         public string walletAddress;
         public string createdAt;
@@ -74,7 +85,7 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class GameSessionData {
+    public class GameSessionData : SerializedClass {
         public string token;
     }
 
@@ -85,17 +96,17 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class ScoreUpdateData{
+    public class ScoreUpdateData: SerializedClass{
         public GameResult result;
     }
 
     [Serializable]
-    public class GameResult{
+    public class GameResult : SerializedClass{
         public UserLeaderboardData userLeaderboard;
     }
 
     [Serializable]
-    public class UserBalanceData {
+    public class UserBalanceData : SerializedClass{
         public int credits;
         public int gameCoin;
         public int freeCredits;
@@ -106,13 +117,13 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class UserLeaderboardData{
+    public class UserLeaderboardData : SerializedClass{
         public LeaderBoardEntry high;
         public LeaderBoardEntry total;
     }
 
     [Serializable]
-    public class LeaderBoardEntry{
+    public class LeaderBoardEntry : SerializedClass{
         public int score;
         public int rank;
         public float reward;
@@ -120,7 +131,7 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class AppSettings{
+    public class AppSettings : SerializedClass{
         public string id;
         public bool isMusic;
         public bool isSound;
@@ -128,7 +139,7 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class CRUDDBData{
+    public class CRUDDBData : SerializedClass{
         public string id;
         public string createdAt;
         public string updatedAt;
@@ -144,12 +155,12 @@ namespace TA.APIClient.ResponseData{
     } 
 
     [Serializable]
-    public class MinimumPrizePoolData{
+    public class MinimumPrizePoolData : SerializedClass{
         public float prizePool;
     }
 
     [Serializable]
-    public class InitiatePaymentData{
+    public class InitiatePaymentData : SerializedClass{
         public string uuid;
     }
 
@@ -160,7 +171,7 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class CoinEarnData{
+    public class CoinEarnData : SerializedClass{
         public int coinEarned;
         public int totalCoinEarned;
     }
