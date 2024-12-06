@@ -243,11 +243,30 @@ namespace TA.APIClient{
             };
 
             return await SendWebRequest<CRUDDBData, FailedResponse>(
-                    $"/api/shop/item/buy",
+                    $"/api/v1/shop/item/buy",
                     "GET",
                     param,
                     authToken
             );
+        }
+
+        public async UniTask<VariableRequestResponse<CheckFreeBoosterResponse,FailedResponse>> SendCheckFreeBoosterAvailableRequest(
+                string authToken){
+            return await SendWebRequest<CheckFreeBoosterResponse,FailedResponse>(
+                        $"/api/v1/shop/claimed-free-booster",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<CRUDDBData,FailedResponse>> SendClaimFreeBoosterRequest(string authToken){
+            return await SendWebRequest<CRUDDBData, FailedResponse>(
+                        $"/api/v1/shop/cliam-free-booster",
+                        "GET",
+                        null,
+                        authToken
+                    );
         }
 
         //=====================
