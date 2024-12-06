@@ -26,10 +26,13 @@ public class BalanceText : MonoBehaviour{
     }
 
     void OnBalanceUpdate(UserBalanceData data){
-        if(data == null) OnBalanceFailed();
+        if(data == null) {
+            OnBalanceFailed();
+            return;
+        }
         var amount = data.GetFild<int>(currency);
         if(amount == null) {
-            textMesh.text = "ERROR";
+            OnBalanceFailed();
             return;
         }
         textMesh.text = data.credits.ToString();
