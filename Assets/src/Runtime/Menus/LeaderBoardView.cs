@@ -43,10 +43,10 @@ public class LeaderBoardView : MonoBehaviour {
     void Start(){
         _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
         _config = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
- 
+
         InitializePool();
-        leaderBoardTypeSelector.OnSelection += (s) => LoadSelectedLeaderBoard();
-        leaderBoardNameDropdown.onValueChanged.AddListener((val) => LoadSelectedLeaderBoard());
+        leaderBoardTypeSelector.OnSelection += LoadSelectedLeaderBoard;
+        leaderBoardNameDropdown.onValueChanged.AddListener((val) => LoadSelectedLeaderBoard(leaderBoardTypeSelector.Selection));
         scrollView.onValueChanged.AddListener(OnScrollValueChanged);
 
         Hide();
@@ -57,8 +57,12 @@ public class LeaderBoardView : MonoBehaviour {
 
         InitializeOptions();
         SelectActiveLeaderBoard();
-        LoadSelectedLeaderBoard();
-
+        if(_config.hasHighScoreLeaderboard && !_config.hasTotalScoreLeaderboard){
+            LoadSelectedLeaderBoard("high");
+        }
+        else{
+            LoadSelectedLeaderBoard("total");
+        }
     }
 
     void InitializeOptions(){
@@ -130,12 +134,12 @@ public class LeaderBoardView : MonoBehaviour {
         }
     }
 
-    async void LoadSelectedLeaderBoard(){
+    async void LoadSelectedLeaderBoard(string selection){
         var selectedName = leaderBoardNameDropdown.options[leaderBoardNameDropdown.value].text;
-        if(leaderBoardTypeSelector.Selection == "high"){
+        if(selection == "high"){
            _activeLeaderBoard = _leaderBoardService.GetHighScoreLeaderBoard(selectedName);
         }
-        if (leaderBoardTypeSelector.Selection == "total"){
+        if (selection == "total"){
             _activeLeaderBoard = _leaderBoardService.GetTotalScoreLeaderBoard(selectedName);
         }
 

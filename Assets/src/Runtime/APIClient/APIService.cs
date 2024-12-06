@@ -191,7 +191,7 @@ namespace TA.APIClient{
         //=====================
 
         public async UniTask<VariableRequestResponse<InitiatePaymentResponse, FailedResponse>> SendInitiatePaymentRequest(
-                TA.IAP.InitiatePurchaseData data, 
+                TA.IAP.InitiatePurchaseRequest data, 
                 string authToken){
             return await SendWebRequest<InitiatePaymentResponse, FailedResponse>(
                     $"/api/v1/payments/initiate-payment",
@@ -202,7 +202,7 @@ namespace TA.APIClient{
         }
 
         public async UniTask<VariableRequestResponse<BaseAPIResponse, FailedResponse>> SendVerificationRequest(
-                TA.IAP.PurhcaseVerificationData data,
+                TA.IAP.PurhcaseVerificationRequest data,
                 string authToken){
             return await SendWebRequest<BaseAPIResponse, FailedResponse>(
                     $"/api/v1/payments/verify-payment",
