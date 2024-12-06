@@ -226,7 +226,29 @@ namespace TA.APIClient{
         // SHOP
         //=====================
 
-        //public async UniTask SendVerificationResponse
+        public async UniTask<VariableRequestResponse<BoosterResponse<T>, FailedResponse>> SendFetchBoostersRequest<T>() where T : class{
+            return await SendWebRequest<BoosterResponse<T>, FailedResponse>(
+                    $"/api/v1/shop/boosters",
+                    "GET"
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<CRUDDBData, FailedResponse>> SendBuyBoosterRequest(IShopItem item, 
+                int quantity, 
+                string authToken){
+            var param = new BuyItemParams(){
+                itemId = item.ShopId,
+                quanity = quantity,
+                itemType = item.ItemType
+            };
+
+            return await SendWebRequest<CRUDDBData, FailedResponse>(
+                    $"/api/shop/item/buy",
+                    "GET",
+                    param,
+                    authToken
+            );
+        }
 
         //=====================
         // END
@@ -328,3 +350,4 @@ namespace TA.APIClient{
         }
     }
 }
+
