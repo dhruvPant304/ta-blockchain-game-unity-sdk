@@ -44,5 +44,12 @@ namespace TA.APIClient.RequestData{
     public class AddCoinParams{
         public int coinEarned;
     }
+
+    [Serializable]
+    public class BuyItemParams{
+        public int itemId;
+        public int quanity;
+        public string itemType;
+    }
 }
 
