@@ -58,6 +58,9 @@ namespace TA.APIClient.ResponseData{
     public class BoosterResponse<T> : APIResponse<BoosterData<T>> where T: class{}; 
 
     [Serializable]
+    public class CheckFreeBoosterResponse : APIResponse<FreeBoosterAvailableData>{};
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -177,6 +180,12 @@ namespace TA.APIClient.ResponseData{
     public class BoosterData<T> where T: class{
         public T[] boosters;
         public T freeBooster;
+    }
+
+    [Serializable]
+    public class FreeBoosterAvailableData{
+        public bool isClaimed;
+        public string lastPurchaseTime;
     }
 
     [Serializable]
