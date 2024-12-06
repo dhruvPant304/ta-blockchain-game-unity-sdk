@@ -39,5 +39,10 @@ namespace TA.APIClient.RequestData{
     public class ProgressParams{
         public object progress;
     }
+
+    [Serializable]
+    public class AddCoinParams{
+        public int coinEarned;
+    }
 }
 
