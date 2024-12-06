@@ -9,6 +9,7 @@ namespace TA.Components{
 public class BalanceText : MonoBehaviour{
     TextMeshProUGUI textMesh;
     UserProfileService _userProfileService;
+    [SerializeField] string currency = "credits";
 
     void Start(){
         textMesh = GetComponent<TextMeshProUGUI>();
@@ -26,6 +27,11 @@ public class BalanceText : MonoBehaviour{
 
     void OnBalanceUpdate(UserBalanceData data){
         if(data == null) OnBalanceFailed();
+        var amount = data.GetFild<int>(currency);
+        if(amount == null) {
+            textMesh.text = "ERROR";
+            return;
+        }
         textMesh.text = data.credits.ToString();
     }
 
