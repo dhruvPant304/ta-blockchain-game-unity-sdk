@@ -38,13 +38,17 @@ namespace TA.Leaderboard {
             var response = await _apiService.SendFetchMasterLeaderboardRequest(_apiConfigProvider.APIConfig.gameId);
             if(response.IsSuccess){
                 foreach(var leaderboard in response.SuccessResponse.data){
+                    var leaderBoardCount = 0;
+                    if(_apiConfigProvider.APIConfig.hasTotalScoreLeaderboard) leaderBoardCount++;
+                    if(_apiConfigProvider.APIConfig.hasHighScoreLeaderboard) leaderBoardCount++;
+                    leaderBoardCount = Math.Max(1,leaderBoardCount);
                     var totalBoard = new LeaderBoard(){
                         id = leaderboard.id,
                         type = "total",
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
                         endDate = leaderboard.endTime,
-                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool / 2
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool / leaderBoardCount
                     };
 
                     _totalScoreLeaderBoards[totalBoard.DisplayName()] = totalBoard;
@@ -55,7 +59,7 @@ namespace TA.Leaderboard {
                         isActive = leaderboard.isActive,
                         startDate = leaderboard.startTime,
                         endDate = leaderboard.endTime,
-                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool / 2
+                        totalPrizePool = leaderboard.minimumPrizePoolData.prizePool / leaderBoardCount
                     };
 
                     _highScoreLeaderBoards[highBoard.DisplayName()] = highBoard;
