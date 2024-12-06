@@ -145,6 +145,16 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<CoinEarnedResponse, FailedResponse>> SendAddGameCoinRequest(int coins, string authToken){
+            var param = new AddCoinParams(){coinEarned = coins};
+            return await SendWebRequest<CoinEarnedResponse,FailedResponse>(
+                        "/api/v1/games/earned-coins",
+                        "POST",
+                        param,
+                        authToken
+                    );
+        }
+
         //=====================
         // LEADER BOARDS 
         //=====================
