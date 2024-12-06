@@ -11,7 +11,6 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using static TA.Components.MessagePopupExit;
 using TA.Leaderboard;
-using System.Globalization;
 
 namespace TA.Game{
 public class GameService : Service<GameService> {
@@ -376,5 +375,10 @@ public class GameService : Service<GameService> {
 
     public void MakeExitGameRequest(){
         OnExitGameRequest?.Invoke();
+    }
+
+    public async void AddGameCoin(int amount){
+        await _apiService.SendAddGameCoinRequest(amount, _userProfileService.LoginToken);
+        await _userProfileService.UpdateUserBalance();
     }
 }}

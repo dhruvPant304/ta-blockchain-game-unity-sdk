@@ -52,6 +52,9 @@ namespace TA.APIClient.ResponseData{
     public class ProgressResponse<T> : APIResponse<ProgressData<T>> where T : class{};
 
     [Serializable]
+    public class CoinEarnedResponse : APIResponse<CoinEarnData> {};
+
+    [Serializable]
     public class FailedResponse{
         public string message;
         public string error;
@@ -154,5 +157,11 @@ namespace TA.APIClient.ResponseData{
     public class ProgressData<T> : CRUDDBData where T : class{
         public int userLevel;
         public T progress;
+    }
+
+    [Serializable]
+    public class CoinEarnData{
+        public int coinEarned;
+        public int totalCoinEarned;
     }
 }
