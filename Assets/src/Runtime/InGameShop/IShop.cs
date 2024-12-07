@@ -10,6 +10,7 @@ public interface IShop<T> where T : IShopItem {
     public UniTask<bool> Buy(T item, int quantity);
     public UniTask<bool> CheckFreeItemAvailable();
     public UniTask<bool> ClaimFreeItem();
+    public abstract UniTask<int> GetNextFreeItemRefreshTimeInSeconds();
 }
 
 public abstract class Shop<T> : IShop<T> where T : IShopItem{ 
