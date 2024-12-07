@@ -48,7 +48,7 @@ namespace TA.APIClient.RequestData{
     [Serializable]
     public class BuyItemParams{
         public int itemId;
-        public int quanity;
+        public int quantity;
         public string itemType;
     }
 }
