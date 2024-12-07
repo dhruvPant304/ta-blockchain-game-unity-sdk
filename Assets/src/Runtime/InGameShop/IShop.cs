@@ -24,5 +24,6 @@ public abstract class Shop<T> : IShop<T> where T : IShopItem{
     }
     public abstract UniTask<bool> CheckFreeItemAvailable();
     public abstract UniTask<bool> ClaimFreeItem();
+    public abstract UniTask<int> GetNextFreeItemRefreshTimeInSeconds();
 }
 }
