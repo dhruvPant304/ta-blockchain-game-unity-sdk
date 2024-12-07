@@ -262,7 +262,7 @@ namespace TA.APIClient{
 
         public async UniTask<VariableRequestResponse<APIResponse<CRUDDBData>,FailedResponse>> SendClaimFreeBoosterRequest(string authToken){
             return await SendWebRequest<APIResponse<CRUDDBData>, FailedResponse>(
-                        $"/api/v1/shop/cliam-free-booster",
+                        $"/api/v1/shop/claim-free-booster",
                         "GET",
                         null,
                         authToken
