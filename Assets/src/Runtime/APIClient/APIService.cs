@@ -238,7 +238,7 @@ namespace TA.APIClient{
                 string authToken){
             var param = new BuyItemParams(){
                 itemId = item.ShopId,
-                quanity = quantity,
+                quantity = quantity,
                 itemType = item.ItemType
             };
 
