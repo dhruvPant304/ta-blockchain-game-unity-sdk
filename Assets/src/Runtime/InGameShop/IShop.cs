@@ -10,6 +10,7 @@ public interface IShop<T> where T : IShopItem {
     public UniTask<bool> Buy(T item, int quantity);
     public UniTask<bool> CheckFreeItemAvailable();
     public UniTask<bool> ClaimFreeItem();
+    public UniTask<bool> CanBuy(T item);
     public abstract UniTask<int> GetNextFreeItemRefreshTimeInSeconds();
 }
 
@@ -23,6 +24,14 @@ public abstract class Shop<T> : IShop<T> where T : IShopItem{
         await profile.UpdateUserBalance();
         return res.IsSuccess;
     }
+    
+    public async UniTask<bool> CanBuy(T item){
+        var profile = ServiceLocator.Instance.GetService<UserProfileService>();
+        if(item.IsFree) return true;
+        await UniTask.CompletedTask;
+        return profile.UserBalanceData.GetFild<int>(item.Currency) > item.Price;
+    }
+
     public abstract UniTask<bool> CheckFreeItemAvailable();
     public abstract UniTask<bool> ClaimFreeItem();
     public abstract UniTask<int> GetNextFreeItemRefreshTimeInSeconds();
