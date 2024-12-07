@@ -1,7 +1,11 @@
 using UnityEngine;
 
 namespace TA.InGameShop{
-public abstract class ShopView<TItem> : MonoBehaviour where TItem : IShopItem {
-    public abstract void ShowShopController<TShop>(TShop shop) where TShop: IShop<TItem>;
+public abstract class ShopView<TItem> : ShopView where TItem : IShopItem {
+}
+
+public abstract class ShopView : MonoBehaviour{
+    public abstract void Show();
+    public abstract void Hide();
 }
 }
