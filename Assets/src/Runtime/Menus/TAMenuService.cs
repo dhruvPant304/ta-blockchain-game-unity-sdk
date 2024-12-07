@@ -2,6 +2,9 @@ using System;
 using TA.APIClient;
 using TA.Services;
 using UnityEngine;
+using TA.InGameShop;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TA.Menus{
 public class TAMenuService : Service<TAMenuService>{
@@ -18,7 +21,10 @@ public class TAMenuService : Service<TAMenuService>{
     public event Action OnInGameCreditShopOpen;
     public event Action OnInGameCreditShopClosed;
 
+    List<ShopView> _shops = new();
+
     protected override void OnInitialize(){
+        _shops.Add(GetComponentInChildren<ShopView>());
     }
 
     public void OpenBuyCreditsMenu(){
@@ -88,11 +94,29 @@ public class TAMenuService : Service<TAMenuService>{
         _leaderBoardView.Hide();
     }
 
+    public void OpenShopView<T>() where T : IShopItem {
+        var shop = GetShopView<T>();
+        if(shop) {
+            CloseAll();
+            shop.Show();
+        }else{
+            Debug.LogError($"Shop for product type {typeof(T)}, no found in children");
+        }
+    }
+
+    private ShopView GetShopView<T>() where T : IShopItem {
+        if(_shops.Where(s => s is ShopView<T>).Any()){
+            return _shops.First(s => s is ShopView<T>);
+        }
+        return null;
+    }
+
     public void CloseAll(){
         CloseBuyCreditMenu();
         CloseProfilePage();
         CloseSettingsPage();
         CloseInGameCreditShop();
         CloseLeaderBoardPage();
+        _shops.ForEach(s => s.Hide());
     }
 }}
