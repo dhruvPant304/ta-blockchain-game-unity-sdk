@@ -296,11 +296,19 @@ namespace TA.APIClient{
 
                 if (request.result == UnityWebRequest.Result.Success){
                     response.IsSuccess = true;
-                    response.SuccessResponse = JsonConvert.DeserializeObject<TSuccess>(responseText);
+                    try{
+                        response.SuccessResponse = JsonConvert.DeserializeObject<TSuccess>(responseText);
+                    }catch(Exception e){
+                        throw new Exception($"API response parsing Error:{e} \n Recieved: {responseText}");
+                    }
                 }
                 else{
                     response.IsSuccess = false;
-                    response.FailureResponse = JsonConvert.DeserializeObject<TFailure>(responseText);
+                    try{
+                        response.FailureResponse = JsonConvert.DeserializeObject<TFailure>(responseText);
+                    }catch(Exception e){
+                        throw new Exception($"API response parsing Error:{e} \n Recieved: {responseText}");
+                    }
                 }
             }
             return response;
