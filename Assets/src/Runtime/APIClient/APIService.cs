@@ -65,6 +65,16 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<InventoryResponse<T>, FailedResponse>> SendFetchUserInventoryRequest<T>(string authToken)
+        where T : class {
+            return await SendWebRequest<InventoryResponse<T>,FailedResponse>(
+                        "/api/v1/user/inventory",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
         //=====================
         // SETTINGS
         //=====================
@@ -226,7 +236,8 @@ namespace TA.APIClient{
         // SHOP
         //=====================
 
-        public async UniTask<VariableRequestResponse<BoosterResponse<T>, FailedResponse>> SendFetchBoostersRequest<T>() where T : class{
+        public async UniTask<VariableRequestResponse<BoosterResponse<T>, FailedResponse>> SendFetchBoostersRequest<T>() 
+            where T : class, IShopItem{
             return await SendWebRequest<BoosterResponse<T>, FailedResponse>(
                     $"/api/v1/shop/boosters",
                     "GET"
