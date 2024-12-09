@@ -19,7 +19,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         _canvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
     }
 
-    public async UniTask<List<InventoryEntry<T>>> GetInventory<T>() where T : class{
+    public async UniTask<List<InventoryEntry<T>>> GetInventory<T>() where T : class, IShopItem {
         var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
         if(!inventory.IsSuccess){
             return null;
