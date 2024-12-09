@@ -54,10 +54,10 @@ namespace TA.APIClient.ResponseData{
     public class CoinEarnedResponse : APIResponse<CoinEarnData> {};
 
     [Serializable]
-    public class BoosterResponse<T> : APIResponse<BoosterData<T>> where T: class{}; 
+    public class BoosterResponse<T> : APIResponse<BoosterData<T>> where T: class, IShopItem {};
 
     [Serializable]
-    public class InventoryResponse<T> : APIResponse<InventoryEntry<T>[]> where T: class{};
+    public class InventoryResponse<T> : APIResponse<InventoryEntry<T>[]> where T: class, IShopItem {};
 
     [Serializable]
     public class CheckFreeBoosterResponse : APIResponse<FreeBoosterAvailableData>{};
