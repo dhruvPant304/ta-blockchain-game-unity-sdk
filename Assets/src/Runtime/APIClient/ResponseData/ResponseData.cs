@@ -57,6 +57,9 @@ namespace TA.APIClient.ResponseData{
     public class BoosterResponse<T> : APIResponse<BoosterData<T>> where T: class{}; 
 
     [Serializable]
+    public class InventoryResponse<T> : APIResponse<InventoryEntry<T>[]> where T: class{};
+
+    [Serializable]
     public class CheckFreeBoosterResponse : APIResponse<FreeBoosterAvailableData>{};
 
     [Serializable]
@@ -179,6 +182,13 @@ namespace TA.APIClient.ResponseData{
     public class BoosterData<T> where T: class{
         public T[] boosters;
         public T freeBooster;
+    }
+
+    [Serializable]
+    public class InventoryEntry<T> where T: class{
+        public int quantity;
+        public string lastPurchaseTime;
+        public T item;
     }
 
     [Serializable]
