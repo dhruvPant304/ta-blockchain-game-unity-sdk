@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TA.APIClient;
 using TA.Services;
+using TA.UserInventory;
 using TA.UserProfile;
 
 namespace TA.InGameShop{
@@ -14,14 +15,16 @@ public interface IShop<T> where T : IShopItem {
     public abstract UniTask<int> GetNextFreeItemRefreshTimeInSeconds();
 }
 
-public abstract class Shop<T> : IShop<T> where T : IShopItem{ 
+public abstract class Shop<T> : IShop<T> where T : class, IShopItem{ 
     public abstract UniTask<List<T>> GetAllShopItems();
     public async UniTask<bool> Buy(T item, int quantity){
         var api = ServiceLocator.Instance.GetService<APIService>();
         var profile = ServiceLocator.Instance.GetService<UserProfileService>();
+        var inventory = ServiceLocator.Instance.GetService<UserInventoryService>();
         var token = profile.LoginToken;
         var res = await api.SendBuyBoosterRequest(item,quantity,token);
         await profile.UpdateUserBalance();
+        await inventory.RefreshInevntory<T>();
         return res.IsSuccess;
     }
 
