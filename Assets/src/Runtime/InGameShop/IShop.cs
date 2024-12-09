@@ -24,7 +24,7 @@ public abstract class Shop<T> : IShop<T> where T : IShopItem{
         await profile.UpdateUserBalance();
         return res.IsSuccess;
     }
-    
+
     public async UniTask<bool> CanBuy(T item){
         var profile = ServiceLocator.Instance.GetService<UserProfileService>();
         if(item.IsFree) return true;
