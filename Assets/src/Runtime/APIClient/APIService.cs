@@ -81,7 +81,7 @@ namespace TA.APIClient{
             };
 
             return await SendWebRequest<BaseAPIResponse,FailedResponse>(
-                        "api/v1/user/consume-shop-item",
+                        "/api/v1/user/consume-shop-item",
                         "PATCH",
                         param,
                         authToken
