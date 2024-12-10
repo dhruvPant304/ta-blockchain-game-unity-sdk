@@ -87,7 +87,7 @@ public class GameService : Service<GameService> {
         _taMenuService = ServiceLocator.Instance.GetService<TAMenuService>();
         _gameId = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig.gameId;
         _apiConfig = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
-
+        _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
 
         StartCoroutine(ExecuteUpdateRequestQueue().ToCoroutine());
     } 
