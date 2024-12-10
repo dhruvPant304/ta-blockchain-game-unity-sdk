@@ -65,6 +65,16 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<InventoryResponse<T>, FailedResponse>> SendFetchUserInventoryRequest<T>(string authToken)
+        where T : class {
+            return await SendWebRequest<InventoryResponse<T>,FailedResponse>(
+                        "/api/v1/user/inventory",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
         //=====================
         // SETTINGS
         //=====================
@@ -145,6 +155,16 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<CoinEarnedResponse, FailedResponse>> SendAddGameCoinRequest(int coins, string authToken){
+            var param = new AddCoinParams(){coinEarned = coins};
+            return await SendWebRequest<CoinEarnedResponse,FailedResponse>(
+                        "/api/v1/games/earned-coins",
+                        "POST",
+                        param,
+                        authToken
+                    );
+        }
+
         //=====================
         // LEADER BOARDS 
         //=====================
@@ -212,6 +232,53 @@ namespace TA.APIClient{
                     );
         }
 
+        //=====================
+        // SHOP
+        //=====================
+
+        public async UniTask<VariableRequestResponse<BoosterResponse<T>, FailedResponse>> SendFetchBoostersRequest<T>() 
+            where T : class, IShopItem{
+            return await SendWebRequest<BoosterResponse<T>, FailedResponse>(
+                    $"/api/v1/shop/boosters",
+                    "GET"
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<CRUDDBData, FailedResponse>> SendBuyBoosterRequest(IShopItem item, 
+                int quantity, 
+                string authToken){
+            var param = new BuyItemParams(){
+                itemId = item.ShopId,
+                quantity = quantity,
+                itemType = item.ItemType
+            };
+
+            return await SendWebRequest<CRUDDBData, FailedResponse>(
+                    $"/api/v1/shop/item/buy",
+                    "POST",
+                    param,
+                    authToken
+            );
+        }
+
+        public async UniTask<VariableRequestResponse<CheckFreeBoosterResponse,FailedResponse>> SendCheckFreeBoosterAvailableRequest(
+                string authToken){
+            return await SendWebRequest<CheckFreeBoosterResponse,FailedResponse>(
+                        $"/api/v1/shop/claimed-free-booster",
+                        "GET",
+                        null,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<APIResponse<CRUDDBData>,FailedResponse>> SendClaimFreeBoosterRequest(string authToken){
+            return await SendWebRequest<APIResponse<CRUDDBData>, FailedResponse>(
+                        $"/api/v1/shop/claim-free-booster",
+                        "POST",
+                        null,
+                        authToken
+                    );
+        }
 
         //=====================
         // END
@@ -240,11 +307,19 @@ namespace TA.APIClient{
 
                 if (request.result == UnityWebRequest.Result.Success){
                     response.IsSuccess = true;
-                    response.SuccessResponse = JsonConvert.DeserializeObject<TSuccess>(responseText);
+                    try{
+                        response.SuccessResponse = JsonConvert.DeserializeObject<TSuccess>(responseText);
+                    }catch(Exception e){
+                        throw new Exception($"API response parsing Error:{e} \n Recieved: {responseText}");
+                    }
                 }
                 else{
                     response.IsSuccess = false;
-                    response.FailureResponse = JsonConvert.DeserializeObject<TFailure>(responseText);
+                    try{
+                        response.FailureResponse = JsonConvert.DeserializeObject<TFailure>(responseText);
+                    }catch(Exception e){
+                        throw new Exception($"API response parsing Error:{e} \n Recieved: {responseText}");
+                    }
                 }
             }
             return response;
@@ -313,3 +388,4 @@ namespace TA.APIClient{
         }
     }
 }
+
