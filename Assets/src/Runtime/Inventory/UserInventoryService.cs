@@ -46,7 +46,7 @@ public class UserInventoryService : Service<UserInventoryService>{
                 continue;
             }
         }
-
+        parsableEntries.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
         return parsableEntries;
     }
 
