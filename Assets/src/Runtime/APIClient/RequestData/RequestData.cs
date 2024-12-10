@@ -51,5 +51,10 @@ namespace TA.APIClient.RequestData{
         public int quantity;
         public string itemType;
     }
+
+    [Serializable]
+    public class ConsumeItemParams{
+        public int id;
+    }
 }
 
