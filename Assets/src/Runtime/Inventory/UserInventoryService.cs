@@ -50,8 +50,8 @@ public class UserInventoryService : Service<UserInventoryService>{
         return parsableEntries;
     }
 
-    public async UniTask ConsumeItem<T>(T item) where T : class, IShopItem {
-        await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
+    public async UniTask ConsumeItem<T>(int inventoryID) {
+        await _apiService.SendConsumeShopItemRequest(inventoryID, _userProfileService.LoginToken); 
         await RefreshInevntory<T>();
     }
 

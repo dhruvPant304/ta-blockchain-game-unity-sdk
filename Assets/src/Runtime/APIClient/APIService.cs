@@ -75,9 +75,9 @@ namespace TA.APIClient{
                     );
         }
 
-        public async UniTask<VariableRequestResponse<BaseAPIResponse, FailedResponse>> SendConsumeShopItemRequest(IShopItem item, string authToken){
+        public async UniTask<VariableRequestResponse<BaseAPIResponse, FailedResponse>> SendConsumeShopItemRequest(int inventoryId, string authToken){
             var param = new ConsumeItemParams(){
-                id = item.ShopId.ToString()
+                id = inventoryId
             };
 
             return await SendWebRequest<BaseAPIResponse,FailedResponse>(
