@@ -186,6 +186,7 @@ namespace TA.APIClient.ResponseData{
 
     [Serializable]
     public class InventoryEntry<T> where T: class{
+        public int id;
         public int quantity;
         public string lastPurchaseTime;
         public T item;
