@@ -120,7 +120,7 @@ namespace TA.APIClient.ResponseData{
         public int freeCredits;
         public int boughtCredits;
         public float tokens;
-        public float xpBalance;
+        public int xpBalance;
         public float native;
     }
 
