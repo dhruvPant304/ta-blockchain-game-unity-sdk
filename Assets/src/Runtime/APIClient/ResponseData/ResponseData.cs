@@ -182,6 +182,7 @@ namespace TA.APIClient.ResponseData{
     public class BoosterData<T> where T: class{
         public T[] boosters;
         public T freeBooster;
+        public string boosterRenewTimeInMinutes;
     }
 
     [Serializable]
