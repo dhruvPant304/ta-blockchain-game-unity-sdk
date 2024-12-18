@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -294,31 +295,33 @@ namespace TA.APIClient{
         }
 
         //=====================
-        // END
+        // METHODS
         //=====================
 
-
-        ///<summary>
-        ///Use this method for handling API requests that have variable
-        ///Success and failure response structures, if the request response
-        ///is static the overload SendWebRequest<TSuccess> is preferred
-        ///</summary>
-        ///<param name="relativeAPIPath"> relativeAPIPath is the API path after the server relativeAPIPath</paramm>
         private async UniTask<VariableRequestResponse<TSuccess, TFailure>> SendWebRequest<TSuccess,TFailure>(string relativeAPIPath, string method, object param = null, string authToken = ""){
             var absoluteUrl = _config.serverUrl + relativeAPIPath;
-            var request = CreateRequest(absoluteUrl, method, param, authToken);
+            var request = new DetailedWebRequest(_config);
+            request.Construct(absoluteUrl, method, param, authToken);
+            var res = await SendWebRequest<TSuccess,TFailure>(request);
+            request.LogRequest();
+            return res;
+        }
+
+        private async UniTask<VariableRequestResponse<TSuccess, TFailure>> SendWebRequest<TSuccess,TFailure>(DetailedWebRequest request){
             var response = new VariableRequestResponse<TSuccess, TFailure>();
             try{ 
-                await request.SendWebRequest();
+                await request.webRequest.SendWebRequest();
             }
             catch(Exception e){
                 Debug.LogError($"Error while sending request: {e}");
             }
             finally{
-                var responseText = request.downloadHandler.text;
+                var responseText = request.webRequest.downloadHandler.text;
+                request.response = responseText;
                 if(_config.logResponses) Debug.Log($"Received: {responseText}");
 
-                if (request.result == UnityWebRequest.Result.Success){
+                if (request.webRequest.result == UnityWebRequest.Result.Success){
+                    request.isSuccess = true;
                     response.IsSuccess = true;
                     try{
                         response.SuccessResponse = JsonConvert.DeserializeObject<TSuccess>(responseText);
@@ -327,6 +330,7 @@ namespace TA.APIClient{
                     }
                 }
                 else{
+                    request.isSuccess = true;
                     response.IsSuccess = false;
                     try{
                         response.FailureResponse = JsonConvert.DeserializeObject<TFailure>(responseText);
@@ -338,35 +342,9 @@ namespace TA.APIClient{
             return response;
         }
 
-        ///<summary>
-        ///Use this method for handling API requests that have a static response structure
-        ///in case response structure can vary for success and failure use the overload
-        ///SendWebRequest<TSuccess,TFailure> which returns a VariableRequestResponse
-        ///</summary>
-        ///<param name="relativePath"> relativeAPIPath is the API path after the server relativeAPIPath</paramm>
-    
         private async UniTask<StaticRequestResponse<TResponse>> SendWebRequest<TResponse>(string relativePath, string method, object param = null, string authToken = ""){
             var variableResponse = await SendWebRequest<TResponse,TResponse>(relativePath, method, param, authToken);
             return new StaticRequestResponse<TResponse>(variableResponse);
-        }
-
-        private UnityWebRequest CreateRequest(string uri, string method, object body = null, string authToken = ""){
-            var request = new UnityWebRequest(uri);
-            request.method = method;
-            request.SetRequestHeader("Accept", "application/json");
-            request.SetRequestHeader("Content-Type", "application/json");
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.disposeUploadHandlerOnDispose = true;
-            request.disposeDownloadHandlerOnDispose = true;
-            if (!string.IsNullOrEmpty(authToken)) {
-                request.SetRequestHeader("Authorization", $"Bearer {authToken}");
-            }
-           var json = JsonConvert.SerializeObject(body);
-            if (_config.logRequest)
-                Debug.Log($"Sent: [{method}] {uri} \nAuthToken: {authToken}\n body: {json}");
-            var data = Encoding.UTF8.GetBytes(json);
-            if (body != null) request.uploadHandler = new UploadHandlerRaw(data);
-            return request;
         }
 
         public static StaticRequestResponse<BaseAPIResponse> CreateBaseResponse(bool isSuccess, string message){
@@ -379,6 +357,68 @@ namespace TA.APIClient{
             };
 
             return new StaticRequestResponse<BaseAPIResponse>(variableResponse);
+        }
+    }
+
+    [Serializable]
+    public class DetailedWebRequest{
+        public UnityWebRequest webRequest;
+        public string url;
+        public string body;
+        public string response;
+        public bool isSuccess = false;
+        public Dictionary<string,string> headers = new();
+        private APIConfig _config;
+
+        public DetailedWebRequest(APIConfig config){
+            _config = config;
+        }
+
+        public void Construct(string uri, string method, object body = null, string authToken = ""){
+            url = $"{_config.serverUrl}/{uri}";
+            webRequest = CreateRequest(uri,method,body,authToken);
+        }
+
+
+        private UnityWebRequest CreateRequest(string uri, string method, object body = null, string authToken = ""){
+            var request = new UnityWebRequest(uri);
+            request.method = method;
+
+            request.SetRequestHeader("Accept", "application/json");
+            request.SetRequestHeader("Content-Type", "application/json");
+            if (!string.IsNullOrEmpty(authToken)) {
+                request.SetRequestHeader("Authorization", $"Bearer {authToken}");
+                headers["Authorization"] = $"Bearer {authToken}";
+            }
+
+            headers["Accept"] = "application/json";
+            headers["Content-Type"] = "application/json";
+
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.disposeUploadHandlerOnDispose = true;
+            request.disposeDownloadHandlerOnDispose = true;
+
+            var json = JsonConvert.SerializeObject(body);
+            this.body = json;
+            var data = Encoding.UTF8.GetBytes(json);
+            if (body != null) request.uploadHandler = new UploadHandlerRaw(data);
+            return request;
+        }
+
+        public void LogRequest(){
+            var msg = $"URL: {url}\n HEADERS: [";
+            foreach(var header in headers){
+                msg += $"{header.Key} : {headers.Values},";
+            }
+            msg += "]";
+            msg += $"\nbody: {body}";
+            msg += $"\nresponse: {response}";
+
+            if(isSuccess){
+                Debug.Log(msg);
+            }else{
+                Debug.LogError(msg);
+            }
         }
     }
 
