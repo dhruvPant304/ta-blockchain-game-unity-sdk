@@ -408,7 +408,7 @@ namespace TA.APIClient{
         public void LogRequest(){
             var msg = $"URL: {url}\n HEADERS: [";
             foreach(var header in headers){
-                msg += $"{header.Key} : {headers.Values},";
+                msg += $"{header.Key} : {header.Value},";
             }
             msg += "]";
             msg += $"\nbody: {body}";
