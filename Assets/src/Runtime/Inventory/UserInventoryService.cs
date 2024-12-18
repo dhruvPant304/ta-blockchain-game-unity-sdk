@@ -23,7 +23,7 @@ public class UserInventoryService : Service<UserInventoryService>{
 
     public Action<List<InventoryEntry<IShopItem>>> OnInventoryUpdate;
 
-    public async UniTask<List<InventoryEntry<T>>> GetInventory<T>() where T : class, IShopItem {
+    public async UniTask<List<InventoryEntry<T>>> GetInventory<T>(string type) where T : class, IShopItem {
         var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
         if(!inventory.IsSuccess){
             return null;
@@ -34,6 +34,8 @@ public class UserInventoryService : Service<UserInventoryService>{
             try{
                 var itemJson = JsonConvert.SerializeObject(entry.item);
                 var converted = JsonConvert.DeserializeObject<T>(itemJson);
+
+                if(converted.ItemType != type) continue;
 
                 var convertedEntry = new InventoryEntry<T>(){
                     quantity = entry.quantity,
@@ -50,13 +52,14 @@ public class UserInventoryService : Service<UserInventoryService>{
         return parsableEntries;
     }
 
-    public async UniTask ConsumeItem<T>(T item) where T : class, IShopItem {
-        await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
-        await RefreshInevntory<T>();
+    public async UniTask<bool> ConsumeItem<T>(T item) where T : class, IShopItem {
+        var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
+        await RefreshInevntory<T>(item.ItemType);
+        return res.IsSuccess;
     }
 
-    public async UniTask RefreshInevntory<T>() where T : class, IShopItem{
-        var updated = await GetInventory<T>();
+    public async UniTask RefreshInevntory<T>(string type) where T : class, IShopItem{
+        var updated = await GetInventory<T>(type);
         var converted = updated.Select((entry) => new InventoryEntry<IShopItem> {
                      quantity = entry.quantity,
                      lastPurchaseTime = entry.lastPurchaseTime,
