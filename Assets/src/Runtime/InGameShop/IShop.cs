@@ -24,7 +24,7 @@ public abstract class Shop<T> : IShop<T> where T : class, IShopItem{
         var token = profile.LoginToken;
         var res = await api.SendBuyBoosterRequest(item,quantity,token);
         await profile.UpdateUserBalance();
-        await inventory.RefreshInevntory<T>();
+        await inventory.RefreshInevntory<T>(item.ItemType);
         return res.IsSuccess;
     }
 
