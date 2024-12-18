@@ -411,8 +411,8 @@ namespace TA.APIClient{
                 msg += $"{header.Key} : {header.Value},";
             }
             msg += "]";
-            msg += $"\nbody: {body}";
-            msg += $"\nresponse: {response}";
+            msg += $"\nPAYLOAD: {body}";
+            msg += $"\nRESPONSE: {response}";
 
             if(isSuccess){
                 Debug.Log(msg);
