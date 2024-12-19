@@ -318,7 +318,6 @@ namespace TA.APIClient{
             finally{
                 var responseText = request.webRequest.downloadHandler.text;
                 request.response = responseText;
-                if(_config.logResponses) Debug.Log($"Received: {responseText}");
 
                 if (request.webRequest.result == UnityWebRequest.Result.Success){
                     request.isSuccess = true;
