@@ -136,11 +136,23 @@ public class LeaderBoardView : MonoBehaviour {
 
     async void LoadSelectedLeaderBoard(string selection){
         var selectedName = leaderBoardNameDropdown.options[leaderBoardNameDropdown.value].text;
-        if(selection == "high"){
-           _activeLeaderBoard = _leaderBoardService.GetHighScoreLeaderBoard(selectedName);
+
+        if(_config.hasHighScoreLeaderboard && !_config.hasTotalScoreLeaderboard){
+            _activeLeaderBoard = _leaderBoardService.GetHighScoreLeaderBoard(selectedName);
         }
-        if (selection == "total"){
+        else if(_config.hasTotalScoreLeaderboard && !_config.hasHighScoreLeaderboard){
             _activeLeaderBoard = _leaderBoardService.GetTotalScoreLeaderBoard(selectedName);
+        }
+        else if(_config.hasTotalScoreLeaderboard && _config.hasHighScoreLeaderboard){
+            if(selection == "high"){
+                _activeLeaderBoard = _leaderBoardService.GetHighScoreLeaderBoard(selectedName);
+            }
+            if (selection == "total"){
+                _activeLeaderBoard = _leaderBoardService.GetTotalScoreLeaderBoard(selectedName);
+            }
+        }
+        else{
+            return;
         }
 
         _activePage = 0;
