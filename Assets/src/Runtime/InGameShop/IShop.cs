@@ -32,7 +32,7 @@ public abstract class Shop<T> : IShop<T> where T : class, IShopItem{
         var profile = ServiceLocator.Instance.GetService<UserProfileService>();
         if(item.IsFree) return true;
         await UniTask.CompletedTask;
-        return profile.UserBalanceData.GetFild<int>(item.Currency) > item.Price;
+        return profile.UserBalanceData.GetFild<int>(item.Currency) >= item.Price;
     }
 
     public abstract UniTask<bool> CheckFreeItemAvailable();
