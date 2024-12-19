@@ -21,7 +21,7 @@ public class TAMenuService : Service<TAMenuService>{
     public event Action OnInGameCreditShopOpen;
     public event Action OnInGameCreditShopClosed;
 
-    List<ShopView> _shops = new();
+    List<ShopView> _shops = new(); //TODO: Should have an abstraction like View instead of using concrete type
 
     protected override void OnInitialize(){
         _shops.AddRange(GetComponentsInChildren<ShopView>());
