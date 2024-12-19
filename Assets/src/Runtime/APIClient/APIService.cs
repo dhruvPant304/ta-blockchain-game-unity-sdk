@@ -374,7 +374,7 @@ namespace TA.APIClient{
         }
 
         public void Construct(string uri, string method, object body = null, string authToken = ""){
-            url = $"{_config.serverUrl}/{uri}";
+            url = $"{uri}";
             webRequest = CreateRequest(uri,method,body,authToken);
         }
 
