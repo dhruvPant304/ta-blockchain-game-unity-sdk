@@ -24,7 +24,7 @@ public class TAMenuService : Service<TAMenuService>{
     List<ShopView> _shops = new();
 
     protected override void OnInitialize(){
-        _shops.Add(GetComponentInChildren<ShopView>());
+        _shops.AddRange(GetComponentsInChildren<ShopView>());
     }
 
     public void OpenBuyCreditsMenu(){
