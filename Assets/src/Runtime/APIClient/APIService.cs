@@ -89,6 +89,37 @@ namespace TA.APIClient{
                     );
         }
 
+        public async UniTask<VariableRequestResponse<BaseAPIResponse,FailedResponse>> SendUpdateDeviceTokenRequest(
+                string authToken, 
+                DeviceId details){
+            return await SendWebRequest<BaseAPIResponse,FailedResponse>(
+                        "/api/v1/user/device",
+                        "PATCH",
+                        details,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<BaseAPIResponse, FailedResponse>> SendDeleteDevice(string authToken){
+            return await SendWebRequest<BaseAPIResponse, FailedResponse>(
+                        "/api/v1/user/device",
+                        "DELETE",
+                        null,
+                        authToken
+                    );
+        }
+
+        public async UniTask<VariableRequestResponse<BaseAPIResponse, FailedResponse>> SendVerifyDeviceRequest(
+                string authToken,
+                DeviceDetails details){
+            return await SendWebRequest<BaseAPIResponse, FailedResponse>(
+                        "/api/v1/user/verify-device-token",
+                        "PATCH",
+                        null,
+                        authToken
+                    );
+        }
+
         //=====================
         // SETTINGS
         //=====================
@@ -293,6 +324,12 @@ namespace TA.APIClient{
                         authToken
                     );
         }
+
+        //=====================
+        // PUSH NOTIFICATIONS
+        //=====================
+
+        
 
         //=====================
         // METHODS

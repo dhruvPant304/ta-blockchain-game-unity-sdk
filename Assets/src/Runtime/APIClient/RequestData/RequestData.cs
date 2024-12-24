@@ -56,5 +56,16 @@ namespace TA.APIClient.RequestData{
     public class ConsumeItemParams{
         public string id;
     }
+
+    [Serializable]
+    public class DeviceDetails{
+        public string deviceType;
+        public string deviceId;
+    }
+
+    [Serializable]
+    public class DeviceId : DeviceDetails{
+        public string token;
+    }
 }
 
