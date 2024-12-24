@@ -12,6 +12,7 @@ public class FirebaseInitializer {
        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             if(task.Result == DependencyStatus.Available){
                 Debug.Log("Firebase is ready to use");
+                InitializeFCM();
             }else{
                 Debug.LogError($"could not resolve firebase dependencies: {task.Result}");
             }
