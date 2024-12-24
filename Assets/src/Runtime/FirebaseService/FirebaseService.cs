@@ -5,6 +5,7 @@ using TA.Services;
 using TA.UserProfile;
 using TA.APIClient.RequestData;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Android;
 
 namespace TA.Firebase{
     public class FirebaseService : Service<FirebaseService>{
@@ -45,7 +46,16 @@ namespace TA.Firebase{
             };
 
             await UniTask.WaitUntil(() => _profile.LoggedIn);
+            RequestNotificationPremissions();
            _api.SendUpdateDeviceTokenRequest(_profile.LoginToken, deviceToken).Forget(); 
+        }
+
+        void RequestNotificationPremissions(){
+             if (Application.platform == RuntimePlatform.Android){
+                if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS")){
+                    Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
+                }
+            }
         }
     }
 }
