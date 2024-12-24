@@ -20,7 +20,7 @@ namespace TA.Firebase{
             firebaseMessaging.onTokenReceived += OnToken; 
         }
 
-        void OnToken(object sender, TokenReceivedEventArgs args){
+        async void OnToken(object sender, TokenReceivedEventArgs args){
             FCMToken = args.Token;
             Debug.Log($"FCM Token received: {FCMToken}");
 
@@ -44,6 +44,7 @@ namespace TA.Firebase{
                 token = FCMToken
             };
 
+            await UniTask.WaitUntil(() => _profile.LoggedIn);
            _api.SendUpdateDeviceTokenRequest(_profile.LoginToken, deviceToken).Forget(); 
         }
     }
