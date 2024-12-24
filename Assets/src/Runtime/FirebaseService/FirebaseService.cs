@@ -6,12 +6,15 @@ using TA.UserProfile;
 using TA.APIClient.RequestData;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Android;
+using TA.APIClient.ResponseData;
+using TA.Authentication;
 
 namespace TA.Firebase{
     public class FirebaseService : Service<FirebaseService>{
         public string FCMToken {get; private set;}
         APIService _api;
         UserProfileService _profile;
+        Web3AuthService _web3;
 
         void Start(){
             _api = ServiceLocator.Instance.GetService<APIService>();
@@ -21,12 +24,16 @@ namespace TA.Firebase{
             firebaseMessaging.onTokenReceived += OnToken; 
         }
 
-        async void OnToken(object sender, TokenReceivedEventArgs args){
+        void OnToken(object sender, TokenReceivedEventArgs args){
             FCMToken = args.Token;
             Debug.Log($"FCM Token received: {FCMToken}");
+            _profile.OnAuthSuccess += OnLogin;
+            _web3.OnLogout += OnLogout;
+        }
 
+        void OnLogin(LoginSessionData data){
             string platform; 
-
+            RequestNotificationPremissions();
             switch(Application.platform){
                 case RuntimePlatform.Android:
                     platform = "android";
@@ -45,9 +52,11 @@ namespace TA.Firebase{
                 token = FCMToken
             };
 
-            await UniTask.WaitUntil(() => _profile.LoggedIn);
-            RequestNotificationPremissions();
            _api.SendUpdateDeviceTokenRequest(_profile.LoginToken, deviceToken).Forget(); 
+        }
+
+        void OnLogout(){
+            _api.SendDeleteDevice(_profile.LoginToken).Forget();
         }
 
         void RequestNotificationPremissions(){
