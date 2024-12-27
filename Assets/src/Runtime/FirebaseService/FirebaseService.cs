@@ -1,3 +1,4 @@
+#if ENABLE_FIREBASE_MESSAGING
 using Firebase.Messaging;
 using UnityEngine;
 using TA.APIClient;
@@ -68,3 +69,4 @@ namespace TA.Firebase{
         }
     }
 }
+#endif

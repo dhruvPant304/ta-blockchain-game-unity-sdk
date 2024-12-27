@@ -1,3 +1,4 @@
+#if ENABLE_FIREBASE_MESSAGING
 using System;
 using Firebase;
 using Firebase.Messaging;
@@ -29,3 +30,4 @@ public class FirebaseInitializer {
     }
 }
 }
+#endif
