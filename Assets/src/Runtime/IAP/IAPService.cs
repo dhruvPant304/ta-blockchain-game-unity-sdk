@@ -11,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using TA.APIClient.ResponseData;
 using System.Linq;
 using TA.UserProfile;
+using TA.UserProfile.Balance;
 
 namespace TA.IAP{
     public class IAPService : Service<IAPService>, IDetailedStoreListener {
@@ -19,6 +20,7 @@ namespace TA.IAP{
         BlockchainGameCanvas _canvas;
         APIService _apiService;
         UserProfileService _userProfile; 
+        UserBalanceService _userBalance;
 
         IStoreController _storeController;
         IExtensionProvider _extensionProvider;
@@ -141,7 +143,7 @@ namespace TA.IAP{
 
             var response =await _apiService.SendVerificationRequest(verificationData, _userProfile.LoginToken);
             if(response.IsSuccess) {
-                _userProfile.UpdateUserBalance().Forget();
+                _userBalance.UpdateUserBalance().Forget();
                 return response.SuccessResponse;
             }
 
@@ -162,13 +164,9 @@ namespace TA.IAP{
             _extensionProvider = extensions;
         }
 
-        public void OnInitializeFailed(InitializationFailureReason error){
-            // throw new System.NotImplementedException();
-        }
+        public void OnInitializeFailed(InitializationFailureReason error){}
 
-        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason){
-            // throw new System.NotImplementedException();
-        }
+        public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason){}
 
         public void OnInitializeFailed(InitializationFailureReason error, string message){
             _canvas.ShowMessagePopup(CreateInitializationErrorPopUp(message));

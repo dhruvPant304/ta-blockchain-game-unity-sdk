@@ -11,6 +11,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using static TA.Components.MessagePopupExit;
 using TA.Leaderboard;
+using TA.UserProfile.Balance;
 
 namespace TA.Game{
 public class GameService : Service<GameService> {
@@ -22,6 +23,7 @@ public class GameService : Service<GameService> {
     BlockchainGameCanvas _blockChainGameCanvas;
     TAMenuService _taMenuService;
     LeaderboardService _leaderBoardService;
+    UserBalanceService _userBalanceService;
     APIConfig _apiConfig;
 
     string _gameId;
@@ -72,7 +74,7 @@ public class GameService : Service<GameService> {
     int Credits {
         get{
             if(useTestCredits) return testCredits;
-            else return _userProfileService.UserBalanceData.credits;
+            else return _userBalanceService.GetBalanceInt("credits");
         }
     }
 
@@ -87,6 +89,7 @@ public class GameService : Service<GameService> {
         _gameId = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig.gameId;
         _apiConfig = ServiceLocator.Instance.GetService<APIConfigProviderService>().APIConfig;
         _leaderBoardService = ServiceLocator.Instance.GetService<LeaderboardService>();
+        _userBalanceService = ServiceLocator.Instance.GetService<UserBalanceService>();
 
         StartCoroutine(ExecuteUpdateRequestQueue().ToCoroutine());
     } 
@@ -158,7 +161,7 @@ public class GameService : Service<GameService> {
     }
 
     async UniTask<bool> TryUserBalance(Action onFailed){
-        var response = await _userProfileService.UpdateUserBalance();
+        var response = await _userBalanceService.UpdateUserBalance();
         if(response.IsSuccess) {
             return true;
         }else{
@@ -366,11 +369,6 @@ public class GameService : Service<GameService> {
 
         _gameToken = null;
         OnEndSessionSuccess?.Invoke();
-        //var response = await _apiService.SendCompleteRequest(param, GameToken);
-        // if(response.IsSuccess){
-        // }else{
-        //     //ShowErrorMessage(response.FailureResponse.message, OnEndSessionFailed);
-        // }
     }
 
     public void MakeExitGameRequest(){
@@ -379,6 +377,6 @@ public class GameService : Service<GameService> {
 
     public async void AddGameCoin(int amount){
         await _apiService.SendAddGameCoinRequest(amount, _userProfileService.LoginToken);
-        await _userProfileService.UpdateUserBalance();
+        await _userBalanceService.UpdateUserBalance();
     }
 }}

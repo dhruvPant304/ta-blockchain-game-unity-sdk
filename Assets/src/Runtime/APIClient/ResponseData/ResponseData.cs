@@ -122,6 +122,18 @@ namespace TA.APIClient.ResponseData{
         public float tokens;
         public int xpBalance;
         public float native;
+
+        public static UserBalanceData operator+(UserBalanceData data1, UserBalanceData data2){
+            return new UserBalanceData{
+                credits = data1.credits + data2.credits,
+                gameCoin = data1.gameCoin + data2.gameCoin,
+                freeCredits = data1.freeCredits + data2.freeCredits,
+                boughtCredits = data1.boughtCredits + data2.boughtCredits,
+                tokens = data1.tokens + data2.tokens,
+                xpBalance = data1.xpBalance + data2.xpBalance,
+                native = data1.native + data2.native
+            };
+        }
     }
 
     [Serializable]

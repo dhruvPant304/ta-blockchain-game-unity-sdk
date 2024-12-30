@@ -10,17 +10,18 @@ using Newtonsoft.Json;
 using TA.Components;
 using System.Collections.Generic;
 using TA.APIClient.RequestData;
+using TA.UserProfile.Balance;
 
 namespace TA.UserProfile{
 public class UserProfileService : Service<UserProfileService>{
 
-    protected override void OnInitialize(){
-    }
+    protected override void OnInitialize(){}
 
     Web3AuthService _web3AuthService;
     APIService _apiService;
     BlockchainGameCanvas _gameCanvas;
     APIConfigProviderService _apiConfigService;
+    UserBalanceService _balanceService;
 
     string platform = "android";
     string appType = "etuktuk";
@@ -32,18 +33,13 @@ public class UserProfileService : Service<UserProfileService>{
 
     UserData _sessionUserData;
     public UserData SessionUserData => _sessionUserData;
-
-    UserBalanceData _userBalanceData;
-    public UserBalanceData UserBalanceData => _userBalanceData;
-
+ 
     //Events
+    public Action OnAuthComplete;
     public Action<LoginSessionData> OnAuthSuccess;
     public Action<FailedResponse>  OnAuthFailed;
     public Action<UserData> OnUserDataUpdate;
-    public Action OnAuthComplete;
-    public Action<UserBalanceData> OnBalanceUpdate;
-    public Action OnBalanceUpdateFailed;
-
+    
     public bool LoggedIn {get; private set;}
     public bool IsAutoLoginSession {get; private set;}
 
@@ -52,6 +48,7 @@ public class UserProfileService : Service<UserProfileService>{
         _apiService = ServiceLocator.Instance.GetService<APIService>();
         _gameCanvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
         _apiConfigService = ServiceLocator.Instance.GetService<APIConfigProviderService>();
+        _balanceService = ServiceLocator.Instance.GetService<UserBalanceService>();
 
         _web3AuthService.OnLogin += OnLogin;
     }
@@ -95,9 +92,13 @@ public class UserProfileService : Service<UserProfileService>{
     async UniTask<bool> TryHandleLogin(LoginSessionData response){
          var loginData = response;
         _userloginData = loginData;
-        _sessionUserData = loginData;
+        _sessionUserData = loginData; 
 
-        var balanceResponse = await UpdateUserBalance();
+        var fetchOnLogin = _apiConfigService.APIConfig.fetchUserBalanceOnLogin;
+        var balanceResponse =  fetchOnLogin? 
+            await _balanceService.UpdateUserBalance() : 
+            APIService.CreateBaseResponse(true, "Not checking for user balance on login");
+
         if(balanceResponse.IsSuccess){
             OnAuthSuccess?.Invoke(_userloginData);
             OnUserDataUpdate?.Invoke(_userloginData);
@@ -111,22 +112,7 @@ public class UserProfileService : Service<UserProfileService>{
     void HandleAuthFailiure(FailedResponse failedResponse){
         Debug.LogError($"Failed to authentiacate user: {failedResponse.message}");
         OnAuthFailed?.Invoke(failedResponse);
-    }
-
-    public async UniTask<StaticRequestResponse<BaseAPIResponse>> UpdateUserBalance(){
-        if(!_apiConfigService.APIConfig.fetchUserBalanceOnLogin){
-            return APIService.CreateBaseResponse(true, "Not checking for user balance on login");
-        }
-
-        var response = await _apiService.SendFetchUserBalanceRequest(LoginUserData.token);
-        if(response.IsSuccess){
-            OnBalanceUpdate?.Invoke(response.Response.data);
-            _userBalanceData = response.Response.data;
-        } else{
-            OnBalanceUpdateFailed?.Invoke();
-        }
-        return APIService.CreateBaseResponse(response.IsSuccess, response.Response.message);
-    }
+    } 
 
     //=======================
     // SAVED LOGIN SESSIONS
@@ -258,6 +244,5 @@ public class UserProfileService : Service<UserProfileService>{
             _gameCanvas.ShowMessagePopup(popup);
         }
     }
-
 }
 }

@@ -3,24 +3,29 @@ using TMPro;
 using TA.UserProfile;
 using TA.APIClient.ResponseData;
 using TA.Services;
+using TA.UserProfile.Balance;
+using Cysharp.Threading.Tasks;
 
 namespace TA.Components{
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class BalanceText : MonoBehaviour{
     TextMeshProUGUI textMesh;
-    UserProfileService _userProfileService;
+    UserBalanceService _userBalanceService;
     [SerializeField] string currency = "credits";
 
     void Start(){
         textMesh = GetComponent<TextMeshProUGUI>();
 
-        ServiceLocator.Instance.OnServiceRegistered<UserProfileService>(
-            () => {
-                _userProfileService = ServiceLocator.Instance.GetService<UserProfileService>();
-                _userProfileService.OnBalanceUpdate += OnBalanceUpdate;
-                _userProfileService.OnBalanceUpdateFailed += OnBalanceFailed;
+        ServiceLocator.Instance.OnServiceRegistered<UserBalanceService>(
+            async () => {
 
-               OnBalanceUpdate(_userProfileService.UserBalanceData);
+                var profile = ServiceLocator.Instance.GetService<UserProfileService>();
+                await UniTask.WaitUntil(() => profile.LoggedIn);
+                _userBalanceService = ServiceLocator.Instance.GetService<UserBalanceService>();
+                _userBalanceService.OnBalanceSync += OnBalanceUpdate;
+                _userBalanceService.OnBalanceSyncFailed += OnBalanceFailed;
+
+               OnBalanceUpdate(_userBalanceService.LastSyncedBalance());
             }
         );
     }
