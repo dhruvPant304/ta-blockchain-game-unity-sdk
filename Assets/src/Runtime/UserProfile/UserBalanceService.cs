@@ -23,7 +23,11 @@ namespace TA.UserProfile.Balance{
             _profile = ServiceLocator.Instance.GetService<UserProfileService>();
         }
 
-        public int GetBalanceInt(string type) {
+        public bool CanSpend(string type, int amount){
+            return GetBalanceIntCached(type) >= amount;
+        }
+
+        public int GetBalanceIntCached(string type) {
             try{
                 if(!_chachedTransactions.ContainsKey(type)){
                     return (int)_syncedBalance.GetFild<int>(type);
@@ -35,7 +39,7 @@ namespace TA.UserProfile.Balance{
             }
         }
 
-        public void Spend(string currencyName, int value){
+        public void SpendCached(string currencyName, int value){
             if(!_chachedTransactions.ContainsKey(currencyName)){
                 _chachedTransactions[currencyName] = 0;
             } 

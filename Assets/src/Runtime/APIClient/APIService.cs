@@ -289,7 +289,7 @@ namespace TA.APIClient{
                     );
         }
 
-        public async UniTask<VariableRequestResponse<CRUDDBData, FailedResponse>> SendBuyBoosterRequest(IShopItem item, 
+        public async UniTask<VariableRequestResponse<CRUDDBData, FailedResponse>> SendBuyItemRequest(IShopItem item, 
                 int quantity, 
                 string authToken){
             var param = new BuyItemParams(){

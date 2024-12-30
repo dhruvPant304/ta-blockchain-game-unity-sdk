@@ -7,7 +7,6 @@ using TA.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 
 namespace TA.UserInventory{
 public class UserInventoryService : Service<UserInventoryService>{
@@ -22,14 +21,35 @@ public class UserInventoryService : Service<UserInventoryService>{
     }
 
     public Action<List<InventoryEntry<IShopItem>>> OnInventoryUpdate;
+    public Dictionary<int, InventoryEntry<IShopItem>> _inventoryCache = new();
 
-    public async UniTask<List<InventoryEntry<T>>> GetInventory<T>(string type) where T : class, IShopItem {
+    public void AddToInventoryCached<T>(T item, int amount) where T : class, IShopItem{
+        if(_inventoryCache.ContainsKey(item.ShopId) == false){
+            throw new Exception($"Cannot find entry with id: \"{item.ShopId}\" in inventory cache, make sure you call SyncInventory atleast once before");
+        }
+        _inventoryCache[item.ShopId].quantity += amount;
+        SyncInventory<T>(item.ItemType).Forget();
+    }
+
+    public void TakeFromInventoryCached<T>(T item) where T : class, IShopItem{
+        if(_inventoryCache.ContainsKey(item.ShopId) == false){
+            throw new Exception($"Cannot find entry with id: \"{item.ShopId}\" in inventory cache, make sure you call SyncInventory atleast once before");
+        }
+        if(_inventoryCache[item.ShopId].quantity < 1){
+            throw new Exception($"Should have atleast one in inventory to consume");
+        }
+        _inventoryCache[item.ShopId].quantity += 1;
+        SendConsumptionRequest<T>(item).Forget();
+    }
+
+    async UniTask<List<InventoryEntry<T>>> SyncInventory<T>(string type) where T : class, IShopItem {
         var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
         if(!inventory.IsSuccess){
             return null;
         }
 
-        List<InventoryEntry<T>> parsableEntries = new();
+        List<InventoryEntry<T>> filteredByReqType = new();
+        List<InventoryEntry<IShopItem>> callBackParams = new();
         foreach(var entry in inventory.SuccessResponse.data){
             try{
                 var itemJson = JsonConvert.SerializeObject(entry.item);
@@ -43,29 +63,28 @@ public class UserInventoryService : Service<UserInventoryService>{
                     item = converted
                 };
 
-                parsableEntries.Add(convertedEntry);
+                var abstractEntry = new InventoryEntry<IShopItem>(){
+                    quantity = entry.quantity,
+                    lastPurchaseTime = entry.lastPurchaseTime,
+                    item = converted
+                };
+
+                filteredByReqType.Add(convertedEntry);
+                callBackParams.Add(abstractEntry);
+                _inventoryCache[converted.ShopId] = abstractEntry;
             }catch{
                 continue;
             }
         }
-        parsableEntries.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
-        return parsableEntries;
+        filteredByReqType.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
+        OnInventoryUpdate?.Invoke(callBackParams);
+        return filteredByReqType;
     }
 
-    public async UniTask<bool> ConsumeItem<T>(T item) where T : class, IShopItem {
+    async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
         var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
-        await RefreshInevntory<T>(item.ItemType);
+        await SyncInventory<T>(item.ItemType);
         return res.IsSuccess;
-    }
-
-    public async UniTask RefreshInevntory<T>(string type) where T : class, IShopItem{
-        var updated = await GetInventory<T>(type);
-        var converted = updated.Select((entry) => new InventoryEntry<IShopItem> {
-                     quantity = entry.quantity,
-                     lastPurchaseTime = entry.lastPurchaseTime,
-                     item = (IShopItem)entry.item
-                }).ToList();
-        OnInventoryUpdate?.Invoke(converted);
     }
 }
 }

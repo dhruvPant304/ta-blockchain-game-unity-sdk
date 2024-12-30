@@ -74,7 +74,7 @@ public class GameService : Service<GameService> {
     int Credits {
         get{
             if(useTestCredits) return testCredits;
-            else return _userBalanceService.GetBalanceInt("credits");
+            else return _userBalanceService.GetBalanceIntCached("credits");
         }
     }
 
