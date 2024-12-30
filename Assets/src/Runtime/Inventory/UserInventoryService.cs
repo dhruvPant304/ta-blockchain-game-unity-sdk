@@ -42,7 +42,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         SendConsumptionRequest<T>(item).Forget();
     }
 
-    async UniTask<List<InventoryEntry<T>>> SyncInventory<T>(string type) where T : class, IShopItem {
+    public async UniTask<List<InventoryEntry<T>>> SyncInventory<T>(string type) where T : class, IShopItem {
         var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
         if(!inventory.IsSuccess){
             return null;
