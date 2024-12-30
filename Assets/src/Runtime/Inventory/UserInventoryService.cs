@@ -7,6 +7,7 @@ using TA.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace TA.UserInventory{
 public class UserInventoryService : Service<UserInventoryService>{
@@ -22,6 +23,18 @@ public class UserInventoryService : Service<UserInventoryService>{
 
     public Action<List<InventoryEntry<IShopItem>>> OnInventoryUpdate;
     public Dictionary<int, InventoryEntry<IShopItem>> _inventoryCache = new();
+
+    public List<InventoryEntry<T>> GetInventory<T>(string type) where T: class, IShopItem{
+        var filtered = _inventoryCache
+            .Select((pair) => pair.Value)
+            .Where((entry) => entry.item.ItemType == type)
+            .Select((entry) => new InventoryEntry<T>{
+                quantity = entry.quantity,
+                item = (T)entry.item
+            }).ToList();
+
+        return filtered;
+    }
 
     public void AddToInventoryCached<T>(T item, int amount) where T : class, IShopItem{
         if(_inventoryCache.ContainsKey(item.ShopId) == false){
