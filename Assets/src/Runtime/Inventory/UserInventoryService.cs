@@ -41,6 +41,8 @@ public class UserInventoryService : Service<UserInventoryService>{
             throw new Exception($"Cannot find entry with id: \"{item.ShopId}\" in inventory cache, make sure you call SyncInventory atleast once before");
         }
         _inventoryCache[item.ShopId].quantity += amount;
+        var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
+        OnInventoryUpdate?.Invoke(callbackParams);
         SyncInventory<T>(item.ItemType).Forget();
     }
 
@@ -52,6 +54,8 @@ public class UserInventoryService : Service<UserInventoryService>{
             throw new Exception($"Should have atleast one in inventory to consume");
         }
         _inventoryCache[item.ShopId].quantity += 1;
+        var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
+        OnInventoryUpdate?.Invoke(callbackParams);
         SendConsumptionRequest<T>(item).Forget();
     }
 
@@ -92,33 +96,6 @@ public class UserInventoryService : Service<UserInventoryService>{
         filteredByReqType.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
         OnInventoryUpdate?.Invoke(callBackParams);
         return filteredByReqType;
-    }
-
-    public async UniTask SyncAll(){
-        var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
-        if(!inventory.IsSuccess){
-            return;
-        }
-
-        List<InventoryEntry<IShopItem>> callBackParams = new();
-        foreach(var entry in inventory.SuccessResponse.data){
-            try{
-                var itemJson = JsonConvert.SerializeObject(entry.item);
-                var converted = JsonConvert.DeserializeObject<IShopItem>(itemJson);
-
-                var abstractEntry = new InventoryEntry<IShopItem>(){
-                    quantity = entry.quantity,
-                    lastPurchaseTime = entry.lastPurchaseTime,
-                    item = converted
-                };
-
-                callBackParams.Add(abstractEntry);
-                _inventoryCache[converted.ShopId] = abstractEntry;
-            }catch{
-                continue;
-            }
-        }
-        OnInventoryUpdate?.Invoke(callBackParams);
     }
 
     async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
