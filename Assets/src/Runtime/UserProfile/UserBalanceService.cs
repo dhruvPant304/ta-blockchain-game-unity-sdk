@@ -52,7 +52,7 @@ namespace TA.UserProfile.Balance{
             if(!_chachedTransactions.ContainsKey(currencyName)){
                 _chachedTransactions[currencyName] = 0;
             }
-            _chachedTransactions[currencyName] -= value;
+            _chachedTransactions[currencyName] += value;
             OnCurrencyBalanceUpdate?.Invoke(currencyName);
             UpdateUserBalance().Forget();
         }
