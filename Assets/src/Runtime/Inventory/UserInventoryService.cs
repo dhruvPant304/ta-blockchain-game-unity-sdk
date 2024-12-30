@@ -94,7 +94,6 @@ public class UserInventoryService : Service<UserInventoryService>{
             }
         }
         filteredByReqType.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
-        OnInventoryUpdate?.Invoke(callBackParams);
         return filteredByReqType;
     }
 
