@@ -375,8 +375,8 @@ public class GameService : Service<GameService> {
         OnExitGameRequest?.Invoke();
     }
 
-    public async void AddGameCoin(int amount){
-        await _apiService.SendAddGameCoinRequest(amount, _userProfileService.LoginToken);
-        await _userBalanceService.UpdateUserBalance();
+    public void AddGameCoin(int amount){
+        _apiService.SendAddGameCoinRequest(amount, _userProfileService.LoginToken).Forget();
+        _userBalanceService.AddCached("gameCoin", amount);
     }
 }}

@@ -45,6 +45,16 @@ namespace TA.UserProfile.Balance{
             } 
             _chachedTransactions[currencyName] -= value;
             OnCurrencyBalanceUpdate?.Invoke(currencyName);
+            UpdateUserBalance().Forget();
+        }
+
+        public void AddCached(string currencyName, int value){
+            if(!_chachedTransactions.ContainsKey(currencyName)){
+                _chachedTransactions[currencyName] = 0;
+            }
+            _chachedTransactions[currencyName] -= value;
+            OnCurrencyBalanceUpdate?.Invoke(currencyName);
+            UpdateUserBalance().Forget();
         }
 
         public UserBalanceData LastSyncedBalance(){
