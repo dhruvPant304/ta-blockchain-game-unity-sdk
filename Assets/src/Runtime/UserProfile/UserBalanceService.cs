@@ -25,6 +25,9 @@ namespace TA.UserProfile.Balance{
 
         public int GetBalanceInt(string type) {
             try{
+                if(!_chachedTransactions.ContainsKey(type)){
+                    return (int)_syncedBalance.GetFild<int>(type);
+                }
                 return (int)_syncedBalance.GetFild<int>(type) + _chachedTransactions[type] ;
             }
             catch (Exception e){
