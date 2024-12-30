@@ -15,8 +15,8 @@ namespace TA.UserProfile.Balance{
 
         public Action<string> OnCurrencyBalanceUpdate; 
 
-        public APIService _api;
-        public UserProfileService _profile;
+        private APIService _api;
+        private UserProfileService _profile;
 
         void Start(){
             _api = ServiceLocator.Instance.GetService<APIService>();
