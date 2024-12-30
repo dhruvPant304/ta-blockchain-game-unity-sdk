@@ -94,6 +94,33 @@ public class UserInventoryService : Service<UserInventoryService>{
         return filteredByReqType;
     }
 
+    public async UniTask SyncAll(){
+        var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
+        if(!inventory.IsSuccess){
+            return;
+        }
+
+        List<InventoryEntry<IShopItem>> callBackParams = new();
+        foreach(var entry in inventory.SuccessResponse.data){
+            try{
+                var itemJson = JsonConvert.SerializeObject(entry.item);
+                var converted = JsonConvert.DeserializeObject<IShopItem>(itemJson);
+
+                var abstractEntry = new InventoryEntry<IShopItem>(){
+                    quantity = entry.quantity,
+                    lastPurchaseTime = entry.lastPurchaseTime,
+                    item = converted
+                };
+
+                callBackParams.Add(abstractEntry);
+                _inventoryCache[converted.ShopId] = abstractEntry;
+            }catch{
+                continue;
+            }
+        }
+        OnInventoryUpdate?.Invoke(callBackParams);
+    }
+
     async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
         var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
         await SyncInventory<T>(item.ItemType);
