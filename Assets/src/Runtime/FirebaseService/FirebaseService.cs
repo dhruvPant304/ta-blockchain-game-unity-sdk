@@ -2,16 +2,18 @@
 using Firebase.Messaging;
 using UnityEngine;
 using TA.APIClient;
-using TA.Services;
 using TA.UserProfile;
 using TA.APIClient.RequestData;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Android;
 using TA.APIClient.ResponseData;
 using TA.Authentication;
+#endif
+using TA.Services;
 
 namespace TA.Firebase{
     public class FirebaseService : Service<FirebaseService>{
+#if ENABLE_FIREBASE_MESSAGING
         public string FCMToken {get; private set;}
         APIService _api;
         UserProfileService _profile;
@@ -67,6 +69,6 @@ namespace TA.Firebase{
                 }
             }
         }
+#endif
     }
 }
-#endif
