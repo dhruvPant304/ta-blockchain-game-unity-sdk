@@ -43,7 +43,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         _inventoryCache[item.ShopId].quantity += amount;
         var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
         OnInventoryUpdate?.Invoke(callbackParams);
-        SyncInventory<T>(item.ItemType).Forget();
+        FetchInventory<T>(item.ItemType).Forget();
     }
 
     public void TakeFromInventoryCached<T>(T item) where T : class, IShopItem{
@@ -59,7 +59,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         SendConsumptionRequest<T>(item).Forget();
     }
 
-    public async UniTask<List<InventoryEntry<T>>> SyncInventory<T>(string type) where T : class, IShopItem {
+    private async UniTask<List<InventoryEntry<T>>> FetchInventory<T>(string type) where T : class, IShopItem {
         var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
         if(!inventory.IsSuccess){
             return null;
@@ -97,9 +97,22 @@ public class UserInventoryService : Service<UserInventoryService>{
         return filteredByReqType;
     }
 
+    public async UniTask InitInventory<T>(string type) where T : class, IShopItem {
+        var fetched = await FetchInventory<T>(type);
+        var args = fetched.Select((ent) => {
+            return new InventoryEntry<IShopItem>(){
+                quantity = ent.quantity,
+                lastPurchaseTime = ent.lastPurchaseTime,
+                item = ent.item
+            };
+        }).ToList();
+        OnInventoryUpdate?.Invoke(args);
+
+    }
+
     async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
         var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
-        await SyncInventory<T>(item.ItemType);
+        await FetchInventory<T>(item.ItemType);
         return res.IsSuccess;
     }
 }
