@@ -4,6 +4,6 @@ public interface IShopItem {
     public string Description {get;}
     public string Currency {get;}
     public int Price {get;}
-    public string ItemType {get;}
+    public static string ItemType {get;}
     public bool IsFree {get;}
 }
