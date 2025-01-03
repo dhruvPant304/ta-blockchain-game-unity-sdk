@@ -4,7 +4,6 @@ using TA.APIClient.ResponseData;
 using TA.Services;
 using TA.UserProfile;
 using TA.Components;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -21,19 +20,18 @@ public class UserInventoryService : Service<UserInventoryService>{
         _canvas = ServiceLocator.Instance.GetService<BlockchainGameCanvas>();
     }
 
-    public Action<List<InventoryEntry<IShopItem>>> OnInventoryUpdate;
-    public Dictionary<int, InventoryEntry<IShopItem>> _inventoryCache = new();
+    public Action<List<InventoryEntry>> OnInventoryUpdate;
+    public Dictionary<int, InventoryEntry> _inventoryCache = new();
 
-    public List<InventoryEntry<T>> GetInventory<T>(string type) where T: class, IShopItem{
-        var filtered = _inventoryCache
-            .Select((pair) => pair.Value)
-            .Where((entry) => entry.item.ItemType == type)
-            .Select((entry) => new InventoryEntry<T>{
-                quantity = entry.quantity,
-                item = (T)entry.item
-            }).ToList();
+    public InventoryCollection GetInventory() {
+        var cached = _inventoryCache
+            .Select(pair => pair.Value)
+            .ToList();
 
-        return filtered;
+        var filteredCollection = new InventoryCollection();
+        filteredCollection.AddRange(cached);
+
+        return filteredCollection;
     }
 
     public void AddToInventoryCached<T>(T item, int amount) where T : class, IShopItem{
@@ -43,7 +41,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         _inventoryCache[item.ShopId].quantity += amount;
         var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
         OnInventoryUpdate?.Invoke(callbackParams);
-        FetchInventory<T>(item.ItemType).Forget();
+        FetchInventory().Forget();
     }
 
     public void TakeFromInventoryCached<T>(T item) where T : class, IShopItem{
@@ -58,62 +56,46 @@ public class UserInventoryService : Service<UserInventoryService>{
         OnInventoryUpdate?.Invoke(callbackParams);
         SendConsumptionRequest<T>(item).Forget();
     }
-
-    private async UniTask<List<InventoryEntry<T>>> FetchInventory<T>(string type) where T : class, IShopItem {
-        var inventory = await _apiService.SendFetchUserInventoryRequest<object>(_userProfileService.LoginToken); 
-        if(!inventory.IsSuccess){
-            return null;
+    
+    public async UniTask<InventoryCollection> FetchInventory(){
+        var collection  = new InventoryCollection();
+        var res = await _apiService.SendFetchUserInventoryRequest(_userProfileService.LoginToken); 
+        if(!res.IsSuccess){
+            return collection;
         }
+        var entries = res.SuccessResponse.data.ToList();
 
-        List<InventoryEntry<T>> filteredByReqType = new();
-        List<InventoryEntry<IShopItem>> callBackParams = new();
-        foreach(var entry in inventory.SuccessResponse.data){
-            try{
-                var itemJson = JsonConvert.SerializeObject(entry.item);
-                var converted = JsonConvert.DeserializeObject<T>(itemJson);
+        entries.ForEach((ent) => {
+            var temp = ent.Parse<ItemTemp>();
+            _inventoryCache[temp.item.id] = ent;
+        });
 
-                if(converted.ItemType != type) continue;
-
-                var convertedEntry = new InventoryEntry<T>(){
-                    quantity = entry.quantity,
-                    lastPurchaseTime = entry.lastPurchaseTime,
-                    item = converted
-                };
-
-                var abstractEntry = new InventoryEntry<IShopItem>(){
-                    quantity = entry.quantity,
-                    lastPurchaseTime = entry.lastPurchaseTime,
-                    item = converted
-                };
-
-                filteredByReqType.Add(convertedEntry);
-                callBackParams.Add(abstractEntry);
-                _inventoryCache[converted.ShopId] = abstractEntry;
-            }catch{
-                continue;
-            }
-        }
-        filteredByReqType.Sort((a,b) => a.item.ShopId.CompareTo(b.item.ShopId));
-        return filteredByReqType;
-    }
-
-    public async UniTask InitInventory<T>(string type) where T : class, IShopItem {
-        var fetched = await FetchInventory<T>(type);
-        var args = fetched.Select((ent) => {
-            return new InventoryEntry<IShopItem>(){
-                quantity = ent.quantity,
-                lastPurchaseTime = ent.lastPurchaseTime,
-                item = ent.item
-            };
-        }).ToList();
-        OnInventoryUpdate?.Invoke(args);
-
+        collection.AddRange(entries);
+        return collection;
     }
 
     async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
         var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
-        await FetchInventory<T>(item.ItemType);
+        await FetchInventory();
         return res.IsSuccess;
+    }
+}
+
+public class ItemTemp{
+    public int id;
+    public string itemType;
+}
+
+public class InventoryCollection : List<InventoryEntry> { 
+    public List<InventoryEntry<T>> As<T>() where T: class, IShopItem{
+        List<InventoryEntry<T>> list = new();
+        return this
+            .Where(e => {
+                var success = false;
+                e.TryParse<T>(ref success);
+                return success;
+            })
+            .Select(e => e.Parse<T>()).ToList();
     }
 }
 }

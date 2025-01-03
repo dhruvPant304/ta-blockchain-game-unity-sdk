@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TA.APIClient.ResponseData{
     [Serializable]
@@ -57,7 +59,7 @@ namespace TA.APIClient.ResponseData{
     public class BoosterResponse<T> : APIResponse<BoosterData<T>> where T: class, IShopItem {};
 
     [Serializable]
-    public class InventoryResponse<T> : APIResponse<InventoryEntry<T>[]> where T: class {};
+    public class InventoryResponse : APIResponse<InventoryEntry[]> {};
 
     [Serializable]
     public class CheckFreeBoosterResponse : APIResponse<FreeBoosterAvailableData>{};
@@ -198,7 +200,33 @@ namespace TA.APIClient.ResponseData{
     }
 
     [Serializable]
-    public class InventoryEntry<T> where T: class{
+    public class InventoryEntry{
+        public int quantity;
+        public string lastPurchaseTime;
+        public JObject item;
+
+        public InventoryEntry<TConvert> TryParse<TConvert>(ref bool success){
+            try{
+                success = true;
+                return new InventoryEntry<TConvert>(){
+                    quantity = quantity,
+                    lastPurchaseTime = lastPurchaseTime,
+                    item = JsonConvert.DeserializeObject<TConvert>(JsonConvert.SerializeObject(item))
+                };
+            } catch {
+                success = false;
+                return null;
+            }
+        }
+
+        public InventoryEntry<TConvert> Parse<TConvert>(){
+            bool success = false;
+            return TryParse<TConvert>(ref success);
+        }
+    }
+
+    [Serializable]
+    public class InventoryEntry<T>{
         public int quantity;
         public string lastPurchaseTime;
         public T item;

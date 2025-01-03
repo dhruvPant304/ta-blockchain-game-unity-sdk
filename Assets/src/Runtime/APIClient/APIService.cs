@@ -66,9 +66,8 @@ namespace TA.APIClient{
                     );
         }
 
-        public async UniTask<VariableRequestResponse<InventoryResponse<T>, FailedResponse>> SendFetchUserInventoryRequest<T>(string authToken)
-        where T : class {
-            return await SendWebRequest<InventoryResponse<T>,FailedResponse>(
+        public async UniTask<VariableRequestResponse<InventoryResponse, FailedResponse>> SendFetchUserInventoryRequest(string authToken){
+            return await SendWebRequest<InventoryResponse,FailedResponse>(
                         "/api/v1/user/inventory",
                         "GET",
                         null,

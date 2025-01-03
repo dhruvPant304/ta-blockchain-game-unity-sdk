@@ -14,6 +14,8 @@ namespace TA.UserProfile.Balance{
         public Action OnBalanceSyncFailed;
 
         public Action<string> OnCurrencyBalanceUpdate; 
+        public Action<string> OnSpent;
+        public Action<string> OnAdded;
 
         private APIService _api;
         private UserProfileService _profile;
@@ -45,6 +47,7 @@ namespace TA.UserProfile.Balance{
             } 
             _chachedTransactions[currencyName] -= value;
             OnCurrencyBalanceUpdate?.Invoke(currencyName);
+            OnSpent?.Invoke(currencyName);
             UpdateUserBalance().Forget();
         }
 
@@ -54,6 +57,7 @@ namespace TA.UserProfile.Balance{
             }
             _chachedTransactions[currencyName] += value;
             OnCurrencyBalanceUpdate?.Invoke(currencyName);
+            OnAdded?.Invoke(currencyName);
             UpdateUserBalance().Forget();
         }
 
