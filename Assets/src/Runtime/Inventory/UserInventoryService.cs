@@ -41,7 +41,6 @@ public class UserInventoryService : Service<UserInventoryService>{
         _inventoryCache[item.ShopId].quantity += amount;
         var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
         OnInventoryUpdate?.Invoke(callbackParams);
-        FetchInventory().Forget();
     }
 
     public void TakeFromInventoryCached<T>(T item) where T : class, IShopItem{
@@ -76,7 +75,6 @@ public class UserInventoryService : Service<UserInventoryService>{
 
     async UniTask<bool> SendConsumptionRequest<T>(T item) where T : class, IShopItem {
         var res = await _apiService.SendConsumeShopItemRequest(item, _userProfileService.LoginToken); 
-        await FetchInventory();
         return res.IsSuccess;
     }
 }
