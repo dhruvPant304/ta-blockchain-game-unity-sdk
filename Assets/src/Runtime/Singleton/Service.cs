@@ -9,5 +9,6 @@ public abstract class Service<T> : MonoBehaviour where T : Service<T>{
 		ServiceLocator.Instance.RegisterService(this, registerAsSingle);
 		OnInitialize();
 	}
+	public static T Get() => ServiceLocator.Instance.GetService<T>();
 	protected virtual void OnInitialize(){}
 }}
