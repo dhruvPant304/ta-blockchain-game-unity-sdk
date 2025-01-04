@@ -51,12 +51,12 @@ public class UserInventoryService : Service<UserInventoryService>{
         if(_inventoryCache[item.ShopId].quantity < 1){
             throw new Exception($"Should have atleast one in inventory to consume");
         }
-        _inventoryCache[item.ShopId].quantity += 1;
+        _inventoryCache[item.ShopId].quantity -= 1;
         var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
         OnInventoryUpdate?.Invoke(callbackParams);
         SendConsumptionRequest<T>(item).Forget();
     }
-    
+
     public async UniTask<InventoryCollection> FetchInventory(){
         var collection  = new InventoryCollection();
         var res = await _apiService.SendFetchUserInventoryRequest(_userProfileService.LoginToken); 
@@ -87,15 +87,27 @@ public class ItemTemp{
 }
 
 public class InventoryCollection : List<InventoryEntry> { 
-    public List<InventoryEntry<T>> As<T>(string typeFilter = null) where T: class, IShopItem{
-        List<InventoryEntry<T>> list = new();
-        return this
+
+    public InventoryCollection OfType(string typeFilter = null) {
+        List<InventoryEntry> list = new();
+        var filtered =  this
             .Where(e => {
                 if(typeFilter != null){
                     if(e.Parse<ItemTemp>().item.itemType != typeFilter) {
                         return false;
                     } 
                 }
+                return true;
+            }).ToList();
+         var collection = new InventoryCollection();
+         collection.AddRange(filtered);
+         return collection;
+    }
+
+    public List<InventoryEntry<T>> As<T>() where T: class, IShopItem{
+        List<InventoryEntry<T>> list = new();
+        return this
+            .Where(e => {
                 var success = false;
                 e.TryParse<T>(ref success);
                 return success;
