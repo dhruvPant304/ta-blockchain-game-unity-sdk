@@ -87,10 +87,15 @@ public class ItemTemp{
 }
 
 public class InventoryCollection : List<InventoryEntry> { 
-    public List<InventoryEntry<T>> As<T>() where T: class, IShopItem{
+    public List<InventoryEntry<T>> As<T>(string typeFilter = null) where T: class, IShopItem{
         List<InventoryEntry<T>> list = new();
         return this
             .Where(e => {
+                if(typeFilter != null){
+                    if(e.Parse<ItemTemp>().item.itemType != typeFilter) {
+                        return false;
+                    } 
+                }
                 var success = false;
                 e.TryParse<T>(ref success);
                 return success;
