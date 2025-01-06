@@ -67,9 +67,9 @@ namespace TA.UserProfile.Balance{
 
         public async UniTask<StaticRequestResponse<BaseAPIResponse>> UpdateUserBalance(){
             var response = await _api.SendFetchUserBalanceRequest(_profile.LoginUserData.token);
-            _chachedTransactions = new();
             if(response.IsSuccess){
                 _syncedBalance = response.Response.data;
+                _chachedTransactions = new();
                 OnBalanceSync?.Invoke(response.Response.data);
             } else{
                 OnBalanceSyncFailed?.Invoke();
