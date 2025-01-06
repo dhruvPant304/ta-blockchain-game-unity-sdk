@@ -17,10 +17,10 @@ namespace TA.InGameShop{
             var profile = ServiceLocator.Instance.GetService<UserProfileService>();
             var inventory = ServiceLocator.Instance.GetService<UserInventoryService>();
             var token = profile.LoginToken;
-            api.SendBuyItemRequest(item,quantity,token).Forget();
             if(balance.CanSpend(item.Currency, item.Price)){
                 balance.SpendCached(item.Currency, item.Price);
                 inventory.AddToInventoryCached(item, quantity);
+                api.SendBuyItemRequest(item,quantity,token).Forget();
                 return true;
             }
             return false;
