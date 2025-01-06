@@ -7,6 +7,7 @@ using TA.Components;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace TA.UserInventory{
 public class UserInventoryService : Service<UserInventoryService>{
@@ -36,7 +37,10 @@ public class UserInventoryService : Service<UserInventoryService>{
 
     public void AddToInventoryCached<T>(T item, int amount) where T : class, IShopItem{
         if(_inventoryCache.ContainsKey(item.ShopId) == false){
-            throw new Exception($"Cannot find entry with id: \"{item.ShopId}\" in inventory cache, make sure you call SyncInventory atleast once before");
+            _inventoryCache[item.ShopId] = new InventoryEntry{
+                quantity = 0,
+                item = JObject.FromObject(item)
+            };
         }
         _inventoryCache[item.ShopId].quantity += amount;
         var callbackParams = _inventoryCache.Select((pair) => pair.Value).ToList();
