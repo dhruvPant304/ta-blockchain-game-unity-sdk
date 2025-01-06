@@ -39,7 +39,10 @@ public class UserInventoryService : Service<UserInventoryService>{
         if(_inventoryCache.ContainsKey(item.ShopId) == false){
             _inventoryCache[item.ShopId] = new InventoryEntry{
                 quantity = 0,
-                item = JObject.FromObject(item)
+                item = JObject.FromObject(new ItemTemp{
+                            id = item.ShopId,
+                            itemType = item.ItemType
+                        })
             };
         }
         _inventoryCache[item.ShopId].quantity += amount;
