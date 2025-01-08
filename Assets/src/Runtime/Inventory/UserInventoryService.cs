@@ -23,7 +23,9 @@ public class UserInventoryService : Service<UserInventoryService>{
 
     public Action<List<InventoryEntry>> OnInventoryUpdate;
     public Action OnInventoryFetch;
-    public Dictionary<int, InventoryEntry> _inventoryCache = new();
+    private Dictionary<int, InventoryEntry> _inventoryCache = new();
+
+    public bool Fetched {get; private set;}
 
     public InventoryCollection GetInventory() {
         var cached = _inventoryCache
@@ -79,6 +81,7 @@ public class UserInventoryService : Service<UserInventoryService>{
 
         collection.AddRange(entries);
         OnInventoryFetch?.Invoke();
+        Fetched = true;
         return collection;
     }
 
