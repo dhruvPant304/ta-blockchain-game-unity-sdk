@@ -22,6 +22,7 @@ public class UserInventoryService : Service<UserInventoryService>{
     }
 
     public Action<List<InventoryEntry>> OnInventoryUpdate;
+    public Action OnInventoryFetch;
     public Dictionary<int, InventoryEntry> _inventoryCache = new();
 
     public InventoryCollection GetInventory() {
@@ -77,6 +78,7 @@ public class UserInventoryService : Service<UserInventoryService>{
         });
 
         collection.AddRange(entries);
+        OnInventoryFetch?.Invoke();
         return collection;
     }
 
