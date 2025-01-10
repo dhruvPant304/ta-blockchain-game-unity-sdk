@@ -4,6 +4,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using TA.APIClient;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace TA.UserProfile.Balance{
     public class UserBalanceService : Service<UserBalanceService> {
@@ -68,6 +69,7 @@ namespace TA.UserProfile.Balance{
             if(response.IsSuccess){
                 _syncedBalance = response.Response.data;
                 _chachedTransactions = new();
+                Debug.Log("balance cache cleared");
                 OnBalanceSync?.Invoke(response.Response.data);
             } else{
                 OnBalanceSyncFailed?.Invoke();
