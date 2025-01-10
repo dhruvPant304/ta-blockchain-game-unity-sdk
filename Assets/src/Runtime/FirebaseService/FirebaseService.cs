@@ -70,16 +70,11 @@ namespace TA.Firebase{
         }
 
         async UniTask RequestNotificationPremissions(){
-             if (Application.platform == RuntimePlatform.Android){
-                if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS")){
-                    Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
-                }
-            }else if (Application.platform == RuntimePlatform.IPhonePlayer){
-                await RequestNotificationPremissions();
+#if UNITY_ANDROID
+            if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS")){
+                Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
             }
-        }
-
-        async UniTask RequestIosAuthorization(){
+#endif
 #if UNITY_IOS
             var authorizationOption = AuthorizationOption.Alert 
                 | AuthorizationOption.Badge 
