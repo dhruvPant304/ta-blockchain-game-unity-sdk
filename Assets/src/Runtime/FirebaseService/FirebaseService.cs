@@ -5,8 +5,12 @@ using TA.APIClient;
 using TA.UserProfile;
 using TA.APIClient.RequestData;
 using Cysharp.Threading.Tasks;
+#if UNITY_ANDROID
 using UnityEngine.Android;
+#endif
+#if UNITY_IOS
 using Unity.Notifications.iOS;
+#endif
 using TA.APIClient.ResponseData;
 using TA.Authentication;
 #endif
@@ -76,6 +80,7 @@ namespace TA.Firebase{
         }
 
         async UniTask RequestIosAuthorization(){
+#if UNITY_IOS
             var authorizationOption = AuthorizationOption.Alert 
                 | AuthorizationOption.Badge 
                 | AuthorizationOption.Sound;
@@ -83,6 +88,7 @@ namespace TA.Firebase{
             var req = new AuthorizationRequest(authorizationOption, true);
             await UniTask.WaitUntil(() => req.IsFinished);
             Debug.Log("IOS notification permission granted");
+#endif
         }
 #endif
     }
