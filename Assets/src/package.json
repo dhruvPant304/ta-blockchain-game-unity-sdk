@@ -21,6 +21,7 @@
 		}
 	],
 	"dependencies": {
-		"com.unity.purchasing": "4.12.2"
+		"com.unity.purchasing": "4.12.2",
+		"com.unity.services.push-notifications": "4.0.1"
 	}
 }

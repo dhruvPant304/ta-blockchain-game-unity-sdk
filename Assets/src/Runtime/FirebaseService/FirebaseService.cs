@@ -6,6 +6,7 @@ using TA.UserProfile;
 using TA.APIClient.RequestData;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Android;
+using Unity.Notifications.iOS;
 using TA.APIClient.ResponseData;
 using TA.Authentication;
 #endif
@@ -24,19 +25,21 @@ namespace TA.Firebase{
             _profile = ServiceLocator.Instance.GetService<UserProfileService>();
 
             var firebaseMessaging = new FirebaseInitializer();
-            firebaseMessaging.onTokenReceived += OnToken; 
+            firebaseMessaging.onTokenReceived += OnToken;
         }
 
         void OnToken(object sender, TokenReceivedEventArgs args){
             FCMToken = args.Token;
-            Debug.Log($"FCM Token received: {FCMToken}");
-            _profile.OnAuthSuccess += OnLogin;
-            _web3.OnLogout += OnLogout;
+            if(FCMToken != null){
+                Debug.Log($"FCM Token received: {FCMToken}");
+                _profile.OnAuthSuccess += SetupNotifcations;
+                _web3.OnLogout += RemoveDeviceToken;
+            }
         }
 
-        void OnLogin(LoginSessionData data){
+        void SetupNotifcations(LoginSessionData data){
             string platform; 
-            RequestNotificationPremissions();
+            RequestNotificationPremissions().Forget();
             switch(Application.platform){
                 case RuntimePlatform.Android:
                     platform = "android";
@@ -58,16 +61,28 @@ namespace TA.Firebase{
            _api.SendUpdateDeviceTokenRequest(_profile.LoginToken, deviceToken).Forget(); 
         }
 
-        void OnLogout(){
+        void RemoveDeviceToken(){
             _api.SendDeleteDevice(_profile.LoginToken).Forget();
         }
 
-        void RequestNotificationPremissions(){
+        async UniTask RequestNotificationPremissions(){
              if (Application.platform == RuntimePlatform.Android){
                 if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS")){
                     Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
                 }
+            }else if (Application.platform == RuntimePlatform.IPhonePlayer){
+                await RequestNotificationPremissions();
             }
+        }
+
+        async UniTask RequestIosAuthorization(){
+            var authorizationOption = AuthorizationOption.Alert 
+                | AuthorizationOption.Badge 
+                | AuthorizationOption.Sound;
+
+            var req = new AuthorizationRequest(authorizationOption, true);
+            await UniTask.WaitUntil(() => req.IsFinished);
+            Debug.Log("IOS notification permission granted");
         }
 #endif
     }
