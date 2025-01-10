@@ -50,18 +50,20 @@ public class UserProfileService : Service<UserProfileService>{
         _apiConfigService = ServiceLocator.Instance.GetService<APIConfigProviderService>();
         _balanceService = ServiceLocator.Instance.GetService<UserBalanceService>();
 
-        _web3AuthService.OnLogin += OnLogin;
+        _web3AuthService.OnLogin += LoginToServer;
+        _web3AuthService.OnLogout += LogOutFromServer;
     }
 
     void OnDisable(){
-        _web3AuthService.OnLogin -= OnLogin;
+        _web3AuthService.OnLogin -= LoginToServer;
+        _web3AuthService.OnLogout -= LogOutFromServer;
     }
 
     //=======================
     // WEB3AUTH LOGIN
     //=======================
 
-    async void OnLogin(Web3AuthResponse response){
+    async void LoginToServer(Web3AuthResponse response){
         var privateKey = response.privKey;
 
         var walletAddress = CryptoHelper.GetWalletAddress(privateKey);
@@ -107,6 +109,12 @@ public class UserProfileService : Service<UserProfileService>{
         }
 
         return false;
+    }
+
+    void LogOutFromServer(){
+        LoggedIn = false;
+        _sessionUserData = null;
+        _userloginData = null;
     }
 
     void HandleAuthFailiure(FailedResponse failedResponse){
