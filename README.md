@@ -2,7 +2,7 @@
 ### Content
 1. [Introduction](#introduction)
 2. [Installation](#installation)
-3  [How to user](#how-to-use)
+3.  [How to user](#how-to-use)
 4. [SDK Configs](#sdk-configs)
 
 ## Introduction
