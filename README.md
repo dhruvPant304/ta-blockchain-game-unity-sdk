@@ -1,6 +1,6 @@
 # TA BlockChain Game Unity SDK
 ## Content
-1. [Introduction](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#introduction)
+1. [Introduction](#introduction)
 2. [Installation](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#installation)
 3. [How to use](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#how-to-use)
 3. [SDK Configs](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#sdk-configs)
