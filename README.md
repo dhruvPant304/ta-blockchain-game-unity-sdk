@@ -1,9 +1,9 @@
 # TA BlockChain Game Unity SDK
-## Content
+### Content
 1. [Introduction](#introduction)
-2. [Installation](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#installation)
-3. [How to use](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#how-to-use)
-3. [SDK Configs](https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk/new/main?filename=README.md#sdk-configs)
+2. [Installation](#installation)
+3  [How to user](#how-to-use)
+4. [SDK Configs](#sdk-configs)
 
 ## Introduction
 The TA Blockchain SDK was created to provide a simple and easy way to integrate blockchain functionality into Unity games. The SDK provides a simple interface to interact with the blockchain and provides a simple way to authenticate users using web3Auth. The SDK is designed to be easy to use and provides a simple way to interact with the blockchain without having to worry about the underlying blockchain technology or Back-end architecture.
