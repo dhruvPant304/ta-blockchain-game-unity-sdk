@@ -6,13 +6,14 @@
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [How to use](#how-to-use)
-    1. [Using Services](#using-services)
-    2. [Initial DataFetch](#initial-data-fetch)
-    3. [Launching SDK Menus](#launching-sdk-menus)
-    4. [Game Flow](#game-flow)
-    5. [User Balance](#user-balance)
-    6. [User Inventory](#user-inventory)
-4. [SDK configs](#sdk-configs)
+    1. [Config setup](#config-setup)
+    2. [Using Services](#using-services)
+    3. [Initial DataFetch](#initial-data-fetch)
+    4. [Launching SDK Menus](#launching-sdk-menus)
+    5. [Game Flow](#game-flow)
+    6. [User Balance](#user-balance)
+    7. [User Inventory](#user-inventory)
+4. [UI design customisation](#ui-design-customisation)
 
 ## Introduction
 The TA Blockchain SDK was created to provide a simple and easy way to integrate blockchain functionality into Unity games. The SDK provides a simple interface to interact with the blockchain and provides a simple way to authenticate users using web3Auth. The SDK is designed to be easy to use and provides a simple way to interact with the blockchain without having to worry about the underlying blockchain technology or Back-end architecture.
@@ -39,6 +40,18 @@ we suggest manually downloading Android plugins and only including the plugins t
 We suggest downloading **PlayDoge-Tchi** sample included with the Unity package, from Unity package manager and making a copy of it in your project so you can start making changes to provided prefabs and not have them effected by subsequent package update. Then add the **Landing Page, Login and SignIn** scenes available in PlayDoge-Tchi sample as first,second and third scene in build settings respectively.
 
 These scenes will prompt the user with the login/signup flows (auto login if they have a saved login session) and then load the **scene after SingIn scene in build settings** (build index 3), this scene will act as entry point to your game
+
+### **Config setup**
+
+In order to provide configuration options to the SDK you must create a few scriptable objects, ``APIConfig`` option and ``Web3AuthConfig`` are essential for all games. ``PurchasePackageData`` scriptable object is required for games that use IAP for credit/in-game-currency purchase.
+
+create the required scriptable objects in the **Assets > Resources** folder and set the required values in the scriptable objects.
+
+for web3auth redirection to work, you also need to create a file named **webauth** in the resources folder in this file add the redirect url you want to set.
+
+``` title="webauth"
+intent://com.fightout.fighting/auth
+```
 
 ### **Using Services**
 
@@ -145,4 +158,8 @@ var concreteItemTypes = inventory.As<MyItemType>();
 
 class ```MyItemType``` is the concrete implementation of the Inventory Item JSON structure defined on back end, this allows flexibility in the data an inventory item can store when working on different games 
 
-## SDK Configs
+## UI Design Customisation
+
+To customize UI Designs for SDK menus and UI elements you can use the prefabs available in the sample and change them according to the new designs
+
+> **For Designers:** while creating designs for new games following the p2e game format please keep in mind to stick to existing Menus in terms of UI flow, although the layout of UI elements in individual menus is flexible, for example: it is possible to easily move edit profile button's position inside the profile menu screen but it would not be possible to move this button to settings menu screen
