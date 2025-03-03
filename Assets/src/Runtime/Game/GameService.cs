@@ -43,7 +43,7 @@ public class GameService : Service<GameService> {
     public Action OnStartSessionFailed;
 
     public Action OnUpdateScoreFailed;
-    public Action OnUpdateScoreSucess;
+    public Action OnUpdateScoreSuccess;
 
     public Action OnContinueGameFailed;
     public Action OnContinueGameSuccess;
@@ -256,7 +256,7 @@ public class GameService : Service<GameService> {
             _duration = Time.time;
             _timeStamp = DataTimeHelper.GetCurrentTimeInIsoFormat();
 
-            OnUpdateScoreSucess?.Invoke();
+            OnUpdateScoreSuccess?.Invoke();
         }else{
             ShowErrorMessage(response.FailureResponse.message, OnUpdateScoreFailed);
         }
