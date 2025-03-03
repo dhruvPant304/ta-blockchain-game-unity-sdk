@@ -34,6 +34,8 @@ https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk.git?path=Assets/src
 please note that the SDK package does not include Android plugins that are required for web3Auth as it is observed that these plugins may conflict with existing plugins and cause build errors.
 we suggest manually downloading Android plugins and only including the plugins that are not already present in your project.
 
+> **Note** Please note that this repository should exist as a public remote repository for this package to be downloadable using this method, if you are reading this code from a private repo please upload this to a public github repository for the installation to work and update the url accordingly
+
 ## How to use
 
 ### **Getting started using the available samples**
