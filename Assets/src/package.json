@@ -14,10 +14,10 @@
 		"url": "https://www.unity3d.com"
 	},
 	"samples" : [
-		{			
-			"displayName": "ETUK-TUK Samples",
-			"description": "Menu prefabs and assets for etuk tuk game",
-			"path": "Samples~/ETUK-TUK Samples"
+		{
+			"displayName": "PlayDoge-Tchi",
+			"description": "Menu prefabs and assets for PlayDoge-Tchi game",
+			"path": "Samples~/PlayDoge-Tchi"
 		}
 	],
 	"dependencies": {
