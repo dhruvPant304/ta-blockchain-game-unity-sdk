@@ -49,8 +49,8 @@ create the required scriptable objects in the **Assets > Resources** folder and 
 
 for web3auth redirection to work, you also need to create a file named **webauth** in the resources folder in this file add the redirect url you want to set.
 
-``` title="webauth"
-// Filename: webauth
+**webauth**
+```
 intent://com.fightout.fighting/auth
 ```
 
