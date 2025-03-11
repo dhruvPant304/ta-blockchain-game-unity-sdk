@@ -31,6 +31,13 @@ You can install the package using git URL option in Unity package manager window
 ```
 https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk.git?path=Assets/src
 ```
+
+to install package from some branch other than main use following url
+```
+https://github.com/dhruvPant304/ta-blockchain-game-unity-sdk.git?path=Assets/src#branch_name
+```
+replace branch_name by actual branch name
+
 please note that the SDK package does not include Android plugins that are required for web3Auth as it is observed that these plugins may conflict with existing plugins and cause build errors.
 we suggest manually downloading Android plugins and only including the plugins that are not already present in your project.
 
